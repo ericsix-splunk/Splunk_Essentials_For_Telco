@@ -1,0 +1,23 @@
+<nav search_view="search" color="#000000">
+	<view name="home" default='true' />
+  <collection label="FSI Use Cases Content">
+    <view name="contents"/>
+    <divider />
+    <view name="overview" />
+    <view name="bookmarked_content" />
+  </collection>
+  <view name="journey" />
+ <!--  <view name="data_source_check" /> -->
+    <view name="setup" />
+<collection label="Documentation">
+  <!--   <view name="data_source" /> -->
+    <a target="_blank" href="https://splunkbase.splunk.com/app/4145/#/details">Documentation</a>
+    <a target="_blank" href="https://answers.splunk.com/answers/ask.html?appid=4145">Ask a Question</a>
+    <view name="credits" />
+  </collection> 
+  <collection label="Advanced">
+    <view name="search"/>
+    <view name="showcase_simple_search"></view> 
+  </collection>
+  <!--<a href="http://docs.splunk.com/Documentation/MLApp">Docs</a>-->
+</nav>

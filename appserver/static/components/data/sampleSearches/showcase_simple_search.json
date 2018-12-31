@@ -1,0 +1,2600 @@
+ {
+    "Splunk Internal Top Sourcetypes - Demo": {
+        "prereqs": [
+            {
+                "test": "| inputlookup authorizations.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "index=_internal earliest=-1week | top 10 sourcetype",
+        "label": "Splunk Internal Top Sourcetypes - Demo"
+    },
+
+    "Splunk Internal Search Scheduler - Demo": {
+        "prereqs": [
+            {
+                "test": "| inputlookup authorizations.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value":"index=_internal earliest=-1y@y host=* sourcetype=scheduler (status=\"completed\" OR status=\"skipped\" OR status=\"deferred\") | eval alert_actions = if(isnull(alert_actions) OR alert_actions == \"\", \"none\", alert_actions) | stats count by status | sort - count | eventstats sum(count) AS total | eval percent = round(count / total * 100, 2).\" %\" | fields - total | rename status as Status, app as App, user as User, savedsearch_name as \"Report Name\", alert_actions as \"Alert Actions\", count as Count, percent as \"Percent of Total\"",
+        "label": "Splunk Internal Search Scheduler - Demo"
+    },
+
+    "Track Application Usage - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup track_application_usage | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup track_application_usage | search  ADD_REAL_SPL_HERE",
+        "label": "Track Application Usage - Demo"
+    },
+    "Testing - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup track_application_usage | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup track_application_usage | search  ADD_REAL_SPL_HERE",
+        "label": "Testing - Demo"
+    },
+    "CCAuth Status Subcontractors - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup authorizations.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use chart to count over subcontractor split by possible credit card actions."
+        ],
+        "value": "|inputlookup authorizations.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|chart count over subcontractor by action",
+        "label": "CCAuth Status Subcontractors - Demo"
+    },
+    "CCAuth_ITSI - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup authorizations.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges."
+        ],
+        "value": "|inputlookup authorizations.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time",
+        "label": "CCAuth_ITSI - Demo"
+    },
+    "CCAuth Most Authorizations - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup authorizations.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges. Filter by authorized attempts only.",
+            "Count by customer their credit card transactions details. Use eventstats to find the average count and standard deviation of all counts.",
+            "Filter with events that have a count greater than the average plus 2*standard deviation."
+        ],
+        "value": "|inputlookup authorizations.csv| where action=\"authorized\"|eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")\n|eval amount=tostring(round(amount, 2),\"commas\")|stats count values(amount) as amounts values(subcontractor) as subcontractors by customer|eventstats avg(count) as avg stdev(count) as stdev\n|where count>(avg+2*stdev)| sort - count",
+        "label": "CCAuth Most Authorizations - Demo"
+    },
+    "CCAuth Outlier Response Time - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup authorizations.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Group by customer their credit card transactions details including their average response time. Use eventstats to find the average Response Time and standard deviation of all Response Times.",
+            "Filter with events that have a count greater than the average plus 4*standard deviation."
+        ],
+        "value": "|inputlookup authorizations.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|stats avg(ResponseTime) as averageResp by customer,subcontractor|eventstats avg(averageResp) as avg stdev(averageResp) as stdev \n|where averageResp>(avg+4*stdev)",
+        "label": "CCAuth Outlier Response Time - Demo"
+    },
+    "CCAuth Customer Issues - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup authorizations.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges."
+        ],
+        "value": "|inputlookup authorizations.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time|where action=\"error\"|table _time, customer, action, amount, subcontractor|eval amount=tostring(round(amount, 2),\"commas\")", 
+        "label": "CCAuth Customer Issues - Demo"
+    },
+    "CCAuth Subcontractor Counts - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup authorizations.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges."
+        ],
+        "value": "|inputlookup authorizations.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time|chart count by action",
+        "label": "CCAuth Subcontractor Counts - Demo"
+    },
+    "CCAuth Auth Denial Subcontractors - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup authorizations.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use a timechart to split by subcontractor and use the count evals to only count authorized and denied actions."
+        ],
+        "value": "|inputlookup authorizations.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|timechart span=10m fixedrange=F count(eval(action=\"authorized\")) as authorized count(eval(action=\"denied\")) as denied by subcontractor",
+        "label": "CCAuth Auth Denial Subcontractors - Demo"
+    },
+    "CCAuth Average Response - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup authorizations.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use a timechart to split by subcontractor and compute average response time over 10 minute spans."
+        ],
+        "value": "|inputlookup authorizations.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|timechart span=10m fixedrange=F avg(ResponseTime) as averageResponseTime by subcontractor",
+        "label": "CCAuth Average Response - Demo"
+    },
+    "CCAuth Timewrap - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup authorized2days.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use timechart in 15 minute spans to get the average response times. Use Timewrap with 4h to compare today vs. yesterday. Use exact option to bind the time."
+        ],
+        "value": "|inputlookup authorized2days.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|timechart span=15m fixedrange=F avg(ResponseTime) as ResponseTime|timewrap series=exact time_format=\"Hours of %m/%d\" 4h",
+        "label": "CCAuth Timewrap - Demo"
+    },
+    "Credit Limit Denies - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup credit_limit_requests.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges."
+        ],
+        "value": "|inputlookup credit_limit_requests.csv|eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time|eval action=\"authorized\"|lookup CustomerData customer|eval denied_reason=\"Number of yearly transactions too low\"|where good_standing=\"yes\" AND year_transactions<=10|eval action=\"denied\"|eval income=tostring(round(income, 2),\"commas\"), new_limit=tostring(round(new_limit, 2),\"commas\")|fields - epoch",
+        "label": "Credit Limit Denies - Demo"
+    },
+    "Credit Limit Authorized - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup credit_limit_requests.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Assume all are authorized and use a lookup to get more fields. If the person is in good standing, has income 10 times the credit limit request, and has yearly transactions greater than 10, authorize the limit, otherwise deny it. Remove unnecessary fields."
+        ],
+        "value": "|inputlookup credit_limit_requests.csv|eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|eval action=\"authorized\"|lookup CustomerData customer|eval action=if(good_standing=\"yes\" AND year_transactions>10 AND income>(new_limit*10), \"authorized\", \"denied\")|where action=\"authorized\"|eval income=tostring(round(income, 2),\"commas\"), new_limit=tostring(round(new_limit, 2),\"commas\")|fields - epoch",
+        "label": "Credit Limit Authorized - Demo"
+    },
+    "Credit Limit Over Time - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup credit_limit_requestscsv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges.",
+            "Assume all are authorized and use a lookup to get more fields. If the person is in good standing, has income 10 times the credit limit request, and has yearly transactions greater than 10, authorize the limit, otherwise deny it. Assign a new value to action. Perform timechart count by action."
+        ],
+        "value": "|inputlookup credit_limit_requests.csv|eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|eval action=\"authorized\"|lookup CustomerData customer|eval action=if(good_standing=\"yes\" AND year_transactions>10 AND income>(new_limit*10), \"authorized\", \"denied\")|timechart span=10m fixedrange=F count by action",
+        "label": "Credit Limit Over Time - Demo"
+    },
+    "Credit Limit Trellis - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup credit_limit_requestscsv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Assume all are authorized and use a lookup to get more fields. Perform timechart count for all not in good standing, incomes less than 10 times the new limit, and yearly transaction count less than 10. Visualize as a trellis vizualization."
+        ],
+        "value": "|inputlookup credit_limit_requests.csv|eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|eval action=\"authorized\"|lookup CustomerData customer|timechart span=15m fixedrange=F count(eval(good_standing=\"no\")) as \"denied not good standing\" count(eval(year_transactions<=10)) as \"denied not enough yearly transations\" count(eval(income<(10*new_limit))) as \"denied not enough income\"",
+        "label": "Credit Limit Trellis - Demo"
+    },
+    "Credit Limit Average Increase - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup credit_limit_requestscsv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Perform timechart to find the average new credit limit amount in 10 minute spans."
+        ],
+        "value": "|inputlookup credit_limit_requests.csv|eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|timechart span=10m fixedrange=F avg(new_limit) as requested_limit",
+        "label": "Credit Limit Average Increase - Demo"
+    },
+    "TX 3Steps - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup transdate.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges."
+        ],
+        "value": "|inputlookup transdate.csv|sort - _time|stats values(_time) as time values(action) as action values(customer) as customer count by sessionID|where count=1",
+        "label": "TX 3Steps - Demo"
+    },
+    "TX Average Duration - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup transdate.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Group all events by sessionID and count the number of times it happens along with the first, last, and all values of time for the sessionID. Duration is last-first time. Then, show average in timechart."
+        ],
+        "value": "|inputlookup transdate.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|stats count  values(_time) as _time first(_time) as first last(_time) as last by sessionID|where count>3|eval duration=last-first|timechart span=10m fixedrange=F avg(duration)",
+        "label": "TX Average Duration - Demo"
+    },
+    "TX Outliers Duration - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup transdate.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Group all events by sessionID and count the number of times it happens. A count of 4 means a completed transaction. Use the first and last time of each transaction as the duration.",
+            "Use evantstats for all average durations and std dev. Then, allow to print all customer durations greater than 2 times the standard deviation plus the average."
+        ],
+        "value": "|inputlookup transdate.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|stats count values(customer) as customer values(_time) as _time first(epoch) as first last(epoch) as last by sessionID|where count=4|eval duration=last-first\n|eventstats avg(duration) as avgdur stdev(duration) as stdev|where duration>(avgdur+(2*stdev))|fields - first last count _time|table sessionID customer duration avgdur stdev",
+        "label": "TX Outliers Duration - Demo"
+    },
+    "TX Count By Action - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup transdate.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use stats to count all actions by action name (steps) using the equal in eval. This gives counts for each step."
+        ],
+        "value": "|inputlookup transdate.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|stats count(eval(action=\"start\")) as start_count count(eval(action=\"in-progress\")) as in-progress_count count(eval(action=\"ending\")) as ending_count count(eval(action=\"finished\")) as finished_count", 
+        "label": "TX Count By Action - Demo"
+    },
+    "TX Count By Terminated Step - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup transdate.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use stats count to group by sessionID. The count is used to limit how many steps a session took. Then, count the count of sessions that took only N steps.",
+            "Do this search 4 different times in subsearches, one for each step of the tranaction, and glue the results back together using appendcols."
+        ],
+        "value": "|inputlookup transdate.csv|sort - _time\n|dedup sessionID|stats count(sessionID) as TotalSessions\n|appendcols[|inputlookup transdate.csv|sort - _time|stats count by sessionID|where count=1 |stats count(sessionID) as StoppedAtStartStep]|appendcols[|inputlookup transdate.csv|sort - _time|stats count by sessionID|where count=2 |stats count(sessionID) as StoppedAtStep2]|appendcols[|inputlookup transdate.csv|sort - _time|stats count by sessionID|where count=3 |stats count(sessionID) as StoppedAtStep3]|appendcols[|inputlookup transdate.csv|sort - _time|stats count by sessionID|where count=4|stats count(sessionID) as CompletedTransactions]",
+        "label": "TX Count By Terminated Step - Demo"
+    },
+    "TX Steps Over Time - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup transdate.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use timechart to count each named step of the transaction in 10 minute spans."
+        ],
+        "value": "|inputlookup transdate.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|timechart span=10s fixedrange=F count(eval(action=\"start\")) as start count(eval(action=\"in-progress\")) as in-progress count(eval(action=\"ending\")) as ending count(eval(action=\"finished\")) as finished",
+        "label": "TX Steps Over Time - Demo"
+    },
+    "TX Average Duration Steps - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup transdate.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use streamstats to group each step of the transaction to find the first and last time for the step. Duration is last-first time. Then, compute average duration with stats.",
+            "Use appendcols to glue all three avg duration values into one table."
+        ],
+        "value": "|inputlookup transdate.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|streamstats global=false window=2 first(epoch) as first last(epoch) as last last(action) as action by sessionID|eval duration=last-first|where duration>=0 AND action=\"in-progress\"|stats avg(duration) as Avg-In-Progress-Duration\n|appendcols [|inputlookup transdate.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time|streamstats global=false window=2 first(epoch) as first last(epoch) as last last(action) as action by sessionID|eval duration=last-first|where duration>=0 AND action=\"ending\"|stats avg(duration) as Avg-In-Progress-Ending-Duration]|appendcols[|inputlookup transdate.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time|streamstats global=false window=2 first(epoch) as first last(epoch) as last last(action) as action by sessionID|eval duration=last-first|where duration>=0 AND action=\"finished\"|stats avg(duration) as Avg-Now-Ending-Finished-Duration]",
+        "label": "TX Average Duration Steps - Demo"
+    },
+    "TX Average Duration Steps Sankey - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup transdate.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use streamstats to group each step of the transaction to find the first and last time for the step. Duration is last-first time. Then, print out the action step and average duration.",
+            "Do this with 3 streamstats in subsearches for each action step and use appendpipe to glue all three avg duration values into one table to be used for Sankey (Action-Duration)."
+        ],
+        "value": "|inputlookup transdate.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|streamstats global=false window=2 first(epoch) as first last(epoch) as last by sessionID|eval duration=last-first|table  action, duration|where duration>=0 AND action=\"in-progress\"|stats avg(duration) as Avg-In-Progress-Duration|eval source=\"start\", target=\"in-progress\"| rename Avg-In-Progress-Duration as count \n|appendpipe [|inputlookup transdate.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time|streamstats global=false window=2 first(epoch) as first last(epoch) as last by sessionID|eval duration=last-first|table  action, duration|where duration>=0 AND action=\"ending\"|stats avg(duration) as Avg-In-Progress-Ending-Duration |eval source=\"in-progress\", target=\"ending\"|rename Avg-In-Progress-Ending-Duration as count]|appendpipe[|inputlookup transdate.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time|streamstats global=false window=2 first(epoch) as first last(epoch) as last by sessionID|eval duration=last-first|table  action, last duration|where duration>=0 AND action=\"finished\"|stats avg(duration) as Avg-Ending-Finished-Duration|eval source=\"ending\", target=\"finished\"| rename Avg-Ending-Finished-Duration as count]|fields source target count|rename count as \"Average Duration\"", 
+        "label": "TX Average Duration Steps Sankey - Demo"
+    },
+    "TX Customers Most Completed - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup transdate.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges.",
+            "Use stats to find all sessionIDs, customer combinations that have completed transacations, meaning action=finished. Then, use top to find top customers by count."
+        ],
+        "value": "|inputlookup transdate.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|stats count  last(action) as action values(_time) as _time by sessionID, customer|where count=4 and action=\"finished\"|top customer limit=10", 
+        "label": "TX Customers Most Completed - Demo"
+    },
+    "Wire Transfer Maps - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup wire_transfer.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges."
+        ],
+        "value": "|inputlookup wire_transfer.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort  _time|search action=\"authorized\"|iplocation clientIP|geostats count by clientIP", 
+        "label": "Wire Transfer Maps - Demo"
+    },
+    "Wire Transfer Actions - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup wire_transfer.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges."
+        ],
+        "value": "|inputlookup wire_transfer.csv|sort - _time|stats count by action|sort - count", 
+        "label": "Wire Transfer Actions - Demo"
+    },
+    "Wire Transfer Errors - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup wire_transfer.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Search for Error and print out a table of your events. Use Fields to remove unnecessary fields."
+        ],
+        "value": "|inputlookup wire_transfer.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|search action=\"error\"|eval amount=tostring(round(amount, 2),\"commas\")|table *|fields - epoch OpenDate",
+        "label": "Wire Transfer Errors - Demo"
+    },
+    "Wire Transfer IPs - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup wire_transfer.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges."
+        ],
+        "value": "|inputlookup wire_transfer.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time|timechart span=15m fixedrange=F count by clientIP usenull=f limit=10",
+        "label": "Wire Transfer IPs - Demo"
+    },
+    "Wire Transfer Max Amounts - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup wire_transfer.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use stats to find maximum amount by customer, sort on max amount, and limit it to the top 10."
+        ],
+        "value": "|inputlookup wire_transfer.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|search action=\"authorized\"|stats max(amount) as max_amount by customer|sort - max_amount|head 10", 
+        "label": "Wire Transfer Max Amounts - Demo"
+    },
+    "Wire Transfer Amount Outliers - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup wire_transfer.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges filtering by authorized transfers.",
+            "Use stats to find average amount by authorized customer.  Use eventstats to find the overall average of the average and standard deviation.",
+            "Filter results by customer's amounts average greater than the overall average plus standard deviation."
+        ],
+        "value": "|inputlookup wire_transfer.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time|search action=\"authorized\"\n|stats avg(amount) as avg_amount by customer|eventstats avg(avg_amount) as avg_all stdev(avg_amount) as stdev_all\n|where avg_amount>(avg_all+stdev_all)|eval avg_amount=tostring(round(avg_amount, 2),\"commas\")",
+        "label": "Wire Transfer Amount Outliers - Demo"
+    },
+    "Wire Transfer Sankey - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup wire_transfer.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges. Filter by authorized results.",
+            "Use stats to count the number of times a source and destination combination was used. Visualize as Sankey."
+        ],
+        "value": "|inputlookup wire_transfer.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time|search action=\"authorized\"\n|stats count by clientIP,destIP",
+        "label": "Wire Transfer Sankey - Demo"
+    },
+    "Login Denied Auth - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup new_today.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Get the first and last action field grouped by customer. If the first is denied and last is authorized, it is an outlier."
+        ],
+        "value": "|inputlookup new_today.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|stats first(action) as first_action last(action) as last_action last(_time) as _time by customer, location,sessionID |where first_action=\"denied\" AND last_action=\"authorized\"", 
+        "label": "Login Denied Auth - Demo"
+    },
+    "Login Denied - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup new_today.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Get actions which match denied and print out in a table customer name, action, sessionID, and location."
+        ],
+        "value": "|inputlookup new_today.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|where action=\"denied\"|table _time, customer, action, sessionID, location", 
+        "label": "Login Denied - Demo"
+    },
+    "Login Errors - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup new_today.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Get actions which match error and print out in a table customer name, action, sessionID, and location."
+        ],
+        "value": "|inputlookup new_today.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|where action=\"error\"|table _time, customer, action, sessionID, location", 
+        "label": "Login Errors - Demo"
+    },
+    "Login Response Outliers - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup new_today.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Group average response times by customer using stats. Use eventstats to find the average of all respnose times and standard deviations. Find outliers that are greater than average plus 4 standard deviations."
+        ],
+        "value": "|inputlookup new_today.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|stats avg(ResponseTime) as averageResp by customer,location|eventstats avg(averageResp) as avg stdev(averageResp) as stdev |where averageResp>(avg+4*stdev)", 
+        "label": "Login Response Outliers - Demo"
+    },
+    "Login Response Timewrap - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup new_today.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges."
+        ],
+        "value": "|inputlookup new_today.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time|timechart count span=5m fixedrange=F|timewrap 2h|fields - latest_2hours|rename 722hours_before as now, 720hours_before as 2hours_before",
+        "label": "Login Response Timewrap - Demo"
+    },
+    "Login Trellis - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup new_today.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use timechart to count by action and view it as a Trellis chart."
+        ],
+        "value": "|inputlookup new_today.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|timechart count by action fixedrange=F",
+        "label": "Login Trellis - Demo"
+    },
+    "Login Action Location - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup new_today.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Then, perform a chart count of actions over location."
+        ],
+        "value": "|inputlookup new_today.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|chart count over location by action",
+        "label": "Login Action Location - Demo"
+    },
+    "Login Action Time - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup new_today.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use timechart in 15 minute spans to count the actions split by location."
+        ],
+        "value": "|inputlookup new_today.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|timechart span=15m fixedrange=F count(action) as action by location",
+        "label": "Login Action Time - Demo"
+    },
+    "Login Action Types Time - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup new_today.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use timechart in 15 minute spans to do a count/eval to match authorized or denied split by location."
+        ],
+        "value": "|inputlookup new_today.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|timechart span=15m fixedrange=F count(eval(action=\"authorized\")) as authorized count(eval(action=\"denied\")) as denied by location",
+        "label": "Login Action Types Time - Demo"
+    },
+    "Login Response Location - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup new_today.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use timechart in 15 minute spans to find the average response time split by location."
+        ],
+        "value": "|inputlookup new_today.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|timechart span=15m fixedrange=F avg(ResponseTime) as averageResponseTime by location", 
+        "label": "Login Response Location - Demo"
+    },
+    "ATM Stat Maps - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup ATM_list.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges."
+        ],
+        "value": "|inputlookup ATM_list.csv|eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\") |sort - _time|where action=\"withdrawal\"|lookup ATM_place location OUTPUT latitude longitude|geostats count latfield=latitude longfield=longitude", 
+        "label": "ATM Stat Maps - Demo"
+    },
+    "ATM Stat Trellis - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup ATM_list.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges."
+        ],
+        "value": "|inputlookup ATM_list.csv|eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time|where action=\"withdrawal\"| timechart span=10m fixedrange=F avg(amount)  by user useother=f",
+        "label": "ATM Stat Trellis - Demo"
+    },
+    "ATM Top Users - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup ATM_list.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges."
+        ],
+        "value": "|inputlookup ATM_list.csv|eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time|where action=\"withdrawal\" |top user",
+        "label": "ATM Top Users - Demo"
+    },
+    "ATM Average Withdrawal Deposit - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup ATM_list.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use stats to find the average withdrawal amount.",
+            "Use stats to find the average deposit amount and use appendcols to glue it into one report."
+        ],
+        "value": "|inputlookup ATM_list.csv|eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|where action=\"withdrawal\" |stats avg(amount) as average_withdrawal|eval average_withdrawal=tostring(round(average_withdrawal, 2),\"commas\")\n|appendcols [|inputlookup ATM_list.csv|eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time|where action=\"deposit\" |stats avg(amount) as average_deposit|eval average_deposit=tostring(round(average_deposit, 2),\"commas\")]",
+        "label": "ATM Average Withdrawal Deposit - Demo"
+    },
+    "ATM Location Sankey - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup ATM_list.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges filtering by withdrawal actions.",
+            "Use stats count by location and user to group the location activity, sort the count, and use head for the top 10. Visualize as Sankey."
+        ],
+        "value": "|inputlookup ATM_list.csv|eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time|where action=\"withdrawal\"\n|stats count sum(amount) as sum by user,location|sort - sum|head 10", 
+        "label": "ATM Location Sankey - Demo"
+    },
+    "ATM Location Horizon - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup ATM_list.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use a timechart to count by location in 10 minute spans. Then, visualize as a horizon chart."
+        ],
+        "value": "|inputlookup ATM_list.csv|eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|timechart span=10m fixedrange=F count by location useother=f",
+        "label": "ATM Location Horizon - Demo"
+    },
+    "ATM Location Timeline - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup ATM_list.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use transaction to group events by user and location with a maximum 5 minute spans. This gives you a duration field.",
+            "Use a table to list out the time, location and duration to feed to a timeline chart."
+        ],
+        "value": "|inputlookup ATM_list.csv|eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|transaction user,location maxspan=5m\n|table _time location duration",
+        "label": "ATM Location Timeline - Demo"
+    },
+    "Bitcoin TX Index - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup bc_trans.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use the eventcat field to only search for inputs and outputs. We hardcode the block_height and tx_index for the example, but you should use a macro.",
+            "Finally use table to print out all relevant fields for the trace."
+        ],
+        "value": "|inputlookup bc_trans.csv| sort - _time\n|search (eventcat=input_from OR eventcat=output_to) block_height=532209 tx_index=360716205 \n| table _time, eventcat, block_height, tx_index, out_address, out_n, out_script, out_spent, out_tx_index, out_value, in_address, in_n, in_script, in_tx_index, in_value",
+        "label": "Bitcoin TX Index - Demo"
+    },
+    "Bitcoin Average Block Fee - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup bc_block.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges."
+        ],
+        "value": "|inputlookup bc_block.csv|chart avg(block_fee) by block_size",
+        "label": "Bitcoin Average Block Fee - Demo"
+    },
+    "Bitcoin Average Market Price - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup bc_stats.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Then, use a timechart with 10 minute spans to find the average market price over time."
+        ],
+        "value": "|inputlookup bc_stats.csv| eval _time=strptime(_time, \"%Y-%m-%d %H:%M:%S\")|sort - _time\n| timechart avg(market_price_usd) span=10m fixedrange=F",
+        "label": "Bitcoin Average Market Price - Demo"
+    },
+    "Bitcoin Average Trade Volume - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup bc_stats.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Then, use timechart in 10 minute spans to find the average trade volume over time."
+        ],
+        "value": "|inputlookup bc_stats.csv| eval _time=strptime(_time, \"%Y-%m-%d %H:%M:%S\")\n|sort - _time| timechart avg(trade_volume_usd) span=10m fixedrange=F",
+        "label": "Bitcoin Average Trade Volume - Demo"
+    },
+    "Bitcoin Average Miners Revenue - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup bc_stats.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Then, use timchart with 10 minute spans to find the average miner's price over time."
+        ],
+        "value": "|inputlookup bc_stats.csv| eval _time=strptime(_time, \"%Y-%m-%d %H:%M:%S\")|sort - _time\n| timechart avg(miners_revenue_usd) span=10m fixedrange=F",
+        "label": "Bitcoin Average Miners Revenue - Demo"
+    },
+    "Trade Where Is It - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup trade_entry.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges. Use a macro for the trade ID value instead of the hardcoded value.",
+            "Use the coalesce command to collapse the different field names, representing a trade ID, into one field name used for grouping.",
+            "Then just list the raw events by the coalesced trade ID field."
+        ],
+        "value": "|inputlookup trade_entry.csv |sort - _time|search 327532\n|eval tradeID=coalesce(tradeID, tradeIDReceived, tradeIDSent)\n|stats list(_raw) by tradeID",
+        "label": "Trade Where Is It - Demo"
+    },
+    "Trade Top Customers - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup trade_entry.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use top with a limit of 10 to find counts for top 10 customers as they appear in events."
+        ],
+        "value": "|inputlookup trade_entry.csv|sort - _time\n|top customer limit=10|sort - count|fields - percent",
+        "label": "Trade Top Customers - Demo"
+    },
+    "Trade Total Bought - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup trade_entry.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges filtering on action=buy.",
+            "Use chart or stats sum of quantity split by symbol to find the total quanity. Sort on the total."
+        ],
+        "value": "|inputlookup trade_entry.csv|sort - _time|where action=\"buy\"\n|chart sum(quantity) as \"Total quantity bought\" by symbol|sort - \"Total quantity bought\"",
+        "label": "Trade Total Bought - Demo"
+    },
+    "Trade Total Sold - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup trade_entry.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges filter on action=sell.",
+            "Use chart or stats sum of quantity split by symbol to find the total quanity. Sort on the total."
+        ],
+        "value": "|inputlookup trade_entry.csv|sort - _time|where action=\"sell\"\n|chart sum(quantity) as \"Total quantity sold\" by symbol|sort - \"Total quantity sold\"",
+        "label": "Trade Total Sold - Demo"
+    },
+    "Trade Sell Statistics - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup trade_entry.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges and use action=buy to filter the search.",
+            "Use stats with min, max, mean, and stdev to find the statistics of each price split by symbol. The rest is formatting."
+        ],
+        "value": "|inputlookup trade_entry.csv|sort - _time|where action=\"sell\"\n|stats min(price) as min_price max(price) as max_price stdev(price) as stdev_price mean(price) as mean_price by symbol|eval min_price=tostring(round(min_price, 2),\"commas\"), max_price=tostring(round(max_price, 2),\"commas\"), stdev_price=tostring(round(stdev_price, 2),\"commas\"), mean_price=tostring(round(mean_price, 2),\"commas\")", 
+        "label": "Trade Sell Statistics - Demo"
+    },
+    "Trade Buy Statistics - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup trade_entry.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges and use action=buy to filter the search.",
+            "Use stats with min, max, mean, and stdev to find the statistics of each price split by symbol. The rest is formatting."
+        ],
+        "value": "|inputlookup trade_entry.csv|sort - _time|where action=\"buy\"\n|stats min(price) as min_price max(price) as max_price stdev(price) as stdev_price mean(price) as mean_price by symbol|eval min_price=tostring(round(min_price, 2),\"commas\"), max_price=tostring(round(max_price, 2),\"commas\"), stdev_price=tostring(round(stdev_price, 2),\"commas\"), mean_price=tostring(round(mean_price, 2),\"commas\")", 
+        "label": "Trade Buy Statistics - Demo"
+    },
+    "Account Compliance Negative Balance - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup bank_accounts.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Lookup the other accounts for the customer and group (list) details by customer using the stats command.",
+            "Split up the MV field other_balance and search if any balance starts with -. If so, make it a MV field again and print results."
+        ],
+        "value": "|inputlookup bank_accounts.csv | eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|lookup All_Accounts customer |stats last(_time) as _time last(amount) as amount last(accountID) as accountID last(action) as action last(account_type) as account_type list(other_balance) as other_balance list(other_accountID) as other_accountID  list(other_account_type) as other_account_type by customer \n|search other_balance=*|nomv other_balance|search other_balance=\"-*\"|makemv delim=\" \" other_balance|table _time, customer, amount, accountID, action, account_type, other_accountID, other_account_type, other_balance|eval amount=tostring(round(amount, 2),\"commas\")",
+        "label": "Account Compliance Negative Balance - Demo"
+    },
+    "Account Compliance Zero Balance - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup bank_accounts.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Lookup the other accounts for the customer and group (list) details by customer using the stats command. Check using mvfilter if any other_balance contains zero.",
+            "If so, make it a MV field again and print results."
+        ],
+        "value": "|inputlookup bank_accounts.csv | eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")\n|sort - _time|lookup All_Accounts customer |stats last(_time) as _time last(amount) as amount last(accountID) as accountID last(action) as action last(account_type) as account_type list(other_balance) as other_balance list(other_accountID) as other_accountID  list(other_account_type) as other_account_type by customer \n|eval is_match=mvfilter(match(\"0\", other_balance))|search is_match=*|fields - is_matchtable|table _time, customer, amount, accountID, action, account_type, other_accountID, other_account_type, other_balance|eval amount=tostring(round(amount, 2),\"commas\")",
+        "label": "Account Compliance Zero Balance - Demo"
+    },
+    "Account Compliance TooMany - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup bank_accounts.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Lookup the other accounts for the customer and group (list) details by customer using the stats command.",
+            "Count the number of other accounts and sum up the total balance. If the number of other_accounts is greater than 10, print results."
+        ],
+        "value": "|inputlookup bank_accounts.csv | eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|lookup All_Accounts customer|stats last(_time) as _time list(accountID) as accountID list(action) as action list(amount) as amount list(balance) as balance values(other_accountID) as other_accountID sum(other_balance) as Total_Balance by customer\n|eval count_other_accounts=mvcount(other_accountID)|where count_other_accounts>10|eval Total_Balance=Total_Balance+balance |eval balance=tostring(round(balance, 2),\"commas\"), Total_Balance=tostring(round(Total_Balance, 2),\"commas\")",
+        "label": "Account Compliance TooMany - Demo"
+    },
+    "Account Compliance TooOld - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup bank_accounts.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inner inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Lookup the other accounts for the customer and join the results.",
+            "Use the relative_time function to find other accounts, whose last_touched date is at least 6 months greater than the current transaction date. Report on the results."
+        ],
+        "value": "|inputlookup other_accounts.csv | eval prev_epoch=strptime(last_touched, \"%m/%d/%Y %H:%M:%S\")|sort - last_touched\n|join customer \n[ |inputlookup bank_accounts.csv ]|where epoch>relative_time(prev_epoch, \"+6mon\")|fields - prev_epoch, balance|rename accountID as current_accountID action as current_action account_type as current_account_type |eval current_balance=tostring(round(current_balance, 2),\"commas\"), other_balance=tostring(round(other_balance, 2),\"commas\")|convert timeformat=\"%m/%d/%Y %H:%M:%S\" ctime(epoch) AS current_time|fields - epoch",
+        "label": "Account Compliance TooOld - Demo"
+    },
+    "Account Too Much Balance - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup bank_accounts.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Lookup the other accounts for the customer and correlate the results. Use stats to sum up the account balance for all accounts and find totals greater than 250000.",
+            "Report on the results."
+        ],
+        "value": "|inputlookup bank_accounts.csv | eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|lookup All_Accounts customer|stats  values(_time) as _time list(balance) as current_account_balance list(account_type) as current_account_type list(other_account_type) as other_account_type list(other_accountID) as other_accountID list(other_balance) as other_balance sum(other_balance) as Total_Balance by customer|eval Total_Balance=Total_Balance+current_account_balance|search other_account_type=\"*\" AND Total_Balance>250000|\neval Total_Balance=tostring(round(Total_Balance, 2),\"commas\"), current_account_balance=tostring(round(current_account_balance, 2),\"commas\")",
+        "label": "Account Too Much Balance - Demo"
+    },
+    "FIX Readable - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup fix.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use the translatefix commmand to create readable tags or keys. Then, you use extract with a key value delimiter to create key values."
+
+        ],
+        "value": "|inputlookup fix.csv|eval _time=strptime(_time, \"%Y-%m-%d %H:%M:%S\")|sort - _time\n|translatefix|extract kvdelim=\"=\"|table _time, _raw", 
+        "label": "FIX Readable - Demo"
+    },
+    "FIX Average Price - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup morefix.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use the translatefix command to get readable key values and use stats get the average price by symobl."
+        ],
+        "value": "|inputlookup morefix.csv|eval _time=strptime(_time, \"%Y-%m-%d %H:%M:%S\")\n|sort _time|translatefix|extract kvdelim=\"=\"|stats avg(Price) by Symbol", 
+        "label": "FIX Average Price - Demo"
+    },
+    "FIX Order Status Distribution - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup fix.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use translatefix to get readable key values and use stats to count by order status."
+        ],
+        "value": "|inputlookup fix.csv|eval _time=strptime(_time, \"%Y-%m-%d %H:%M:%S\")|sort _time\n|translatefix|extract kvdelim=\"=\"|stats count by OrdStatus", 
+        "label": "FIX Order Status Distribution - Demo"
+    },
+    "FIX Message Types - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup fix.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use translatefix to get readable key values and use stats to produce a sparkline for Message Types. This uses all-time in the screenshot."
+        ],
+        "value": "|inputlookup fix.csv|eval _time=strptime(_time, \"%Y-%m-%d %H:%M:%S\")|sort _time\n|translatefix|extract kvdelim=\"=\"|stats sparkline count by MsgType|sort - count", 
+        "label": "FIX Message Types - Demo"
+    },
+    "FIX Order Types - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup fix.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use translatefix to get readable key values and use stats to count by Order Type."
+        ],
+        "value": "|inputlookup fix.csv|eval _time=strptime(_time, \"%Y-%m-%d %H:%M:%S\")\n|sort _time|translatefix|extract kvdelim=\"=\"|stats count by OrdType", 
+        "label": "FIX Order Types - Demo"
+    },
+    "ATM Fraud Outliers - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup ATM_list.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Perform a lookup to get risk scores per user. Use eventstats to get the average count and standard deviation of all users. Finally, compare the count of users' access to the average count and some mulitple of standard deviation of all users."
+            
+        ],
+        "value": "|inputlookup ATM_list.csv|eval _time=strptime(_time, \"%Y-%m-%d %H:%M:%S\") |sort - _time\n|lookup Risk user OUTPUT score|stats sum(score) as Risk_Score count by user|eventstats avg(count) as avg stdev(count) as stdev|where count>(avg+stdev*3.5) |sort - count",
+        "label": "ATM Fraud Outliers - Demo"
+    },
+    "ATM Risk Scores - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup ATM_list.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Perform a lookup to get risk scores per user. Finally, summarize the Risk Scores per user against their event activity. Sort by Risk_Score. Use head to get the top 5."
+            
+        ],
+        "value": "|inputlookup ATM_list.csv | eval _time=strptime(_time, \"%Y-%m-%d %H:%M:%S\") |sort - _time\n|lookup Risk user OUTPUT score|stats sum(score) as Risk_Score by user|sort - Risk_Score|head 5",
+        "label": "ATM Risk Scores - Demo"
+    },
+    "ATM Location Fraud - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup ATM_list.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use a time window of 1 minute in streamstats to find locations by user and if the distinct location count is greater than 1.",
+            "Rest is just formatting to show human readable time stamps and amounts with commas."
+        ],
+        "value": "|inputlookup ATM_list.csv|eval _time=strptime(_time, \"%Y-%m-%d %H:%M:%S\") |sort - _time\n|search action=withdrawal|eval amount=tostring(round(amount, 2),\"commas\")|streamstats time_window=1m dc(location) as dc list(amount) as amount list(location) as location earliest(epoch) as epoch latest(epoch) as latest_epoch by user|where dc>1|dedup user\n| eval first_time=strftime(epoch,\"%m/%d/%y %H:%M:%S\"),  last_time=strftime(latest_epoch,\"%m/%d/%y %H:%M:%S\") |table user amount action location first_time last_time",
+        "label": "ATM Location Fraud - Demo"
+    },
+    "ATM Testing Fraud - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup ATM_list.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use a time window of 1 minute in streamstats to find min and max withdrawals by user. If the min is very small and the max is very large, it is an outlier."
+            
+        ],
+        "value": "|inputlookup ATM_list.csv|sort - _time\n|search action=withdrawal|streamstats count time_window=1m min(amount) as min max(amount) as max by user,location|where count>1 and min<20 and max>9000|table _time user action min max location|dedup user, location|eval min=tostring(round(min, 2),\"commas\")|eval max=tostring(round(max, 2),\"commas\")",
+        "label": "ATM Testing Fraud - Demo"
+    },
+    "ATM 10000 Fraud - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup ATM_list.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype=...sort and use your own time ranges.",
+            "Find all amounts less than 10000 and greter than 9800"
+            
+        ],
+        "value": "|inputlookup ATM_list.csv|sort - _time\n|where amount>9800 AND amount<10000|table _time user action amount|eval amount=tostring(round(amount, 2),\"commas\")",
+        "label": "ATM 10000 Fraud - Demo"
+    },
+    "Payment Response Outliers - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup RequestResponse.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Group by some ID and find first and last time occurance to calculate duration. Count must be at least 2 to get a response. Then, use eventstats to find the average duration and standard deviation of all payments.",
+            "Filter by all durations that are greater than the average plus 2*standard deviation."
+            
+        ],
+        "value": "|inputlookup RequestResponse.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")\n|sort _time|stats count values(customer) as customer values(amount) as amount  values(_time) as _time first(epoch) as first last(epoch) as last by sessionID|where count>1|eval duration=last-first|eventstats avg(duration) as avgdur stdev(duration) as stdev|\nwhere duration>(avgdur+(2*stdev))|fields - first last count _time|sort - duration |table sessionID customer amount duration avgdur stdev|eval amount=tostring(round(amount, 2),\"commas\")",
+        "label": "Payment Response Outliers - Demo"
+    },
+    "Payment SLA Counts - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup RequestResponse.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Group by some ID and find first and last time occurance to calculate duration. For sessionID counts that are greater than one, use rangemap to label the range field based on the ranges in duration. Use your own thresholds",
+            "Finally, group the counts of ranges using stats or chart."
+            
+        ],
+        "value": "|inputlookup RequestResponse.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")\n|sort _time|stats count  first(_time) as first last(_time) as last by sessionID|where count>1|eval duration=last-first|rangemap field=duration Met_SLA=1-1500 Near_SLA=1501-2200 Missed_SLA=2201-10000 default=Missed_SLA\n|chart count by range",
+        "label": "Payment SLA Counts - Demo"
+    },
+    "Payment SLA Amounts - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup RequestResponse.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Group by some ID and find first and last time occurance to calculate duration. For sessionID counts that are greater than one, use rangemap to label the range field based on the ranges in duration. Use your own thresholds.",
+            "Then, sum the amounts by range categories."
+            
+        ],
+        "value": "|inputlookup RequestResponse.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time\n|stats count first(amount) as amount  first(_time) as first last(_time) as last by sessionID|where count>1|eval duration=last-first|rangemap field=duration Met_SLA=1-1500 Near_SLA=1501-2200 Missed_SLA=2201-10000 default=Missed_SLA\n|chart sum(amount) as TotalAmount by range|eval TotalAmount=tostring(TotalAmount,\"commas\")",
+        "label": "Payment SLA Amounts - Demo"
+    },
+    "Payment Response Missing - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup RequestResponse.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Group by a payment ID and find all groupings that have only one event, which means the response is mssing."
+            
+        ],
+        "value": "|inputlookup RequestResponse.csv|sort - _time\n|stats values(action) as action values(customer) as customer values(amount) as amount  count by sessionID|where count=1| eval amount=tostring(round(amount, 2),\"commas\")",
+        "label": "Payment Response Missing - Demo"
+    },
+    "Payment Response Statistics - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup RequestResponse.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges. Group by a payment ID and sum up the amounts by ID. Divide by 2 to avoid counting twice"
+            
+        ],
+        "value": "|inputlookup RequestResponse.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time|stats count values(customer) as customer sum(amount) as amount  values(_time) as _time first(epoch) as first last(epoch) as last by sessionID|where count>1 AND (count%2==0)|eval amount=amount/2|sort - amount|head 10|timechart sum(amount) by customer",
+        "label": "Payment Response Statistics - Demo"
+    },
+    "Payment ITSI - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup RequestResponse.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges."
+            
+        ],
+        "value": "|inputlookup RequestResponse.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort _time",
+        "label": "Payment ITSI - Demo"
+    },
+    "MFID Time Drift - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup timedrift.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Search for hosts' time drifts that are outside of an acceptable range as outliers."
+            
+        ],
+        "value": "|inputlookup timedrift.csv|sort - date\n|where drift<-0.1 OR drift>+0.1",
+        "label": "MFID Time Drift - Demo"
+    },
+    "MFID Time Drift - Live": {
+        "prereqs": [{
+            "greaterorequalto": 1,
+            "field": "count",
+            "test": "| metasearch index=* sourcetype=csv | stats count",
+            "resolution": "This data is provided by a script: echo `sntp time_server` `hostname`",
+            "name": "Must have sntp logs with hostname and timestamp"
+        }],
+        "description": [
+            "Check if timedrift is outside a threshold. If so, report it."
+        ],
+        "value": "index=* sourcetype=\"csv\"|where drift<-0.1 OR drift>+0.1|table _time extracted_host drift",
+        "label": "MFID Time Drift - Live"
+    },
+    "MFID Impact Buy - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup timedrift.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Search for hosts' time drifts that are outside of an acceptable range as outliers. Use a lookup to find amounts and volumes for buy orders at that time and print out results in a table."
+            
+        ],
+        "value": "|inputlookup timedrift.csv|sort - date\n|where drift<-0.1 OR drift>+0.1|lookup VolumeBuy host, date|table date, host, drift, amount, volume|eval amount=tostring(round(amount, 2),\"commas\")",
+        "label": "MFID Impact Buy - Demo"
+    },
+    "MFID Impact Sell - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup timedrift.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Search for hosts' time drifts that are outside of an acceptable range as outliers. Use a lookup to find amounts and volumes for sell orders at that time and print out results in a table."
+            
+        ],
+        "value": "|inputlookup timedrift.csv|sort - date\n|where drift<-0.1 OR drift>+0.1|lookup VolumeSell host, date|table date, host, drift, amount, volume|eval amount=tostring(round(amount, 2),\"commas\")",
+        "label": "MFID Impact Sell - Demo"
+    },
+    "MFID Best Execution Buy - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup orders.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges.",
+            "Look up all trade prices from exchanges for each symbol using a lookup. Compare the trade price with an exchange price. If the exchange price is higher, it is a violation."
+            
+        ],
+        "value": "|inputlookup orders.csv\n|lookup FSExchange _time, symbol OUTPUT exchangeA exchangeB exchangeC|where (action=\"buy\") AND (amount>exchangeA OR amount>exchangeB OR amount>exchangeC)",
+        "label": "MFID Best Execution Buy - Demo"
+    },
+    "MFID Best Execution Sell - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup orders.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup with sourcetype= and use your own time ranges.",
+            "Look up all trade prices from exchanges for each symbol. Compare the trade price with an exchange price. If the exchange price is lower, it is a violation."
+            
+        ],
+        "value": "|inputlookup orders.csv\n|lookup FSExchange _time, symbol OUTPUT exchangeA exchangeB exchangeC|where (action=\"sell\") AND (amount<exchangeA OR amount<exchangeB OR amount<exchangeC)",
+        "label": "MFID Best Execution Sell - Demo"
+    },
+    "CC Fraud Rare Spending - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup customer_txn.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use a lookup to find out the last time the customer used the card. If the total spent is large and the last usage is greater than 6 months, it is an outlier.",
+            "relative_time is used to compare an epoch time with a time window."
+            
+        ],
+        "value": "|inputlookup customer_txn.csv | eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")\n|sort - _time|lookup CCData customer|stats sum(amount) as total_spent first(_time) as _time  first(previous_tx_date) as previous_date by customer\n|where total_spent>3000 and _time>relative_time(strptime(previous_date, \"%m/%d/%Y %H:%M:%S\"), \"+6mon\")|eval total_spent=tostring(round(total_spent, 2),\"commas\")",
+        "label": "CC Fraud Rare Spending - Demo"
+    },
+    "CC Fraud Rare TooMany - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup customer_txn.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use streamstats for a one minute window to count the number CC uses by customer. If the number is large, it is an outlier."
+            
+        ],
+        "value": "|inputlookup customer_txn.csv | eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|streamstats earliest(_time) as _time latest(_time) as latest_time time_window=1m count(action) as num_transactions  by customer|where num_transactions>=10 |eval latest_time=strftime(latest_time,\"%Y-%m-%d %H:%M:%S\")|dedup customer|table customer, _time, latest_time, num_transactions, category",
+        "label": "CC Fraud Rare TooMany - Demo"
+    },
+    "CC Fraud New Category - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup customer_txn.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Lookup each customers categories. Group categories by customer and make it a MV field.",
+            "Then, if the purchase category is not in the list if(match...) and the amount is large, it is an outlier."
+            
+        ],
+        "value": "|inputlookup customer_txn.csv | eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|lookup CCData customer|streamstats window=1 list(category) as category by customer |makemv delim=\"|\" categories\n|eval match=if(match(categories,category),1,0)|where match=0 and amount>1000|eval amount=tostring(round(amount, 2),\"commas\")|table customer _time, amount, categories category, action",
+        "label": "CC Fraud New Category - Demo"
+    },
+    "CC Fraud Small Large - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup customer_txn.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Group purchases in streamstats and capture their first and last transanction in a one minute window. If the the first amount is small and last one is large, it is an outlier."
+            
+        ],
+        "value": "|inputlookup customer_txn.csv | eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")\n|sort - _time|streamstats earliest(amount) as first_amount latest(amount) as last_amount earliest(_time) as _time latest(_time) as latest_time time_window=1m count(action) as num_transactions by customer|where num_transactions>=2 and first_amount<20 and last_amount>3000|eval first_amount=tostring(round(first_amount, 2),\"commas\"), last_amount=tostring(round(last_amount, 2),\"commas\")| eval latest_time=strftime(latest_time,\"%Y/%m/%d %H:%M:%S\")|table customer, _time, latest_time, num_transactions, first_amount last_amount",
+        "label": "CC Fraud Small Large - Demo"
+    },
+    "CC Fraud TooMany TooLarge - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup customer_txn.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Group purchases counts in streamstats and capture their total amounts3 in a one minute window. If the amount is large and number of transactions are high, (say 5), it is an outlier.",
+            "Rest is formatting."
+            
+        ],
+        "value": "|inputlookup customer_txn.csv | eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|streamstats earliest(_time) as _time latest(_time) as latest_time time_window=1m count(action) as num_transactions  sum(amount) as total_spent by customer|where num_transactions>=5 AND total_spent>5000\n|eval latest_time=strftime(latest_time,\"%Y/%m/%d %H:%M:%S\")|eval total_spent=tostring(round(total_spent, 2),\"commas\")|table customer, _time, latest_time, num_transactions, total_spent, category",
+        "label": "CC Fraud TooMany TooLarge - Demo"
+    },
+    "Wire Transfer Fraud Denies - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup wire_transfer.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use streamstats to find in a 1 hour window at least 5 denies and one authorization for the same customer, from, and to account. The where clause states there are at least 5 denies, at least 1 authorized, and the latest action is authorized."
+            
+        ],
+        "value": "|inputlookup wire_transfer.csv| convert timeformat=\"%Y/%m/%d %H:%M:%S\" ctime(epoch) AS c_time|sort - _time\n|streamstats time_window=1h count(eval(action=\"denied\")) as denied_count count(eval(action=\"authorized\")) as \"authorized_count\" latest(action) as latest_action by customer,FromAccount,ToAccount|where denied_count>=5 and authorized_count>=1 and latest_action=\"authorized\" |table _time, customer, FromAccount, ToAccount, amount, denied_count, authorized_count|eval amount=tostring(round(amount, 2),\"commas\")",
+        "label": "Wire Transfer Fraud Denies - Demo"
+    },
+    "Wire Transfer Fraud NewAccount - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup wire_transfer.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Assuming you have a field or lookup a field for date open, add 1 day to the current Open Date Time using relative_time and check if the current time is less than that and the transfer amount is greater than 10,000 for an outlier."
+            
+        ],
+        "value": "|inputlookup wire_transfer.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|where _time<relative_time(OpenDate, \"+1d\")  and amount>10000|eval AccountOpenDate=strftime(OpenDate,\"%Y-%m-%d %H:%M:%S\") |iplocation destIP|rename Country as DestCountry City as DestCity |table _time,AccountOpenDate, customer, amount, FromAccount, ToAccount, DestCountry, DestCity|eval amount=tostring(round(amount, 2),\"commas\")",
+        "label": "Wire Transfer Fraud NewAccount - Demo"
+    },
+    "Wire Transfer Fraud MultipleIP - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup wire_transfer.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Using streamstats, use a one minute time window to group transfers by customer and count the number of distint client IPs used. If more than one distinct client IP is counted, this event is an outlier."
+            
+        ],
+        "value": "|inputlookup wire_transfer.csv| convert timeformat=\"%Y/%m/%d %H:%M:%S\" ctime(epoch) AS c_time|sort - _time|\neval amount=tostring(round(amount, 2),\"commas\")|streamstats time_window=1m count(eval(action=\"authorized\")) as authorized_count list(FromAccount) as FromAccount list(ToAccount) as ToAccount list(amount) as amount list(action) as action list(c_time) as time values(clientIP) as clientIP dc(clientIP) as clientIP_count by customer|where clientIP_count>=2|fields - OpenDate epoch destIP _time, clientIP_count c_time authorized_count",
+        "label": "Wire Transfer Fraud MultipleIP - Demo"
+    },
+    "Wire Transfer Fraud TooMany - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup wire_transfer.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Use a one hour time window to group transfers by customer and count the number of distint transfers as authorized_count. If authorized_count is more than a threshold (7), this event is an outlier."
+            
+        ],
+        "value": "|inputlookup wire_transfer.csv|sort - _time|eval amount=tostring(round(amount, 2),\"commas\")\n|streamstats time_window=1h count(eval(action=\"authorized\")) as authorized_count list(FromAccount) as FromAccount list(ToAccount) as ToAccount list(amount) as amount list(action) as action list(_time) as time by customer|where authorized_count>=7|fields - OpenDate epoch clientIP destIP _time",
+        "label": "Wire Transfer Fraud TooMany - Demo"
+    },
+    "Wire Transfer Fraud Suspicious - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup wire_transfer.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "Replace the inputlookup...sort with sourcetype= and use your own time ranges.",
+            "Now either use a destination IP address or Country name in the event to lookup to see if it is suspicious. We are using iplocation to lookup the Country name as we only have a destination IP address. If the country is suspicious and the transfer amount is large (greater than 10000), report on it."
+            
+        ],
+        "value": "|inputlookup wire_transfer.csv| eval _time=strptime(_time, \"%Y/%m/%d %H:%M:%S\")|sort - _time\n|eval is_suspicious=\"no\"|lookup isSuspicious ip as destIP OUTPUT is_suspicious|where is_suspicious=\"yes\" AND amount>10000|iplocation destIP|rename Country as destCountry|table _time, customer, FromAccount, ToAccount, action, amount, destCountry, destIP|eval amount=tostring(round(amount, 2),\"commas\")",
+        "label": "Wire Transfer Fraud Suspicious - Demo"
+    },
+    "Track Application Errors - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup track_application_errors | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_application_errors lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup track_application_errors | search  ADD_REAL_SPL_HERE",
+        "label": "Track Application Errors - Demo"
+    },
+    "Monitor Application Network Usage - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup monitor_application_network_usage | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "monitor_application_network_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup monitor_application_network_usage | search  ADD_REAL_SPL_HERE",
+        "label": "Monitor Application Network Usage - Demo"
+    },
+    "Identify Slow Web Pages - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup identify_slow_web_pages | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "identify_slow_web_pages lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup identify_slow_web_pages | search  ADD_REAL_SPL_HERE",
+        "label": "Identify Slow Web Pages - Demo"
+    },
+    "Predict Web Traffic Volume - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup predict_web_traffic_volume | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "predict_web_traffic_volume lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup predict_web_traffic_volume | search  ADD_REAL_SPL_HERE",
+        "label": "Predict Web Traffic Volume - Demo"
+    },
+    "Monitor End User Experience - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup monitor_end_user_experience | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "monitor_end_user_experience lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup monitor_end_user_experience | search  ADD_REAL_SPL_HERE",
+        "label": "Monitor End User Experience - Demo"
+    },
+    "Log Volume Trending - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup log_volume_trending | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "log_volume_trending lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup log_volume_trending | search  ADD_REAL_SPL_HERE",
+        "label": "Log Volume Trending - Demo"
+    },
+    "Asset Inventory Level 1 - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup asset_inventory_level_1 | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "asset_inventory_level_1 lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup asset_inventory_level_1 | search  ADD_REAL_SPL_HERE",
+        "label": "Asset Inventory Level 1 - Demo"
+    },
+    "Application Migration - Performance Comparison - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup application_migration_-_performance_comparison | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "application_migration_-_performance_comparison lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup application_migration_-_performance_comparison | search  ADD_REAL_SPL_HERE",
+        "label": "Application Migration - Performance Comparison - Demo"
+    },
+    "Identifying Database Errors - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup identifying_database_errors | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "identifying_database_errors lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup identifying_database_errors | search  ADD_REAL_SPL_HERE",
+        "label": "Identifying Database Errors - Demo"
+    },
+    "Predict End User Experience - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup predict_end_user_experience | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "predict_end_user_experience lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup predict_end_user_experience | search  ADD_REAL_SPL_HERE",
+        "label": "Predict End User Experience - Demo"
+    },
+    "Appropriately Scope Incident Impact - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup appropriately_scope_incident_impact | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "appropriately_scope_incident_impact lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup appropriately_scope_incident_impact | search  ADD_REAL_SPL_HERE",
+        "label": "Appropriately Scope Incident Impact - Demo"
+    },
+    "Identify Errors from a Single Server - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup identify_errors_from_a_single_server | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "identify_errors_from_a_single_server lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup identify_errors_from_a_single_server | search  ADD_REAL_SPL_HERE",
+        "label": "Identify Errors from a Single Server - Demo"
+    },
+    "Wire Data for Application Management - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup wire_data_for_application_management | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "wire_data_for_application_management lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup wire_data_for_application_management | search  ADD_REAL_SPL_HERE",
+        "label": "Wire Data for Application Management - Demo"
+    },
+    "Monitor Java Application Servers - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup monitor_java_application_servers | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "monitor_java_application_servers lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup monitor_java_application_servers | search  ADD_REAL_SPL_HERE",
+        "label": "Monitor Java Application Servers - Demo"
+    },
+    "Identify Web Users by Country - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup identify_web_users_by_country | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "identify_web_users_by_country lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup identify_web_users_by_country | search  ADD_REAL_SPL_HERE",
+        "label": "Identify Web Users by Country - Demo"
+    },
+    "Trend Unique Users Over Time - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup trend_unique_users_over_time | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "trend_unique_users_over_time lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup trend_unique_users_over_time | search  ADD_REAL_SPL_HERE",
+        "label": "Trend Unique Users Over Time - Demo"
+    },
+    "Browser Monitoring with Splunk - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup browser_monitoring_with_splunk | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "browser_monitoring_with_splunk lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup browser_monitoring_with_splunk | search  ADD_REAL_SPL_HERE",
+        "label": "Browser Monitoring with Splunk - Demo"
+    },
+    "Track a transaction across multiple servers - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup track_a_transaction_across_multiple_servers | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_a_transaction_across_multiple_servers lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup track_a_transaction_across_multiple_servers | search  ADD_REAL_SPL_HERE",
+        "label": "Track a transaction across multiple servers - Demo"
+    },
+    "Identify accurate incident start and stop times - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup identify_accurate_incident_start_and_stop_times | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "identify_accurate_incident_start_and_stop_times lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup identify_accurate_incident_start_and_stop_times | search  ADD_REAL_SPL_HERE",
+        "label": "Identify accurate incident start and stop times - Demo"
+    },
+    "Prioritize Bug Fixes - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup prioritize_bug_fixes | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "prioritize_bug_fixes lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup prioritize_bug_fixes | search  ADD_REAL_SPL_HERE",
+        "label": "Prioritize Bug Fixes - Demo"
+    },
+    "Track Real Time Twitter Activity - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup track_real_time_twitter_activity | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "track_real_time_twitter_activity lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup track_real_time_twitter_activity | search  ADD_REAL_SPL_HERE",
+        "label": "Track Real Time Twitter Activity - Demo"
+    },
+    "Overlay Change Records over Application KPI - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup overlay_change_records_over_application_kpi | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "overlay_change_records_over_application_kpi lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup overlay_change_records_over_application_kpi | search  ADD_REAL_SPL_HERE",
+        "label": "Overlay Change Records over Application KPI - Demo"
+    },
+    "Using Dynatrace with Splunk - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup using_dynatrace_with_splunk | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "using_dynatrace_with_splunk lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup using_dynatrace_with_splunk | search  ADD_REAL_SPL_HERE",
+        "label": "Using Dynatrace with Splunk - Demo"
+    },
+    "Using Instana with Splunk - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup using_instana_with_splunk | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "using_instana_with_splunk lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup using_instana_with_splunk | search  ADD_REAL_SPL_HERE",
+        "label": "Using Instana with Splunk - Demo"
+    },
+    "Measuring CPU Utilization by Process - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup measuring_cpu_utilization_by_process | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "measuring_cpu_utilization_by_process lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup measuring_cpu_utilization_by_process | search  ADD_REAL_SPL_HERE",
+        "label": "Measuring CPU Utilization by Process - Demo"
+    },
+    "Measuring Memory Utilization by Host - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup measuring_memory_utilization_by_host | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "measuring_memory_utilization_by_host lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup measuring_memory_utilization_by_host | search  ADD_REAL_SPL_HERE",
+        "label": "Measuring Memory Utilization by Host - Demo"
+    },
+    "Measuring Storage Speed/IO Utilization by Host - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup measuring_storage_speed/io_utilization_by_host | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "measuring_storage_speed/io_utilization_by_host lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup measuring_storage_speed/io_utilization_by_host | search  ADD_REAL_SPL_HERE",
+        "label": "Measuring Storage Speed/IO Utilization by Host - Demo"
+    },
+    "Measuring VM Memory Usage by MOID - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup measuring_vm_memory_usage_by_moid | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "measuring_vm_memory_usage_by_moid lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup measuring_vm_memory_usage_by_moid | search  ADD_REAL_SPL_HERE",
+        "label": "Measuring VM Memory Usage by MOID - Demo"
+    },
+    "Measuring VM CPU Usage - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup measuring_vm_cpu_usage | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "measuring_vm_cpu_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup measuring_vm_cpu_usage | search  ADD_REAL_SPL_HERE",
+        "label": "Measuring VM CPU Usage - Demo"
+    },
+    "Measuring Storage I/O Latency  - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup measuring_storage_i/o_latency_ | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "measuring_storage_i/o_latency_ lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup measuring_storage_i/o_latency_ | search  ADD_REAL_SPL_HERE",
+        "label": "Measuring Storage I/O Latency  - Demo"
+    },
+    "Measuring Disk Utilization - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup measuring_disk_utilization | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "measuring_disk_utilization lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup measuring_disk_utilization | search  ADD_REAL_SPL_HERE",
+        "label": "Measuring Disk Utilization - Demo"
+    },
+    "Find Server Errors - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup find_server_errors | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "find_server_errors lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup find_server_errors | search  ADD_REAL_SPL_HERE",
+        "label": "Find Server Errors - Demo"
+    },
+    "Measuring VM Storage Latency - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup measuring_vm_storage_latency | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "measuring_vm_storage_latency lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup measuring_vm_storage_latency | search  ADD_REAL_SPL_HERE",
+        "label": "Measuring VM Storage Latency - Demo"
+    },
+    "Measuring Memory Swap Operations - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup measuring_memory_swap_operations | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "measuring_memory_swap_operations lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup measuring_memory_swap_operations | search  ADD_REAL_SPL_HERE",
+        "label": "Measuring Memory Swap Operations - Demo"
+    },
+    "Measuring Network Utilization - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup measuring_network_utilization | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "measuring_network_utilization lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup measuring_network_utilization | search  ADD_REAL_SPL_HERE",
+        "label": "Measuring Network Utilization - Demo"
+    },
+    "Monitoring OS Metrics with collectd - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup monitoring_os_metrics_with_collectd | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "monitoring_os_metrics_with_collectd lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup monitoring_os_metrics_with_collectd | search  ADD_REAL_SPL_HERE",
+        "label": "Monitoring OS Metrics with collectd - Demo"
+    },
+    "Monitor Apache Web Servers with collectd - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup monitor_apache_web_servers_with_collectd | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "monitor_apache_web_servers_with_collectd lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup monitor_apache_web_servers_with_collectd | search  ADD_REAL_SPL_HERE",
+        "label": "Monitor Apache Web Servers with collectd - Demo"
+    },
+    "Monitor Load Balancer Connections - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup monitor_load_balancer_connections | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "monitor_load_balancer_connections lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup monitor_load_balancer_connections | search  ADD_REAL_SPL_HERE",
+        "label": "Monitor Load Balancer Connections - Demo"
+    },
+    "Monitor Load Balancer Throughput - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup monitor_load_balancer_throughput | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "monitor_load_balancer_throughput lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup monitor_load_balancer_throughput | search  ADD_REAL_SPL_HERE",
+        "label": "Monitor Load Balancer Throughput - Demo"
+    },
+    "Kubernetes Logging  Metrics - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup kubernetes_logging__metrics | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "kubernetes_logging__metrics lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup kubernetes_logging__metrics | search  ADD_REAL_SPL_HERE",
+        "label": "Kubernetes Logging  Metrics - Demo"
+    },
+    "Docker Logging - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup docker_logging | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "docker_logging lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup docker_logging | search  ADD_REAL_SPL_HERE",
+        "label": "Docker Logging - Demo"
+    },
+    "Splunk Insights - EKS Worker Nodes - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup splunk_insights_-_eks_worker_nodes | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "splunk_insights_-_eks_worker_nodes lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup splunk_insights_-_eks_worker_nodes | search  ADD_REAL_SPL_HERE",
+        "label": "Splunk Insights - EKS Worker Nodes - Demo"
+    },
+    "Kubernetes Audit Logging - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup kubernetes_audit_logging | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "kubernetes_audit_logging lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup kubernetes_audit_logging | search  ADD_REAL_SPL_HERE",
+        "label": "Kubernetes Audit Logging - Demo"
+    },
+    "Splunk Insights  - AWS Cloud Monitoring PAYG - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup splunk_insights__-_aws_cloud_monitoring_payg | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "splunk_insights__-_aws_cloud_monitoring_payg lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup splunk_insights__-_aws_cloud_monitoring_payg | search  ADD_REAL_SPL_HERE",
+        "label": "Splunk Insights  - AWS Cloud Monitoring PAYG - Demo"
+    },
+    "Splunk Insights - Windows Perfmon - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup splunk_insights_-_windows_perfmon | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "splunk_insights_-_windows_perfmon lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup splunk_insights_-_windows_perfmon | search  ADD_REAL_SPL_HERE",
+        "label": "Splunk Insights - Windows Perfmon - Demo"
+    },
+    "Splunk Insights - AWS Cloudwatch Logs  Metrics - Demo": {
+        "prereqs": [
+            {
+                "test": "|inputlookup splunk_insights_-_aws_cloudwatch_logs__metrics | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
+                "name": "splunk_insights_-_aws_cloudwatch_logs__metrics lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "<enter comments for line 2 of your search>",
+            "<enter comments for line 3 of your search>",
+            "..."
+        ],
+        "value": "|inputlookup splunk_insights_-_aws_cloudwatch_logs__metrics | search  ADD_REAL_SPL_HERE",
+        "label": "Splunk Insights - AWS Cloudwatch Logs  Metrics - Demo"
+    }
+}

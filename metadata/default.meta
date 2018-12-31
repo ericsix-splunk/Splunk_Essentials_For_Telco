@@ -1,0 +1,308 @@
+[]
+access = read : [ * ], write : [ admin, power ]
+
+[viewstates]
+access = read : [ * ], write : [ * ]
+export = system
+
+[commands]
+export = system
+#export = system
+
+[searchbnf]
+export = system
+
+[views/use_case_metrics]
+owner = admin
+version = 7.0.0
+modtime = 1513706850.650944000
+
+[ui-tour/showcase_simple_search-tour%3Aenterprise]
+owner = admin
+version = 7.0.1
+modtime = 1516200723.381278000
+
+[views/journey]
+version = 7.0.2
+modtime = 1519061060.343288000
+
+[macros/User_to_Index_Provisioning_From_Data_Governance_App]
+export = none
+owner = admin
+version = 7.0.1
+modtime = 1518020879.050514000
+
+[views/security_journey_clone]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = admin
+version = 7.0.2
+modtime = 1518590899.220782000
+
+[ui-tour/contents-tour%3Aenterprise]
+owner = admin
+version = 7.0.1
+modtime = 1518573990.552671000
+
+[app/install/install_source_checksum]
+version = 7.1.0
+modtime = 1525875921.257034000
+
+[lookups/ATM_list.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1532658570.035054000
+
+[lookups/maps.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1532658577.110839000
+
+[lookups/risk.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1532658584.665982000
+
+[transforms/Risk]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1532658677.241434000
+
+[lookups/RequestResponse.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533056388.417422000
+
+[lookups/wire_transfer.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533065509.604840000
+
+[lookups/susplcious_ip.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533095403.562213000
+
+[transforms/isSuspicious]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533095475.953349000
+
+[lookups/exchange.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533158957.015895000
+
+[lookups/orders.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533158965.967360000
+
+[lookups/timedrift.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533158978.759848000
+
+[transforms/FSExchange]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533161378.954081000
+
+[lookups/cust_data.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533177258.191550000
+
+[lookups/customer_txn.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533177266.931622000
+
+[transforms/CCData]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533177323.999033000
+
+[lookups/bank_accounts.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533569170.507745000
+
+[lookups/other_accounts.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533569186.002447000
+
+[transforms/All_Accounts]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533569278.746154000
+
+[lookups/morefix.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533583585.098737000
+
+[lookups/fix.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533583671.581385000
+
+[lookups/bc_block.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533613382.498014000
+
+[lookups/bc_stats.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533613391.298608000
+
+[lookups/bc_trans.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533613403.515844000
+
+[lookups/trade_entry.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533665022.976320000
+
+[lookups/new_today.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533699902.493607000
+
+[lookups/new_total.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533700355.035108000
+
+[transforms/ATM_place]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1533824734.445315000
+
+[lookups/transdate.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1534170328.198648000
+
+[lookups/credit_limit_requests.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1534263163.550504000
+
+[lookups/customer_data.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1534263243.391295000
+
+[transforms/CustomerData]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1534263300.356929000
+
+[lookups/authorizations.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1534284159.108599000
+
+[lookups/authorized2days.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1534284222.514391000
+
+[lookups/volume_buy.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1534376306.191929000
+
+[lookups/volume_sell.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1534376315.572190000
+
+[transforms/VolumeBuy]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1534376373.659037000
+
+[transforms/VolumeSell]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = nobody
+version = 7.1.0
+modtime = 1534376381.807571000

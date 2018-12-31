@@ -1,0 +1,61 @@
+#bookmarkNavContainer {
+    height: 35px;
+    width: 400px;
+    font-size: 13px;
+    line-height: 35px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 20px;
+    background-color: #d3d3d3;
+    display: inline-block;
+    float: right;
+    text-align: center;
+}
+#main_table_body .name {
+    font-size: 11pt;
+}
+
+#bookmarkrow {
+    background-color: #eee
+}
+
+.dvbanner {
+    font-size: 15px
+}
+.panel-title{
+    height: 2.1em
+}
+
+@media print{
+    #row2 .dashboard-cell{
+        width: 210px !important;
+        display: inline-block !important;
+    }
+    .tooltip {
+        display: none !important;
+    }
+    .dashboard-title::before{
+        content: "Splunk Essentials for Financial Services Industry Monitoring ";
+    }
+    #bookmarkNavContainer{
+        display: none;
+    }
+    #footer {
+        display: none;
+    }
+    .tableexpand{
+        display: none;
+    }
+    .tableChangeStatus{
+        display: none;
+    }
+    .dashboard-view-controls{
+        display: none;
+    }
+    .editCustomUseCaseIcons{
+        display: none;
+    }
+    .printandexporticons{
+        display: none;
+    }
+}    

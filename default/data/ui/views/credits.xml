@@ -1,0 +1,31 @@
+<dashboard script="runPageScript.js">
+  <label>Credits</label>
+  <row>
+   <panel> 
+   <html>
+
+ <table >
+  <tbody>
+    <tr>
+      <td valign="top"> <h2>Contributors</h2></td>
+    </tr>
+    <tr>
+      <td>
+	<p>Nimish Doshi: Principal Author</p>
+	<p>Dom Eger: Essentials Framework</p>
+	<p>David Veuve: Essentials Framework</p>
+	<p>Splunk MLTK Engineering: Essentials Framework</p>
+	<p>Brian Guilfoyle: Bitcoin Use Cases and Sample Data</p>
+	<p>Josef Kuepker: FIX Sample Data</p>
+	<p>Peter Benesh: Editor</p>
+	<p>Erin Sweeney: Editor</p>
+	<p>Jade Catalano: Editor</p>
+      </td>
+      <td><img src="/static/app/Splunk_Essentials_For_Telco/images/general_images/logo.png" width="100%"></img></td>
+    </tr>
+  </tbody>
+ </table>
+   </html>
+   </panel>
+  </row>
+</dashboard>

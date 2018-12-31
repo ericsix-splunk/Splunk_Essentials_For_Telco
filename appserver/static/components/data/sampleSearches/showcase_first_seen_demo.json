@@ -1,0 +1,1369 @@
+{
+    "Update Service GDPR - Live": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic dataset of service status reported via WinHostMon (a part of the Universal Forwarder). We also search for where the service doesn't start automatically",
+            "Bucket (aliased to bin) allows us to group events based on _time, effectively flattening the actual _time value to the same day.",
+            "Stats summarizes the status of across the entire environment for better performance.",
+            "Next we look up the host in the GDPR categorization lookup. Because we only care about GDPR hosts for this example, we filter for only the hosts that are in scope for GDPR."
+        ],
+        "outlierValueTracked1": "StartMode",
+        "value": "index=* (sourcetype=wmi:service OR (sourcetype=winhostmon Type=Service) OR (tag=service tag=os))  (tag=update OR Name=wuauserv)  StartMode!=Auto  \n| bucket _time span=1d \n| stats latest(Status) as Status latest(StartMode) as StartMode by _time host Name \n| lookup gdpr_system_category.csv host | search category=*",
+        "outlierValueTracked2": "host",
+        "prereqs": [{
+                "test": "| tstats count where earliest=-2h latest=now index=* (sourcetype=wmi:service OR (sourcetype=winhostmon Service))",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "In order to run this search, you must have data about service status. Visit the <a href=\"/app/Splunk_Essentials_For_Telco/data_source?technology=Windows%20Security\">data onboarding guide for Windows Security in this app</a>, or browse to <a href=\"https://docs.splunk.com/Documentation/Splunk/7.0.2/Data/MonitorWindowshostinformation\">Splunk Docs</a> for more information.",
+                "name": "Must have service status data"
+            },
+            {
+                "test": "| tstats count where earliest=-2h latest=now index=* (sourcetype=wmi:service OR (sourcetype=winhostmon Service)) wuauserv",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Inside of your service status data, you must have Windows Update listed (wuauserv.exe)",
+                "name": "Must have Windows Update status data"
+            }
+        ],
+        "label": "Update Service GDPR - Live"
+    },
+    "Unusual AWS Regions - Live": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic demo dataset. In this case, AWS CloudTrail logs."
+        ],
+        "outlierValueTracked1": "awsRegion",
+        "value": "index=* sourcetype=aws:cloudtrail",
+        "outlierValueTracked2": "sourcetype",
+        "prereqs": [{
+            "test": "| tstats count where earliest=-2h latest=now index=* sourcetype=aws:cloudtrail",
+            "field": "count",
+            "greaterorequalto": 1,
+            "resolution": "In order to run this search, you must have AWS CloudTrail data onboard. Visit the <a href=\"/app/Splunk_Essentials_For_Telco/data_source?technology=AWS%20CloudTrail\">data onboarding guide for AWS CloudTrail in this app</a>, or browse to <a href=\"https://splunkbase.splunk.com/app/1876/\">apps.splunk.com</a> for more information.",
+            "name": "Must have AWS CloudTrail data"
+        }],
+        "label": "Unusual AWS Regions - Live"
+    },
+    "AWS Cloud Provisioning Activity from Unusual IP - Live": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic demo dataset. In this case, AWS CloudTrail logs filtered for provisioning activities."
+        ],
+        "outlierValueTracked1": "src_ip",
+        "value": "index=* sourcetype=aws:cloudtrail eventName=Create* OR eventName=Run* OR eventName=Attach*",
+        "outlierValueTracked2": "sourcetype",
+        "prereqs": [{
+            "test": "| tstats count where earliest=-2h latest=now index=* sourcetype=aws:cloudtrail",
+            "field": "count",
+            "greaterorequalto": 1,
+            "resolution": "In order to run this search, you must have AWS CloudTrail data onboard. Visit the <a href=\"/app/Splunk_Essentials_For_Telco/data_source?technology=AWS%20CloudTrail\">data onboarding guide for AWS CloudTrail in this app</a>, or browse to <a href=\"https://splunkbase.splunk.com/app/1876/\">apps.splunk.com</a> for more information.",
+            "name": "Must have AWS CloudTrail data"
+        }],
+        "label": "AWS Cloud Provisioning Activity from Unusual IP - Live"
+    },
+    "AWS Cloud Provisioning Activity from Unusual Country - Live": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic demo dataset. In this case, AWS CloudTrail logs filtered for provisioning activities.",
+            "Then we summarize to get a count per API and source IP address.",
+            "Next we GeoIP to get the country."
+        ],
+        "outlierValueTracked1": "Country",
+        "value": "index=* sourcetype=aws:cloudtrail eventName=Create* OR eventName=Run* OR eventName=Attach* \n|stats count by src_ip eventName \n| iplocation src_ip",
+        "outlierValueTracked2": "sourcetype",
+        "prereqs": [{
+            "test": "| tstats count where earliest=-2h latest=now index=* sourcetype=aws:cloudtrail",
+            "field": "count",
+            "greaterorequalto": 1,
+            "resolution": "In order to run this search, you must have AWS CloudTrail data onboard. Visit the <a href=\"/app/Splunk_Essentials_For_Telco/data_source?technology=AWS%20CloudTrail\">data onboarding guide for AWS CloudTrail in this app</a>, or browse to <a href=\"https://splunkbase.splunk.com/app/1876/\">apps.splunk.com</a> for more information.",
+            "name": "Must have AWS CloudTrail data"
+        }],
+        "label": "AWS Cloud Provisioning Activity from Unusual Country - Live"
+    },
+    "New cmd.exe or regedit or powershell launched by services.exe - Demo": {
+        "description": [
+            "First we pull in our demo dataset.",
+            "Then we filter to when the process is one of the standard windows processes, and the parent process is services.exe"
+        ],
+        "outlierValueTracked1": "Image",
+        "value": "| `Load_Sample_Log_Data(\"Generic Sysmon Process Launches\")` \n| search (Image=*\\\\cmd.exe OR Image=*\\\\regedit.exe OR Image=*\\\\powershell.exe) ParentImage=*\\\\services.exe",
+        "outlierValueTracked2": "host",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "generic_sysmon_service_launch_logs.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "New cmd.exe or regedit or powershell launched by services.exe - Demo"
+    },
+    "New Applications Contacting SFDC - Demo": {
+        "description": [
+            "First we pull in our demo SFDC dataset.",
+            "Then we filter for what we're looking for in this use case, specifically export EVENT_TYPEs where the CLIENT_NAME is defined.",
+            "Then we enrich to convert the SFDC USER_ID into a friendly username via a lookup."
+        ],
+        "outlierValueTracked1": "CLIENT_NAME",
+        "value": "| `Load_Sample_Log_Data(\"SFDC Data\")` \n| search CLIENT_NAME=* EVENT_TYPE=API OR EVENT_TYPE=BulkAPI OR EVENT_TYPE=RestAPI \n| lookup SFDC_User_Lookup USER_ID",
+        "outlierValueTracked2": "USER_NAME",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "SFDC_Sample_Data_Anon.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "New Applications Contacting SFDC - Demo"
+    },
+    "AWS New API Call Per Peer Group - Demo": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic demo dataset. In this case, anonymized AWS CloudTrail logs. We're using a macro called Load_Sample_Log_Data to wrap around | inputlookup, just so it is cleaner for the demo data."
+        ],
+        "outlierValueTracked1": "user",
+        "value": "| `Load_Sample_Log_Data(AWS CloudTrail)`",
+        "outlierValueTracked2": "eventName",
+        "prereqs": [{
+            "test": "\n| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files \n| eval blah=1, row=\"row\"\n| xyseries row title blah ",
+            "field": "aws-cloudtrail-data-anon.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "AWS New API Call Per Peer Group - Demo",
+        "outlierPeerGroup": "peer_group_for_git_use_case.csv"
+    },
+    "Unusual AWS Regions - Demo": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic demo dataset. In this case, anonymized AWS CloudTrail logs. We're using a macro called Load_Sample_Log_Data to wrap around | inputlookup, just so it is cleaner for the demo data."
+        ],
+        "outlierValueTracked1": "awsRegion",
+        "value": "| `Load_Sample_Log_Data(AWS CloudTrail)`",
+        "outlierValueTracked2": "sourcetype",
+        "prereqs": [{
+            "test": "\n| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files \n| eval blah=1, row=\"row\"\n| xyseries row title blah ",
+            "field": "aws-cloudtrail-data-anon.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "Unusual AWS Regions - Demo"
+    },
+    "AWS Cloud Provisioning Activity from Unusual IP - Demo": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic demo dataset. In this case, anonymized AWS CloudTrail logs. We're using a macro called Load_Sample_Log_Data to wrap around | inputlookup, just so it is cleaner for the demo data.",
+            "Then we filter for provisioning activities (somewhat broadly)."
+        ],
+        "outlierValueTracked1": "src_ip",
+        "value": "| `Load_Sample_Log_Data(AWS CloudTrail)` \n| search eventName=Create* OR eventName=Run* OR eventName=Attach*",
+        "outlierValueTracked2": "sourcetype",
+        "prereqs": [{
+            "test": "\n| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files \n| eval blah=1, row=\"row\"\n| xyseries row title blah ",
+            "field": "aws-cloudtrail-data-anon.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "AWS Cloud Provisioning Activity from Unusual IP - Demo"
+    },
+    "New Applications Contacting SFDC - Live": {
+        "description": [
+            "First we pull in our SFDC dataset and filter for what we're looking for in this use case, specifically export EVENT_TYPEs where the CLIENT_NAME is defined.",
+            "Then we enrich to convert the SFDC USER_ID into a friendly username via a lookup."
+        ],
+        "outlierValueTracked1": "CLIENT_NAME",
+        "value": "index=sfdc CLIENT_NAME=* EVENT_TYPE=API OR EVENT_TYPE=BulkAPI OR EVENT_TYPE=RestAPI \n| lookup SFDC_User_Lookup USER_ID",
+        "outlierValueTracked2": "USER_NAME",
+        "prereqs": [{
+            "test": "| metasearch index=sfdc  earliest=-24h | head 100| stats count",
+            "field": "count",
+            "greaterorequalto": 1,
+            "resolution": "This search requires data from the Salesforce Event Log File API. This is an additional fee from Salesforce, and can be effectively ingested and analyzed with the <a href=\"https://splunkbase.splunk.com/app/1931\">Splunk App for Salesforce</a>.",
+            "name": "Must have Salesforce Data (assumes index=SFDC)"
+        }],
+        "label": "New Applications Contacting SFDC - Live"
+    },
+    "AWS Instance Modified by Unusual User - Demo": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic demo dataset. In this case, anonymized AWS CloudTrail logs. We're using a macro called Load_Sample_Log_Data to wrap around | inputlookup, just so it is cleaner for the demo data.",
+            "Then we filter for individual APIs that we want to pay close attention to."
+        ],
+        "outlierValueTracked1": "user",
+        "value": "| `Load_Sample_Log_Data(AWS CloudTrail)` \n|search  eventName=ConsoleLogin OR eventName=CreateImage OR eventName=AssociateAddress OR eventName=AttachInternetGateway OR eventName=AttachVolume OR eventName=StartInstances OR eventName=StopInstances OR eventName=UpdateService OR eventName=UpdateLoginProfile",
+        "outlierValueTracked2": "eventName",
+        "prereqs": [{
+            "test": "\n| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files \n| eval blah=1, row=\"row\"\n| xyseries row title blah ",
+            "field": "aws-cloudtrail-data-anon.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "AWS Instance Modified by Unusual User - Demo"
+    },
+    "New Parent Process for cmd.exe or regedit.exe - Demo": {
+        "description": [
+            "First we pull in our demo dataset.",
+            "Then we filter for process launches of cmd.exe, regedit.exe, or powershell.exe"
+        ],
+        "outlierValueTracked1": "Image",
+        "value": "| `Load_Sample_Log_Data(\"Generic Sysmon Process Launches\")` \n| search Image=*\\\\cmd.exe OR Image=*\\\\regedit.exe OR Image=*\\\\powershell.exe ",
+        "outlierValueTracked2": "ParentImage",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "generic_sysmon_service_launch_logs.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "New Parent Process for cmd.exe or regedit.exe - Demo"
+    },
+    "New RunAs - Live": {
+        "description": [
+            "Here we start with our basic dataset of WinSecurity logs with Event ID 4648 (signifying \"Run As\" events).",
+            "Next we filter out the Windows System usernames, where this can occur frequently",
+            "Windows Security logs often include two usernames -- the acting username, and the target username. We want the latter (note that this hasn't been proven to work uniformly across all log sources, but it seems to work well for this scenario).",
+            "Finally we put it all in a table."
+        ],
+        "outlierValueTracked1": "Privileged_Account_Name",
+        "value": "index=* sourcetype=Wineventlog:security EventCode=4648 \n| search NOT Account_Name=*$ \n| eval Privileged_Account_Name=mvindex(Account_Name,1) \n| table _time  host Privileged_Account_Name",
+        "outlierValueTracked2": "host",
+        "prereqs": [{
+                "test": "| metasearch earliest=-2h latest=now index=* sourcetype=\"*WinEventLog:Security\" | head | stats count ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "This search requires Windows Security data to run. If it is not present, consider ingesting it via the Splunk Universal Forwarder.",
+                "name": "Must have Windows Security data"
+            },
+            {
+                "test": "| metasearch earliest=-30d sourcetype=\"*WinEventLog:Security\" index=* TERM(eventcode=4648)  | head | stats count",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Windows Security Event ID 4648 tracks the explicit use of credentials, as in a runas event or batch login from a scheduled task. You can enable this from your Windows Logon Event policy configuration.",
+                "name": "Must have Privileged Escalation Events (EventCode=4648)"
+            }
+        ],
+        "label": "New RunAs - Live"
+    },
+    "New Service Creation - Demo": {
+        "description": [
+            "First we pull in our demo dataset."
+        ],
+        "outlierValueTracked1": "Image",
+        "value": "|`Load_Sample_Log_Data(\"Generic Sysmon Service Launches\")`",
+        "outlierValueTracked2": "host",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "generic_sysmon_service_launch_logs.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "New Service Creation - Demo"
+    },
+    "New External IPs Sending Company Emails - Accelerated": {
+        "description": [
+            "Here, tstats is pulling in one command a super-fast count per sender, per day of emails where the sender domain is our organization, but the email did not originate from our organization"
+        ],
+        "outlierValueTracked1": "sourcetype",
+        "value": "| tstats summaries_only=t allow_old_summaries=t count from datamodel=Email where All_Email.src_user=*@mycompany.com All_Email.src_ip!=10.* by All_Email.src_user  _time span=1d",
+        "outlierValueTracked2": "All_Email.src_ip",
+        "prereqs": [{
+                "test": "| tstats summaries_only=f allow_old_summaries=t count from datamodel=Email where earliest=-1h",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "This search requires an Email data. This is dependent on the <a href=\"https://splunkbase.splunk.com/app/1621/\">Common Information Model</a> being present, and also having your data mapped to CIM via appropriate TAs, usually with the out of the box field extractions from the <a href=\"https://splunkbase.splunk.com/app/1761/\">Cisco ESA TA</a>, the <a href=\"https://splunkbase.splunk.com/app/3225/\">Splunk Add-on for Microsoft Exchange</a>, etc.",
+                "name": "Must have an Email data model"
+            },
+            {
+                "test": "| tstats summaries_only=t allow_old_summaries=t count from datamodel=Email where earliest=-1h",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "This search requires an accelerated Email data. In order to run a fast accelerated search, you should accelerate your data model. (<a href=\"https://docs.splunk.com/Documentation/Splunk/latest/HadoopAnalytics/Configuredatamodelacceleration#Accelerate_the_data_model\">docs</a>)",
+                "name": "Must have an accelerated Email data model"
+            },
+            {
+                "test": "| tstats summaries_only=t allow_old_summaries=t dc(All_Email.src_user) as count from datamodel=Email where earliest=-1h",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "This search assumes that you have actual source email addresses -- check your field extractions for src_user and then rebuild your data models if not.",
+                "name": "Must have Sender Email Addresses (src_user) in your accelerated Email data model"
+            },
+            {
+                "test": "| tstats summaries_only=t allow_old_summaries=t dc(All_Email.src_user) as count from datamodel=Email where earliest=-1h",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "This search assumes that you have actual source email addresses -- check your field extractions for src_user and then rebuild your data models if not.",
+                "name": "Must have Source IP Addresses (src_user) in your accelerated Email data model"
+            }
+        ],
+        "label": "New External IPs Sending Company Emails - Accelerated"
+    },
+    "New Path for Process On Host - Demo": {
+        "description": [
+            "First we pull in our demo dataset.",
+            "Earlier versions of sysmon didn't extract a filename by default, so we are adding that in here.",
+            "This line uses eventstats (which works just like stats except it adds all the additional fields to whatever your incoming dataset was) to let us know how many days of baseline we have for a host. This is important, because it allows us to filter out hosts without much of a history.",
+            "This line also uses eventstats to pull out, per host, how many paths a particular filename was executed with.",
+            "Finally we look for files that were launched with multiple paths, and then filter out some known false positives found in our demo dataset (quirk of how it was built out -- shouldn't occur in production)."
+        ],
+        "outlierValueTracked1": "Image",
+        "value": "| `Load_Sample_Log_Data(\"Generic Sysmon Process Launches\")`  \n| rex field=Image \"(?<filename>[^\\\\\\/]*)$\" \n| eval day=strftime(_time, \"%d/%m/%Y\")  | eventstats dc(day) as days_of_baseline by host | where days_of_baseline>7 | fields - day \n| eventstats dc(Image) as NumPaths values(Image) as Paths by filename, host \n| where NumPaths>1  AND NOT (mvcount(Paths) = 2 AND like(mvindex(Paths, 0), \"%SysWOW64%\") AND like(mvindex(Paths, 1), \"%System32%\")) AND NOT (mvcount(Paths) = 2 AND like(mvindex(Paths, 0), \"%SysWOW64\\explorer.exe\") AND like(mvindex(Paths, 1), \"%Windows\\explorer.exe\"))",
+        "outlierValueTracked2": "filename",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "generic_sysmon_service_launch_logs.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "New Path for Process On Host - Demo"
+    },
+    "First USB Usage - Demo": {
+        "description": [
+            "First we pull in our demo dataset."
+        ],
+        "outlierValueTracked1": "anonymized_ComputerName",
+        "value": "|  `Load_Sample_Log_Data(\"USB Inserts from Windows System Event ID 20001\")`",
+        "outlierValueTracked2": "source",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "windows_system_event_id_20001_usb_inserts.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "First USB Usage - Demo"
+    },
+    "Accessing New Git Repositories - Live": {
+        "description": [
+            "First, we start with our Atlassian BitBucket access logs (Atlassian is a commercial open-source version of git).",
+            "Next we extract the field names we will use. These are the regular expressions that have worked in a couple of environments, but you should verify them in yours.",
+            "Finally, we filter for just the logs that include a git_repo field."
+        ],
+        "outlierValueTracked1": "user",
+        "value": "index=* source=\"*/atlassian-bitbucket-access.log\" \n| rex \"GET /projects/[^/]*/repos/(?<git_repo>[^/]*)\" | rex \"(?<git_repo>[^/]*)\\.git\" | rex \"git\\.[^ /]{1,}/projects/[^/]*/repos/(?<git_repo>[^/]*)\" | eval comment = \"<-- verify these regex in your env\"  \n| search  git_repo=\"*\"",
+        "outlierValueTracked2": "git_repo",
+        "prereqs": [{
+                "test": "| metasearch earliest=-24h latest=now index=* source=\"*/atlassian-bitbucket-access.log\" | head 100 | stats count ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "In tests so far, Atlassian BitBucket git logs are stored in a file called atlassian-bitbucket-access.log. We're looking for that here.",
+                "name": "Must have BitBucket / Git data"
+            },
+            {
+                "test": "earliest=-2h latest=now index=* source=\"*/atlassian-bitbucket-access.log\" | head 100 | stats dc(user) as count ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "You should have a field called \"user\" defined in your bitbucket logs. If that's not currently extracted, build an extraction for it (or do an inline rex in the SPL below to work around this).",
+                "name": "Must have a user defined in your data"
+            }
+        ],
+        "label": "Accessing New Git Repositories - Live"
+    },
+    "New Interactive Logon from a Service Account - Live": {
+        "description": [
+            "First we pull in our dataset of Windows Authentication specifying Interactive logon types, and filter for where the user account starts with svc_, which is a common way to notate service accounts.",
+            "Then we use table to include just the processes we're apt to care about. (Technically we need to use | table for this app because we show you the intermediate results, but in production you should drop this line because it will reduce search performance.)"
+        ],
+        "outlierValueTracked1": "user",
+        "value": "index=* sourcetype=\"*WinEventLog:Security\" Logon_Type=2 OR Logon_Type=10 OR Logon_Type=11 Logon Type TaskCategory=Logon Audit Success svc user=svc_* \n| table _time user dest ",
+        "outlierValueTracked2": "Logon_Type",
+        "prereqs": [{
+                "test": "| tstats count where index=* sourcetype=cisco:esa* earliest=-4h",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "This search requires Email data. The out of the box field extractions support the Common Information Model, including Cisco ESA/Ironport and Microsoft Exchange. If you don't have this data today, we highly recommend ingesting it with the <a href=\"https://splunkbase.splunk.com/app/1761/\">Cisco ESA TA</a> or the <a href=\"https://splunkbase.splunk.com/app/3225/\">Splunk Add-on for Microsoft Exchange</a>. For best performance, accelerate the email data model from the <a href=\"https://splunkbase.splunk.com/app/1621/\">Common Information Model</a>!",
+                "name": "Must have Email Data"
+            },
+            {
+                "test": "| metasearch earliest=-2h latest=now index=* sourcetype=\"*WinEventLog:Security\" | head | stats count ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "This search requires Windows Security data to run. If it is not present, consider ingesting it via the Splunk Universal Forwarder.",
+                "name": "Must have Windows Security data"
+            }
+        ],
+        "label": "New Interactive Logon from a Service Account - Live"
+    },
+    "New SFDC Tables Queried by Peer Group - Live": {
+        "description": [
+            "First we pull in our SFDC dataset and filter for EVENT_TYPEs that can have SOQL queries attached.",
+            "Then we extract out the table name from the query.",
+            "Finally we filter for queries of sensitive tables (Account, Contact, or Opportunity), or their derivatives.",
+            "Then we enrich to convert the SFDC USER_ID into a friendly username via a lookup."
+        ],
+        "outlierValueTracked1": "USER_NAME",
+        "value": "index=sfdc QUERY=* EVENT_TYPE=API OR EVENT_TYPE=BulkAPI OR EVENT_TYPE=RestAPI \n| rex field=QUERY max_match=12 \"\\s(?i)from\\s*(?<QUERY_TABLE>[\\w_]*)\" \n| search QUERY_TABLE=Account* OR QUERY_TABLE=Contact* OR QUERY_TABLE=Opportunity* \n| lookup SFDC_User_Lookup USER_ID",
+        "outlierValueTracked2": "QUERY_TABLE",
+        "prereqs": [{
+            "test": "| metasearch index=sfdc  earliest=-24h | head 100| stats count",
+            "field": "count",
+            "greaterorequalto": 1,
+            "resolution": "This search requires data from the Salesforce Event Log File API. This is an additional fee from Salesforce, and can be effectively ingested and analyzed with the <a href=\"https://splunkbase.splunk.com/app/1931\">Splunk App for Salesforce</a>.",
+            "name": "Must have Salesforce Data (assumes index=SFDC)"
+        }],
+        "label": "New SFDC Tables Queried by Peer Group - Live",
+        "outlierPeerGroup": "SFDC_User_Lookup.csv"
+    },
+    "First USB Usage - Live": {
+        "description": [
+            "Here we start with our basic dataset of Windows System Logs, filtered for EventCode 20001 which shows up in some (but not all) systems for USB drive insertion. Notably, this technique of doing the value and then the field=value can bypass some quirks around field extractions, and make searches faster for very large datasets (though that's an area of active work, and it's less true every year)."
+        ],
+        "outlierValueTracked1": "host",
+        "value": "index=* sourcetype=WinEventLog:System 20001 EventCode=20001",
+        "outlierValueTracked2": "source",
+        "prereqs": [{
+                "test": "| metasearch earliest=-2h latest=now index=* sourcetype=WinEventLog:System | head 100 | stats count ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "This search requires Windows System data to run. If it is not present, consider ingesting it via the Splunk Universal Forwarder.",
+                "name": "Must have Windows System Events"
+            },
+            {
+                "name": "Must have EventCode 20001 Events",
+                "greaterorequalto": 1,
+                "field": "count",
+                "test": "index=* earliest=-30d sourcetype=WinEventLog:System TERM(20001) EventCode=20001  | head | stats count",
+                "resolution": "In at least two test environments, EventCode 20001 was found when USB drives were inserted.",
+                "override_auto_finalize": "200"
+            }
+        ],
+        "label": "First USB Usage - Live"
+    },
+    "New External IPs Sending Company Emails - Demo": {
+        "description": [
+            "First we pull in our demo dataset.",
+            "Then we filter for where the sender is *@mycompany.com, but the incoming_address is not in our internal environment (update this with your environment's details)."
+        ],
+        "outlierValueTracked1": "incoming_address",
+        "value": "| `Load_Sample_Log_Data(\"Email Logs\")`\n| search Sender=*@mycompany.com incoming_address!=10.0.0.0/8  ",
+        "outlierValueTracked2": "sourcetype",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "Anonymized_Email_Logs.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "New External IPs Sending Company Emails - Demo"
+    },
+    "New SFDC Tables Queried by User - Demo": {
+        "description": [
+            "First we pull in our demo SFDC dataset.",
+            "Then we filter for what we're looking for in this use case, specifically queries of sensitive tables (Acount, Contact, or Opportunity), or their derivatives.",
+            "Then we enrich to convert the SFDC USER_ID into a friendly username via a lookup."
+        ],
+        "outlierValueTracked1": "USER_NAME",
+        "value": "| `Load_Sample_Log_Data(\"SFDC Data\")` \n| search QUERY_TABLE=Account* OR QUERY_TABLE=Contact* OR QUERY_TABLE=Opportunity* \n| lookup SFDC_User_Lookup USER_ID",
+        "outlierValueTracked2": "QUERY_TABLE",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "SFDC_Sample_Data_Anon.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "New SFDC Tables Queried by User - Demo"
+    },
+    "Update Service - Demo": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic demo dataset. This dataset includes service status reported via WinHostMon (a part of the Universal Forwarder). We're using a macro called Load_Sample_Log_Data to wrap around | inputlookup, just so it is cleaner for the demo data.",
+            "Then search for where the service doesn't start automatically"
+        ],
+        "outlierValueTracked1": "start_mode",
+        "value": "| `Load_Sample_Log_Data(System Update Service Status)` \n| search start_mode!=Auto",
+        "outlierValueTracked2": "host",
+        "prereqs": [{
+            "test": "\n| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files \n| eval blah=1, row=\"row\"\n| xyseries row title blah ",
+            "field": "anon_interactive_logons.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "Update Service - Demo"
+    },
+    "New Domain Name Detected - Demo": {
+        "description": [
+            "First we pull in our demo dataset."
+        ],
+        "outlierValueTracked1": "Account_Domain",
+        "value": "|  `Load_Sample_Log_Data(\"Example Pass The Hash (Legacy)\")`",
+        "outlierValueTracked2": "EventCode",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "Example_Legacy_Pass_The_Hash.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "New Domain Name Detected - Demo"
+    },
+    "New External IPs Sending Company Emails - Cisco ESA Live": {
+        "description": [
+            "Here we start with our basic dataset of Cisco ESA (aka Ironport) logs, where we have either an MID (Message ID) or ICID (Incoming Connection ID).",
+            "Ironport logs will have several messages with just ICID, and many with just MID. We want to ultimately analyze MIDs, but we need to tag those ICID fields that don't have any MID with the MIDs that came on that connection. Eventstats will let us do that, without otherwise changing the dataset. If two messages (MIDs 159950 and 159951) came across one incoming connect (ICID 102501), after this the events would look the same except all logs with ICID 102501 would now have a multi-value field called MID with the values 159950 and 159951.",
+            "Now we can aggregate the source IPs and sender addresses of every incoming message.",
+            "Finally we can filter in on those that have a sender domain that belongs to our company, but didn't originate from our environment."
+        ],
+        "outlierValueTracked1": "src_ip",
+        "value": "index=* sourcetype=cisco:esa* OR sourcetype=*ironport* MID OR ICID \n| eventstats values(MID) as MID by ICID \n| stats values(src_ip) as src_ip values(src_user) as src_user by MID \n| search src_user=*@mycompany.com src_ip!=10.0.0.0/8",
+        "outlierValueTracked2": "sourcetype",
+        "prereqs": [{
+                "test": "| tstats count where index=* sourcetype=cisco:esa* OR sourcetype=*ironport* MID OR ICID earliest=-4h",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "This search requires Email data. The out of the box field extractions support the Common Information Model, including Cisco ESA/Ironport and Microsoft Exchange. If you don't have this data today, we highly recommend ingesting it with the <a href=\"https://splunkbase.splunk.com/app/1761/\">Cisco ESA TA</a> or the <a href=\"https://splunkbase.splunk.com/app/3225/\">Splunk Add-on for Microsoft Exchange</a>. For best performance, accelerate the email data model from the <a href=\"https://splunkbase.splunk.com/app/1621/\">Common Information Model</a>!",
+                "name": "Must have Cisco ESA / Ironport Data"
+            },
+            {
+                "test": "index=* sourcetype=cisco:esa* OR sourcetype=*ironport* MID OR ICID earliest=-4h | head 1000 | stats dc(ICID) as ICID dc(MID) as MID dc(src_ip) as src_ip dc(src_user) as src_user | eval count = ICID * MID * src_ip * src_user",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "We highly recommend the <a href=\"https://splunkbase.splunk.com/app/1761/\">Cisco ESA TA</a> to handle your field extractions.",
+                "name": "Must have Cisco ESA field extractions"
+            }
+        ],
+        "label": "New External IPs Sending Company Emails - Cisco ESA Live"
+    },
+    "AWS Cloud Provisioning Activity from Unusual Country - Demo": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic demo dataset. In this case, anonymized AWS CloudTrail logs. We're using a macro called Load_Sample_Log_Data to wrap around | inputlookup, just so it is cleaner for the demo data.",
+            "Then we filter for provisioning activities (somewhat broadly)",
+            "Next we GeoIP to get the country."
+        ],
+        "outlierValueTracked1": "Country",
+        "value": "| `Load_Sample_Log_Data(AWS CloudTrail)` \n| search eventName=Create* OR eventName=Run* OR eventName=Attach* \n| iplocation src_ip",
+        "outlierValueTracked2": "sourcetype",
+        "prereqs": [{
+            "test": "\n| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files \n| eval blah=1, row=\"row\"\n| xyseries row title blah ",
+            "field": "aws-cloudtrail-data-anon.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "AWS Cloud Provisioning Activity from Unusual Country - Demo"
+    },
+    "New Domain - Demo": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic demo dataset. In this case, sample Proxy logs from a Palo Alto Networks NGFW. We're using a macro called Load_Sample_Log_Data to wrap around | inputlookup, just so it is cleaner for the demo data.",
+            "Now we use URL Toolbox to parse out the domain from the the URL. Parsing out domains is actually wildly complicated (a regex will not suffice!), but URL Toolbox makes it easy. Check out more detail on Splunk Blogs (<a href=\"https://www.splunk.com/blog/2017/09/21/ut-parsing-domains-like-house-slytherin.html\" target=\"_blank\">link</a>).",
+            "Finally, we exclude IP addresses from our search using the regex filtering command. This is an optional step, but we've found that the value to noise ratio when including IP addresses can be quite high given that some applications will connect to many ephemeral AWS instance IPs for normal operations."
+        ],
+        "outlierValueTracked1": "ut_domain",
+        "value": "| `Load_Sample_Log_Data(Web Proxy Logs)` \n| eval list=\"mozilla\" | `ut_parse_extended(uri, list)` \n| regex ut_domain!=\"^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$\"",
+        "outlierValueTracked2": "sourcetype",
+        "prereqs": [{
+            "test": "\n| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files \n| eval blah=1, row=\"row\"\n| xyseries row title blah ",
+            "field": "bots-webproxy-data.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "New Domain - Demo"
+    },
+    "New Domain - Live": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our proxy dataset, leveraging Common Information Model fields, filtering for just events that actually have a URI.",
+            "Now we use URL Toolbox to parse out the domain from the the URL. Parsing out domains is actually wildly complicated (a regex will not suffice!), but URL Toolbox makes it easy. Check out more detail on Splunk Blogs (<a href=\"https://www.splunk.com/blog/2017/09/21/ut-parsing-domains-like-house-slytherin.html\" target=\"_blank\">link</a>).",
+            "Finally, we exclude IP addresses from our search using the regex filtering command. This is an optional step, but we've found that the value to noise ratio when including IP addresses can be quite high given that some applications will connect to many ephemeral AWS instance IPs for normal operations."
+        ],
+        "outlierValueTracked1": "ut_domain",
+        "value": "tag=web url=* \n| eval list=\"mozilla\" | `ut_parse_extended(url,list)`\n| regex ut_domain!=\"^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$\"",
+        "outlierValueTracked2": "sourcetype",
+        "prereqs": [{
+            "test": "| metasearch earliest=-2h latest=now index=* (tag=web tag=proxy) | head 100 | stats count ",
+            "field": "count",
+            "greaterorequalto": 1,
+            "resolution": "Proxy data can come in many forms, including from Palo Alto Networks and other NGFWs, dedicated proxies like BlueCoat, or network monitoring tools like Splunk Stream or bro.",
+            "name": "Must have Proxy data"
+        }],
+        "label": "New Domain - Live"
+    },
+    "AWS Instance Created by Unusual User - Live": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic demo dataset. In this case, AWS CloudTrail logs filtered for Instance Creation."
+        ],
+        "outlierValueTracked1": "user",
+        "value": "index=* sourcetype=aws:cloudtrail eventType=* NOT errorMessage=* eventName=RunInstances ",
+        "outlierValueTracked2": "eventName",
+        "prereqs": [{
+            "test": "| tstats count where earliest=-2h latest=now index=* sourcetype=aws:cloudtrail",
+            "field": "count",
+            "greaterorequalto": 1,
+            "resolution": "In order to run this search, you must have AWS CloudTrail data onboard. Visit the <a href=\"/app/Splunk_Essentials_For_Telco/data_source?technology=AWS%20CloudTrail\">data onboarding guide for AWS CloudTrail in this app</a>, or browse to <a href=\"https://splunkbase.splunk.com/app/1876/\">apps.splunk.com</a> for more information.",
+            "name": "Must have AWS CloudTrail data"
+        }],
+        "label": "AWS Instance Created by Unusual User - Live"
+    },
+    "New Logon Type for User - Live": {
+        "description": [
+            "First we pull in our dataset of Windows Authentication where there is a Logon_Type defined.",
+            "Then we use table to include just the logons we're apt to care about. (Technically we need to use | table for this app because we show you the intermediate results, but in production you should drop this line because it will reduce search performance.)"
+        ],
+        "outlierValueTracked1": "user",
+        "value": "index=* sourcetype=\"*WinEventLog:Security\" Logon_Type=* Logon Type TaskCategory=Logon Audit Success \n| table _time user Logon_Type  ",
+        "outlierValueTracked2": "Logon_Type",
+        "prereqs": [{
+            "test": "| metasearch earliest=-2h latest=now index=* sourcetype=\"*WinEventLog:Security\" | head | stats count ",
+            "field": "count",
+            "greaterorequalto": 1,
+            "resolution": "This search requires Windows Security data to run. If it is not present, consider ingesting it via the Splunk Universal Forwarder.",
+            "name": "Must have Windows Security data"
+        }],
+        "label": "New Logon Type for User - Live"
+    },
+    "New Risky Event Types Per User - Demo": {
+        "description": [
+            "First we pull in our demo SFDC dataset.",
+            "Then we filter for what we're looking for in this use case, specifically high risk EVENT_TYPEs",
+            "Then we enrich to convert the SFDC USER_ID into a friendly username via a lookup."
+        ],
+        "outlierValueTracked1": "USER_NAME",
+        "value": "| `Load_Sample_Log_Data(\"SFDC Data\")` \n| search EVENT_TYPE=API OR EVENT_TYPE=BulkAPI OR EVENT_TYPE=RestAPI OR EVENT_TYPE=ReportExport \n| lookup SFDC_User_Lookup USER_ID",
+        "outlierValueTracked2": "EVENT_TYPE",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "SFDC_Sample_Data_Anon.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "New Risky Event Types Per User - Demo"
+    },
+    "New Interactive Logon from a Service Account - Demo": {
+        "description": [
+            "This line will load a sample CSV. The macro is a wrapper for |inputlookup to make this search look prettier here.",
+            "Now we filter for where the user account starts with svc_, which is a common way to notate service accounts."
+        ],
+        "outlierValueTracked1": "user",
+        "value": "| `Load_Sample_Log_Data(\"Interactive Logins\")` \n | search user=svc_* ",
+        "outlierValueTracked2": "dest",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "anon_interactive_logons.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "New Interactive Logon from a Service Account - Demo"
+    },
+    "Suspicious Command Launch - Live": {
+        "actions_UBASeverity": 7,
+        "prereqs": [{
+                "test": "| metasearch earliest=-2h latest=now index=* sourcetype=\"*WinEventLog:Security\" | stats count",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Begin ingesting Windows Security Logs",
+                "name": "Must have Windows Security Logs"
+            },
+            {
+                "test": "earliest=-2h latest=now sourcetype=\"*WinEventLog:Security\" 4688 EventCode=4688 index=* | head 100 | stats count ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Turn on Process Tracking in your Windows Audit logs (<a href=\"https://technet.microsoft.com/en-us/library/cc976411.aspx\">docs</a>)",
+                "name": "Must have Process Launch Logs (Event ID 4688)"
+            }
+        ],
+        "description": [
+            "First we pull in our dataset of Windows process launch logs, care of EventID 4688 documented in this app. Any other EDR solution giving process launch logs will suffice here, as well.",
+            "From line one we have our process launch logs, now we need to filter that down to just the potential attack tools. We do this via a subsearch. A subsearch goes and runs another search, and then takes those results and inserts them into the main search. You can copy-paste that subsearch into a new search window and see what the results look like -- there's a single field called \"search\" that has a bunch of filenames with ORs between them. That will effectively be inserted into our main search, giving us a really long search string without having to maintain a really long search."
+        ],
+        "value": "index=* sourcetype=\"*WinEventLog:Security\" EventCode=4688 \n[|inputlookup tools.csv | search discovery_or_attack=suspicious | stats values(filename) as search | eval search=mvjoin(search, \" OR \")] ",
+        "label": "Suspicious Command Launch - Live"
+    },
+    "First Log On to Server - Demo": {
+        "description": [
+            "First we pull in our demo dataset."
+        ],
+        "outlierValueTracked1": "user",
+        "value": "|  `Load_Sample_Log_Data(\"Windows Logon Activity\")`",
+        "outlierValueTracked2": "anonymized_ComputerName",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "Sampled_AnonymizedLogonActivity.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "First Log On to Server - Demo"
+    },
+    "Update Service - Live": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic dataset of service status reported via WinHostMon (a part of the Universal Forwarder). We also search for where the service doesn't start automatically",
+            "Bucket (aliased to bin) allows us to group events based on _time, effectively flattening the actual _time value to the same day.",
+            "Stats summarizes the status of across the entire environment for better performance."
+        ],
+        "outlierValueTracked1": "StartMode",
+        "value": "index=* (sourcetype=wmi:service OR (sourcetype=winhostmon Type=Service) OR (tag=service tag=os))  (tag=update OR Name=wuauserv) StartMode!=Auto \n| bucket _time span=1d \n| stats latest(Status) as Status latest(StartMode) as StartMode by _time host Name",
+        "outlierValueTracked2": "host",
+        "prereqs": [{
+                "test": "| tstats count where earliest=-2h latest=now index=* (sourcetype=wmi:service OR (sourcetype=winhostmon Service))",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "In order to run this search, you must have data about service status. Visit the <a href=\"/app/Splunk_Essentials_For_Telco/data_source?technology=Windows%20Security\">data onboarding guide for Windows Security in this app</a>, or browse to <a href=\"https://docs.splunk.com/Documentation/Splunk/7.0.2/Data/MonitorWindowshostinformation\">Splunk Docs</a> for more information.",
+                "name": "Must have service status data"
+            },
+            {
+                "test": "| tstats count where earliest=-2h latest=now index=* (sourcetype=wmi:service OR (sourcetype=winhostmon Service)) wuauserv",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Inside of your service status data, you must have Windows Update listed (wuauserv.exe)",
+                "name": "Must have Windows Update status data"
+            }
+        ],
+        "label": "Update Service - Live"
+    },
+    "New Service Creation - Live": {
+        "description": [
+            "First we pull in our dataset of Windows process launch logs filtered to where services.exe is the Parent Process, care of EventID 4688 documented in this app. Any other EDR solution giving process launch logs will suffice here, as well.",
+            "Then we use table to include just the processes we're apt to care about. (Technically we need to use | table for this app because we show you the intermediate results, but in production you should drop this line because it will reduce search performance.)"
+        ],
+        "outlierValueTracked1": "Image",
+        "value": "index=* sourcetype=\"*WinEventLog:Security\" EventCode=4688 services.exe | search ParentImage=*\\\\services.exe \n|table _time user host EventCode New_Process_Name ParentImage",
+        "outlierValueTracked2": "host",
+        "prereqs": [{
+                "test": "| metasearch index=* earliest=-2h latest=now sourcetype=\"*WinEventLog:Security\" | stats count ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Begin ingesting Windows Security Logs",
+                "name": "Must have Windows Security Logs"
+            },
+            {
+                "test": "earliest=-2h latest=now index=* sourcetype=\"*WinEventLog:Security\" EventCode=4688 | head 100 | stats count ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Turn on Process Tracking in your Windows Audit logs (<a href=\"https://technet.microsoft.com/en-us/library/cc976411.aspx\">docs</a>)",
+                "name": "Must have Process Launch Logs (Event ID 4688)"
+            }
+        ],
+        "label": "New Service Creation - Live"
+    },
+    "New Paths for Common Executables - Demo": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we pull in our demo dataset.",
+            "Then we filter for the individual launches of common windows filenames.",
+            "Earlier versions of sysmon didn't extract a filename by default, so we are adding that in here."
+        ],
+        "outlierValueTracked1": "filename",
+        "value": "| `Load_Sample_Log_Data(\"Generic Sysmon Process Launches\")`  \n| search Image=*svchost.exe OR Image=*iexplore.exe OR Image=*cmd.exe OR Image=*firefox.exe OR Image=*explorer.exe \n| rex field=Image \"^(?<path>.*?)(?<filename>[^\\\\\\/]*)$\" ",
+        "outlierValueTracked2": "path",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "generic_sysmon_service_launch_logs.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "New Paths for Common Executables - Demo"
+    },
+    "Update Service GDPR - Demo": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic demo dataset. This dataset includes service status reported via WinHostMon (a part of the Universal Forwarder). We're using a macro called Load_Sample_Log_Data to wrap around | inputlookup, just so it is cleaner for the demo data.",
+            "Then search for where the service doesn't start automatically",
+            "Next we look up the host in the GDPR categorization lookup. Because we only care about GDPR hosts for this example, we filter for only the hosts that are in scope for GDPR."
+        ],
+        "outlierValueTracked1": "start_mode",
+        "value": "| `Load_Sample_Log_Data(System Update Service Status)` \n| search start_mode!=Auto \n| lookup gdpr_system_category.csv host | search category=*",
+        "outlierValueTracked2": "host",
+        "prereqs": [{
+            "test": "\n| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files \n| eval blah=1, row=\"row\"\n| xyseries row title blah ",
+            "field": "anon_interactive_logons.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "Update Service GDPR - Demo"
+    },
+    "New Domain Name Detected - Live": {
+        "description": [
+            "This string will look in your Windows Security logs for the specific signature of Mimikatz (prior to 2017)."
+        ],
+        "outlierValueTracked1": "Account_Domain",
+        "value": "index=* source=WinEventLog:Security EventCode=4624 Authentication_Package=NTLM Type=Information Account_Name!=\"ANONYMOUS LOGON\" Logon_Type=3 Logon_Process=\"NtLmSsP\" NOT Security_ID!=\"NULL SID\" Key_Length=0",
+        "outlierValueTracked2": "EventCode",
+        "prereqs": [{
+                "test": "| metasearch earliest=-2h latest=now sourcetype=\"*WinEventLog:Security\" index=* | head 100 | stats count ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "This search requires Windows Security data to run. If it is not present, consider ingesting it via the Splunk Universal Forwarder.",
+                "name": "Must have Windows Security data"
+            },
+            {
+                "test": "sourcetype=\"*WinEventLog:Security\" 4624 EventCode=4624 index=* | head 100 | stats count",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Based on research, event ID 4624 (or in a Splunk search, EventCode=4624) gives us the right authentication logs. Make sure you have these logs. Here's a <a href=\"https://www.microsoft.com/en-us/download/details.aspx?id=36036\">really detailed whitepaper from Microsoft</a>. Notably, this approach doesn't work with modern Mimikatz, but it's still valuable for anomaly detection.",
+                "name": "Must have Event Codes for Potentially Suspect Windows Logon Events (EventCode=4624)"
+            }
+        ],
+        "label": "New Domain Name Detected - Live"
+    },
+    "New Path for Process On Host - Live": {
+        "actions_UBASeverity": 7,
+        "prereqs": [{
+                "test": "| metasearch earliest=-2h latest=now index=* sourcetype=\"*WinEventLog:Security\" | stats count",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Begin ingesting Windows Security Logs",
+                "name": "Must have Windows Security Logs"
+            },
+            {
+                "test": "earliest=-2h latest=now sourcetype=\"*WinEventLog:Security\" 4688 EventCode=4688 index=* | head 100 | stats count ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Turn on Process Tracking in your Windows Audit logs (<a href=\"https://technet.microsoft.com/en-us/library/cc976411.aspx\">docs</a>)",
+                "name": "Must have Process Launch Logs (Event ID 4688)"
+            }
+        ],
+        "description": [
+            "First we pull in our dataset of Windows process launch logs, care of EventID 4688 documented in this app. Any other EDR solution giving process launch logs will suffice here, as well.",
+            "Earlier versions of sysmon didn't extract a filename by default, so we are adding that in here.",
+            "This line uses eventstats (which works just like stats except it adds all the additional fields to whatever your incoming dataset was) to let us know how many days of baseline we have for a host. This is important, because it allows us to filter out hosts without much of a history.",
+            "This line also uses eventstats to pull out, per host, how many paths a particular filename was executed with.",
+            "Finally we look for filenames that were launched with multiple paths."
+        ],
+        "value": "index=* sourcetype=\"*WinEventLog:Security\" EventCode=4688 \n| rex field=Image \"(?<filename>[^\\\\\\/]*)$\" \n| eval day=strftime(_time, \"%d/%m/%Y\")  | eventstats dc(day) as days_of_baseline by host | where days_of_baseline>7 | fields - day \n| eventstats dc(Image) as NumPaths values(Image) as Paths by filename, host \n| where NumPaths>1",
+        "label": "New Path for Process On Host - Live"
+    },
+    "New Risky Event Types Per User - Live": {
+        "description": [
+            "First we pull in our SFDC dataset and filter for what we're looking for in this use case, specifically high risk EVENT_TYPEs",
+            "Then we enrich to convert the SFDC USER_ID into a friendly username via a lookup."
+        ],
+        "outlierValueTracked1": "USER_NAME",
+        "value": "index=sfdc EVENT_TYPE=API OR EVENT_TYPE=BulkAPI OR EVENT_TYPE=RestAPI OR EVENT_TYPE=ReportExport \n| lookup SFDC_User_Lookup USER_ID",
+        "outlierValueTracked2": "EVENT_TYPE",
+        "prereqs": [{
+            "test": "| metasearch index=sfdc  earliest=-24h | head 100| stats count",
+            "field": "count",
+            "greaterorequalto": 1,
+            "resolution": "This search requires data from the Salesforce Event Log File API. This is an additional fee from Salesforce, and can be effectively ingested and analyzed with the <a href=\"https://splunkbase.splunk.com/app/1931\">Splunk App for Salesforce</a>.",
+            "name": "Must have Salesforce Data (assumes index=SFDC)"
+        }],
+        "label": "New Risky Event Types Per User - Live"
+    },
+    "New SFDC Tables Queried by Peer Group - Demo": {
+        "description": [
+            "First we pull in our demo SFDC dataset.",
+            "Then we filter for what we're looking for in this use case, specifically queries of sensitive tables (Account, Contact, or Opportunity), or their derivatives.",
+            "Then we enrich to convert the SFDC USER_ID into a friendly username via a lookup."
+        ],
+        "outlierValueTracked1": "USER_NAME",
+        "value": "| `Load_Sample_Log_Data(\"SFDC Data\")` \n| search QUERY_TABLE=Account* OR QUERY_TABLE=Contact* OR QUERY_TABLE=Opportunity* \n| lookup SFDC_User_Lookup USER_ID",
+        "outlierValueTracked2": "QUERY_TABLE",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "SFDC_Sample_Data_Anon.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "New SFDC Tables Queried by Peer Group - Demo",
+        "outlierPeerGroup": "SFDC_User_Lookup.csv"
+    },
+    "New Parent Process for cmd.exe or regedit.exe - Live": {
+        "description": [
+            "First we pull in our basic dataset, which consists of XML format Sysmon logs from the endpoints (ingested via the sysmon TA) with process launches of cmd.exe or regedit.exe. This could be any EDR data source that provides file hash information. Because we're looking for process launches, we then filter for EventCode=1 (the sysmon Process Launch code).",
+            "Then we use table to include just the processes we're apt to care about. (Technically we need to use | table for this app because we show you the intermediate results, but in production you should drop this line because it will reduce search performance.)"
+        ],
+        "outlierValueTracked1": "Image",
+        "value": "index=* sourcetype=*sysmon* EventCode=1 (cmd.exe Image=*\\cmd.exe) OR (regedit.exe Image=*\\regedit.exe)  \n|table  _time host Image ProcessId ParentImage ParentProcessId sha1",
+        "outlierValueTracked2": "ParentImage",
+        "prereqs": [{
+                "test": "| tstats count where index=* earliest=-2h latest=now sourcetype=*sysmon* ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "This search requires Microsoft Sysmon data to run. If it is not present, consider ingesting it via the Splunk Universal Forwarder. If you're not using sysmon at all, it's free and highly recommended! <a href=\"https://technet.microsoft.com/en-us/sysinternals/sysmon\">Here is the direct link</a>, and <a href=\"http://conf.splunk.com/files/2016/slides/splunking-the-endpoint-hands-on.pdf\">here is a .conf presentation on the topic</a>.",
+                "name": "Must have Sysmon data"
+            },
+            {
+                "test": "sourcetype=*sysmon* index=* EventCode=1  | head 100 | stats count",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "These are the logs that will give us process launch data. Some customers will get these logs from other sources, but ensure you have a parent process name as well.",
+                "name": "Must have Sysmon Process Launch logs (EventCode=1)"
+            }
+        ],
+        "label": "New Parent Process for cmd.exe or regedit.exe - Live"
+    },
+    "Remote Powershell Launches - Demo": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we pull in our demo dataset.",
+            "Then we filter for where the parent process is svchost.exe and the actual process is wsmprovhost.exe, as that is what will show up for a remote powershell launch.",
+            "For our demo data, we don't have a user, so we just default it as \"unknown.\" "
+        ],
+        "outlierValueTracked1": "user",
+        "value": "|  `Load_Sample_Log_Data(\"Sysmon Process Launch Logs\")`\n| search ParentImage=*\\\\svchost.exe Image=*\\\\wsmprovhost.exe \n| eval user=\"Unknown\"",
+        "outlierValueTracked2": "host",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "generic_sysmon_service_launch_logs.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "Remote Powershell Launches - Demo"
+    },
+    "First Connection to Domain Controller - Live": {
+        "description": [
+            "First we start with our basic dataset of WinSecurity logs with EventCode 4776, which will only originate from a domain controller.",
+            "We then rename the ComputerName to DomainController name for clarity",
+            "Then we use table to include just the processes we're apt to care about. (Technically we need to use | table for this app because we show you the intermediate results, but in production you should drop this line because it will reduce search performance.)"
+        ],
+        "outlierValueTracked1": "user",
+        "value": "sourcetype=\"*WinEventLog:Security\" index=* 4776 EventCode=4776 \n| rename ComputerName as DomainControllerName \n| table _time DomainControllerName user",
+        "outlierValueTracked2": "anonymized_DomainControllerName",
+        "prereqs": [{
+                "test": "| metasearch earliest=-2h latest=now sourcetype=\"*WinEventLog:Security\" index=* | head 100 | stats count ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "This search requires Windows Security data to run. If it is not present, consider ingesting it via the Splunk Universal Forwarder.",
+                "name": "Must have Windows Security data"
+            },
+            {
+                "test": "sourcetype=\"*WinEventLog:Security\" 4776 EventCode=4776 index=* | head 100 | stats count",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Based on initial research, event ID 4776 (or in a Splunk search, EventCode=4776) gives us the right authentication logs from a domain controller. Make sure you have these logs (or tell us if any other event IDs are valid for this use case!). ",
+                "name": "Must have Domain Controller Logon Events (EventCode=4776)"
+            },
+            {
+                "test": "sourcetype=\"*WinEventLog:Security\" earliest=-2h 4776 EventCode=4776 index=* | head 100 | stats dc(user) as count",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "You should have a field called \"user\" defined in your Windows Security logs. This is provided by the Splunk TA for Windows. Consider adding that TA to make for a better experience!",
+                "name": "Must have the user field defined"
+            }
+        ],
+        "label": "First Connection to Domain Controller - Live"
+    },
+    "First Connection to Domain Controller - Demo": {
+        "description": [
+            "First we pull in our demo dataset."
+        ],
+        "outlierValueTracked1": "user",
+        "value": "|  `Load_Sample_Log_Data(\"Domain Controller Logins (Event ID 4776)\")`",
+        "outlierValueTracked2": "anonymized_DomainControllerName",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "anonymized_DC_4776_logs.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "First Connection to Domain Controller - Demo"
+    },
+    "Accessing New Git Repositories - Accelerated": {
+        "description": [
+            "Here, tstats is pulling in one command a super-fast count per user, per repo, per day.",
+            "(self-explanatory)"
+        ],
+        "outlierValueTracked1": "user",
+        "value": "| tstats summariesonly=t allow_old_summaries=t count from datamodel=Git where nodename=Git_View groupby user, repo, _time span=1d \n| eval comment=\"<--- We don't have a standard data model that includes git repos, so you will need to build one to leverage data model acceleration\"  ",
+        "outlierValueTracked2": "git_repo",
+        "prereqs": [{
+                "test": "| tstats summariesonly=t allow_old_summaries=t count from datamodel=Git where earliest=-24h latest=now nodename=Git_View ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "This search accelerated Git data. There is no formal CIM data model for Source Code checkins or checkouts, so we are presuming a custom data model called Git.",
+                "name": "Must have an accelerated Git data model (not-default)"
+            },
+            {
+                "test": "| tstats summariesonly=t allow_old_summaries=t dc(user) as count from datamodel=Git where earliest=-24h latest=now nodename=Git_View",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "The Git data model must have a user field defined.",
+                "name": "Must have a user field in accelerated Git data model"
+            },
+            {
+                "test": "| tstats summariesonly=t allow_old_summaries=t dc(repo) as count from datamodel=Git where earliest=-24h latest=now nodename=Git_View",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "The Git data model must have a repo field defined.",
+                "name": "Must have a repo field in accelerated Git data model"
+            }
+        ],
+        "label": "Accessing New Git Repositories - Accelerated"
+    },
+    "New SFDC Tables Queried by User - Live": {
+        "description": [
+            "First we pull in our SFDC dataset and filter for EVENT_TYPEs that can have SOQL queries attached.",
+            "Then we extract out the table name from the query.",
+            "Finally we filter for queries of sensitive tables (Acount, Contact, or Opportunity), or their derivatives.",
+            "Then we enrich to convert the SFDC USER_ID into a friendly username via a lookup."
+        ],
+        "outlierValueTracked1": "USER_NAME",
+        "value": "index=sfdc QUERY=* EVENT_TYPE=API OR EVENT_TYPE=BulkAPI OR EVENT_TYPE=RestAPI \n| rex field=QUERY max_match=12 \"\\s(?i)from\\s*(?<QUERY_TABLE>[\\w_]*)\" \n| search QUERY_TABLE=Account* OR QUERY_TABLE=Contact* OR QUERY_TABLE=Opportunity* \n| lookup SFDC_User_Lookup USER_ID",
+        "outlierValueTracked2": "QUERY_TABLE",
+        "prereqs": [{
+            "test": "| metasearch index=sfdc  earliest=-24h | head 100| stats count",
+            "field": "count",
+            "greaterorequalto": 1,
+            "resolution": "This search requires data from the Salesforce Event Log File API. This is an additional fee from Salesforce, and can be effectively ingested and analyzed with the <a href=\"https://splunkbase.splunk.com/app/1931\">Splunk App for Salesforce</a>.",
+            "name": "Must have Salesforce Data (assumes index=SFDC)"
+        }],
+        "label": "New SFDC Tables Queried by User - Live"
+    },
+    "AWS New API Call Per Peer Group - Live": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic dataset. In this case, AWS CloudTrail logs, filtered for individual APIs that we want to pay close attention to."
+        ],
+        "outlierValueTracked1": "user",
+        "value": "index=* sourcetype=aws:cloudtrail eventType=* NOT errorMessage=* NOT eventName=Describe* NOT eventName=Get* NOT eventName=List*",
+        "outlierValueTracked2": "eventName",
+        "prereqs": [{
+            "test": "| tstats count where earliest=-2h latest=now index=* sourcetype=aws:cloudtrail",
+            "field": "count",
+            "greaterorequalto": 1,
+            "resolution": "In order to run this search, you must have AWS CloudTrail data onboard. Visit the <a href=\"/app/Splunk_Essentials_For_Telco/data_source?technology=AWS%20CloudTrail\">data onboarding guide for AWS CloudTrail in this app</a>, or browse to <a href=\"https://splunkbase.splunk.com/app/1876/\">apps.splunk.com</a> for more information.",
+            "name": "Must have AWS CloudTrail data"
+        }],
+        "label": "AWS New API Call Peer Group - Live",
+        "outlierPeerGroup": "peer_group_for_git_use_case.csv"
+    },
+    "Suspicious Command Launch - Demo": {
+        "description": [
+            "First we pull in our demo dataset.",
+            "From line one we have our process launch logs, now we need to filter that down to just the potential attack tools. We do this via a subsearch. A subsearch goes and runs another search, and then takes those results and inserts them into the main search. You can copy-paste that subsearch into a new search window and see what the results look like -- there's a single field called \"search\" that has a bunch of filenames with ORs between them. That will effectively be inserted into our main search, giving us a really long search string without having to maintain a really long search.",
+            "For our demo data, we don't have a user, so we just default it as \"unknown.\""
+        ],
+        "outlierValueTracked1": "Image",
+        "value": "| `Load_Sample_Log_Data(\"Generic Sysmon Process Launches\")`  \n| search [| inputlookup tools.csv | search discovery_or_attack=suspicious | eval filename=\"Image=\\\"*\\\\\\\\\" . filename . \"\\\"\" | stats values(filename) as search | eval search=mvjoin(search, \" OR \")] \n| eval user=\"Unknown\"",
+        "outlierValueTracked2": "user",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "generic_sysmon_service_launch_logs.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "Suspicious Command Launch - Demo"
+    },
+    "Accessing New Git Repositories With Peer - Demo": {
+        "description": [
+            "First we pull in our demo dataset."
+        ],
+        "outlierValueTracked1": "user",
+        "value": "|  `Load_Sample_Log_Data(\"Source Code Access Logs\")`",
+        "outlierValueTracked2": "anonymized_git_repo",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "anonymized_git_history.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "Accessing New Git Repositories With Peer - Demo",
+        "outlierPeerGroup": "peer_group_for_git_use_case.csv"
+    },
+    "AWS Instance Modified by Unusual User - Live": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic dataset. In this case, AWS CloudTrail logs, filtered for individual APIs that we want to pay close attention to."
+        ],
+        "outlierValueTracked1": "user",
+        "value": "index=* sourcetype=aws:cloudtrail eventName=ConsoleLogin OR eventName=CreateImage OR eventName=AssociateAddress OR eventName=AttachInternetGateway OR eventName=AttachVolume OR eventName=StartInstances OR eventName=StopInstances OR eventName=UpdateService OR eventName=UpdateLoginProfile",
+        "outlierValueTracked2": "eventName",
+        "prereqs": [{
+            "test": "| tstats count where earliest=-2h latest=now index=* sourcetype=aws:cloudtrail",
+            "field": "count",
+            "greaterorequalto": 1,
+            "resolution": "In order to run this search, you must have AWS CloudTrail data onboard. Visit the <a href=\"/app/Splunk_Essentials_For_Telco/data_source?technology=AWS%20CloudTrail\">data onboarding guide for AWS CloudTrail in this app</a>, or browse to <a href=\"https://splunkbase.splunk.com/app/1876/\">apps.splunk.com</a> for more information.",
+            "name": "Must have AWS CloudTrail data"
+        }],
+        "label": "AWS Instance Modified by Unusual User - Live"
+    },
+    "AWS Instance Created by Unusual User - Demo": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic demo dataset. In this case, anonymized AWS CloudTrail logs. We're using a macro called Load_Sample_Log_Data to wrap around | inputlookup, just so it is cleaner for the demo data.",
+            "Then we filter for Instance Creation."
+        ],
+        "outlierValueTracked1": "user",
+        "value": "| `Load_Sample_Log_Data(AWS CloudTrail)` \n| search eventName=RunInstances",
+        "outlierValueTracked2": "eventName",
+        "prereqs": [{
+            "test": "\n| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files \n| eval blah=1, row=\"row\"\n| xyseries row title blah ",
+            "field": "aws-cloudtrail-data-anon.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "AWS Instance Created by Unusual User - Demo"
+    },
+    "Accessing New Git Repositories - Demo": {
+        "description": [
+            "First we pull in our demo dataset."
+        ],
+        "outlierValueTracked1": "user",
+        "value": "|  `Load_Sample_Log_Data(\"Source Code Access Logs\")`",
+        "outlierValueTracked2": "anonymized_git_repo",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "anonymized_git_history.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "Accessing New Git Repositories - Demo"
+    },
+    "First USB Usage - Accelerated": {
+        "description": [
+            "Here, tstats is pulling in one command a super-fast count per system, per day of EventCode 20001 which shows up in some (but not all) systems for USB drive insertion.",
+            "It is usually easiest to work with data model acceleration after we've renamed the fields to something a little friendlier."
+        ],
+        "outlierValueTracked1": "source",
+        "value": "| tstats summariesonly=t allow_old_summaries=t count earliest(_time) AS earliest latest(_time) AS latest from datamodel=Change_Analysis where (nodename = All_Changes) (All_Changes.result_id=20001) groupby _time span=1d, source All_Changes.dest\n| rename \"All_Changes.dest\" AS dest ",
+        "outlierValueTracked2": "dest",
+        "prereqs": [{
+                "test": "| tstats summariesonly=t allow_old_summaries=t count  from datamodel=Change_Analysis where earliest=-24h latest=now (nodename = All_Changes) ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "This search requires Windows System data to run. If it is not present, consider ingesting it via the Splunk Universal Forwarder.",
+                "name": "Must have an accelerated Change Analysis data model"
+            },
+            {
+                "test": "| tstats summariesonly=t allow_old_summaries=t count  from datamodel=Change_Analysis where earliest=-24h latest=now (nodename = All_Changes) (All_Changes.result_id=20001) ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "In at least two test environments, EventCode 20001 was found when USB drives were inserted.",
+                "name": "Change Analysis data model must have EventCode 20001 Events"
+            }
+        ],
+        "label": "First USB Usage - Accelerated"
+    },
+    "New RunAs - Demo": {
+        "description": [
+            "First we pull in our demo dataset."
+        ],
+        "outlierValueTracked1": "Privileged_Account_Name",
+        "value": "|`Load_Sample_Log_Data(\"Windows Run As Logs (Event ID 4648)\")` ",
+        "outlierValueTracked2": "host",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "event_id_4648_runas.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "New RunAs - Demo"
+    },
+    "Remote Powershell Launches - Live": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we pull in our dataset of Windows process launch logs filtered to our common Windows executables, care of EventID 4688 documented in this app. Any other EDR solution giving process launch logs will suffice here, as well. Notably, this technique of doing the value and then the field=value can bypass some quirks around field extractions, and make searches faster for very large datasets (though that's an area of active work, and it's less true every year).",
+            "Then we use table to include just the processes we're apt to care about. (Technically we need to use | table for this app because we show you the intermediate results, but in production you should drop this line because it will reduce search performance.)"
+        ],
+        "outlierValueTracked1": "user",
+        "value": "index=* sourcetype=\"*WinEventLog:Security\" EventCode=4688 wsmprovhost svchost ParentImage=*\\\\svchost.exe Image=*\\\\wsmprovhost.exe \n| table _time user host EventCode New_Process_Name",
+        "label": "Remote Powershell Launches - Live",
+        "prereqs": [{
+                "test": "| metasearch index=* earliest=-2h latest=now sourcetype=\"*WinEventLog:Security\" | stats count ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Begin ingesting Windows Security Logs",
+                "name": "Must have Windows Security Logs"
+            },
+            {
+                "test": "earliest=-2h latest=now index=* sourcetype=\"*WinEventLog:Security\" EventCode=4688 | head 100 | stats count ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Turn on Process Tracking in your Windows Audit logs (<a href=\"https://technet.microsoft.com/en-us/library/cc976411.aspx\">docs</a>)",
+                "name": "Must have Process Launch Logs (Event ID 4688)"
+            }
+        ],
+        "outlierValueTracked2": "dest"
+    },
+    "AWS New API Call Per User - Demo": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic demo dataset. In this case, anonymized AWS CloudTrail logs. We're using a macro called Load_Sample_Log_Data to wrap around | inputlookup, just so it is cleaner for the demo data."
+        ],
+        "outlierValueTracked1": "user",
+        "value": "| `Load_Sample_Log_Data(AWS CloudTrail)`",
+        "outlierValueTracked2": "eventName",
+        "prereqs": [{
+            "test": "\n| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files \n| eval blah=1, row=\"row\"\n| xyseries row title blah ",
+            "field": "aws-cloudtrail-data-anon.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "AWS New API Call Per User - Demo"
+    },
+    "New External IPs Sending Company Emails - Live": {
+        "description": [
+            "Here we start with our basic dataset of email logs, where we have a sender address who uses our company's email addresses, but where the IP address isn't a part of our environment."
+        ],
+        "outlierValueTracked1": "src_ip",
+        "value": "index=* sourcetype=cisco:esa* OR sourcetype=MSExchange*:MessageTracking OR tag=email src_user=* src_ip=* src_user=*@mycompany.com src_ip!=10.0.0.0/8",
+        "outlierValueTracked2": "sourcetype",
+        "prereqs": [{
+            "test": "index=* sourcetype=cisco:esa* OR sourcetype=MSExchange*:MessageTracking OR tag=email | head 100 | eval length_combined = len(src_ip) * len(src_user) | stats sum(length_combined) as count",
+            "field": "count",
+            "greaterorequalto": 1,
+            "resolution": "This one is slightly more complex for new Splunk users -- if your email logs show the src_ip (incoming address) in a different event than the sender email address, you will need to join these together via transaction or stats/eventstats. Check out the Cisco ESA version of this search for a working example of this unification, or <a href=\"http://docs.splunk.com/Documentation/Splunk/6.5.2/SearchReference/Transaction#4._Email_transactions_based_on_maxevents_and_endswith\">check Splunk Docs</a>.",
+            "name": "Must have Incoming Address and Sender in Same Event"
+        }],
+        "label": "New External IPs Sending Company Emails - Live"
+    },
+    "New cmd.exe or regedit or powershell launched by services.exe - Live": {
+        "description": [
+            "Here we pull in our dataset of Microsoft Sysmon logs (though an EDR logs will suffice), and filter to when the process is one of the standard windows processes, and the parent process is services.exe"
+        ],
+        "outlierValueTracked1": "Image",
+        "value": "index=* sourcetype=*sysmon* EventCode=1 ( (cmd.exe Image=*\\\\cmd.exe) OR (regedit.exe Image=*\\\\regedit.exe) OR (powershell.exe Image=*\\\\powershell.exe) ) (services.exe Image=*\\\\system32\\\\services.exe)",
+        "outlierValueTracked2": "host",
+        "prereqs": [{
+                "test": "| tstats count where index=* earliest=-2h latest=now sourcetype=*sysmon*  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "This search requires Microsoft Sysmon data to run. If it is not present, consider ingesting it via the Splunk Universal Forwarder. If you're not using sysmon at all, it's free and highly recommended! <a href=\"https://technet.microsoft.com/en-us/sysinternals/sysmon\">Here is the direct link</a>, and <a href=\"http://conf.splunk.com/files/2016/slides/splunking-the-endpoint-hands-on.pdf\">here is a .conf presentation on the topic</a>.",
+                "name": "Must have Sysmon data"
+            },
+            {
+                "test": "sourcetype=*sysmon* index=* EventCode=1  | head 100 | stats count",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "These are the logs that will give us process launch data. Some customers will get these logs from other sources, but ensure you have a parent process name as well.",
+                "name": "Must have Sysmon Process Launch logs (EventCode=1)"
+            }
+        ],
+        "label": "New cmd.exe or regedit or powershell launched by services.exe - Live"
+    },
+    "First Log On to Server - Live": {
+        "description": [
+            "Here we start with our basic dataset of WinSecurity authentication logs. Notably, this technique of doing the value and then the field=value can bypass some quirks around field extractions, and make searches faster for very large datasets (though that's an area of active work, and it's less true every year)."
+        ],
+        "outlierValueTracked1": "dest",
+        "value": "index=* sourcetype=\"*WinEventLog:Security\" (4624 OR 4647 OR 4648 OR 551 OR 552 OR 540 OR 528 OR 4768 OR 4769 OR 4770 OR 4771 OR 4768 OR 4774 OR 4776 OR 4778 OR 4779 OR 672 OR 673 OR 674 OR 675 OR 678 OR 680 OR 682 OR 683) (EventCode=4624 OR EventCode=4647 OR EventCode=4648 OR EventCode=551 OR EventCode=552 OR EventCode=540 OR EventCode=528 OR EventCode=4768 OR EventCode=4769 OR EventCode=4770 OR EventCode=4771 OR EventCode=4768 OR EventCode=4774 OR EventCode=4776 OR EventCode=4778 OR EventCode=4779 OR EventCode=672 OR EventCode=673 OR EventCode=674 OR EventCode=675 OR EventCode=678 OR EventCode=680 OR EventCode=682 OR EventCode=683)",
+        "outlierValueTracked2": "user",
+        "prereqs": [{
+                "test": "| metasearch earliest=-2h latest=now sourcetype=\"*WinEventLog:Security\" index=* | head 100 | stats count ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "This search requires Windows Security data to run. If it is not present, consider ingesting it via the Splunk Universal Forwarder.",
+                "name": "Must have Windows Security data"
+            },
+            {
+                "test": "sourcetype=\"*WinEventLog:Security\" (4624 OR 4647 OR 4648 OR 551 OR 552 OR 540 OR 528 OR 4768 OR 4769 OR 4770 OR 4771 OR 4768 OR 4774 OR 4776 OR 4778 OR 4779 OR 672 OR 673 OR 674 OR 675 OR 678 OR 680 OR 682 OR 683) index=* | head 100 | stats count",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "You should log logon events. There are many event IDs that we look for in the underlying logs, but they should all fall into the Audit Successful (or Failed) Logon events in your Windows Audit Policy. (<a href=\"https://technet.microsoft.com/en-us/library/cc431373.aspx\">docs</a>)",
+                "name": "Must have Logon Success Data"
+            },
+            {
+                "test": "sourcetype=\"*WinEventLog:Security\" earliest=-2h index=* (4624 OR 4647 OR 4648 OR 551 OR 552 OR 540 OR 528 OR 4768 OR 4769 OR 4770 OR 4771 OR 4768 OR 4774 OR 4776 OR 4778 OR 4779 OR 672 OR 673 OR 674 OR 675 OR 678 OR 680 OR 682 OR 683) | head 100 | stats dc(user) as count",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "You should have a field called \"user\" defined in your Windows Security logs. This is provided by the Splunk TA for Windows. Consider adding that TA to make for a better experience!",
+                "name": "Must have the user field defined"
+            }
+        ],
+        "label": "First Log On to Server - Live"
+    },
+    "AWS New API Call Per User - Live": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we bring in our basic dataset. In this case, AWS CloudTrail logs, filtered for individual APIs that we want to pay close attention to."
+        ],
+        "outlierValueTracked1": "user",
+        "value": "index=* sourcetype=aws:cloudtrail eventType=* NOT errorMessage=* NOT eventName=Describe* NOT eventName=Get* NOT eventName=List*",
+        "outlierValueTracked2": "eventName",
+        "prereqs": [{
+            "test": "| tstats count where earliest=-2h latest=now index=* sourcetype=aws:cloudtrail",
+            "field": "count",
+            "greaterorequalto": 1,
+            "resolution": "In order to run this search, you must have AWS CloudTrail data onboard. Visit the <a href=\"/app/Splunk_Essentials_For_Telco/data_source?technology=AWS%20CloudTrail\">data onboarding guide for AWS CloudTrail in this app</a>, or browse to <a href=\"https://splunkbase.splunk.com/app/1876/\">apps.splunk.com</a> for more information.",
+            "name": "Must have AWS CloudTrail data"
+        }],
+        "label": "AWS New API Call Per User - Live"
+    },
+    "New Paths for Common Executables - Live": {
+        "actions_UBASeverity": 7,
+        "description": [
+            "First we pull in our dataset of Windows process launch logs filtered to our common Windows executables, care of EventID 4688 documented in this app. Any other EDR solution giving process launch logs will suffice here, as well. Notably, this technique of doing the value and then the field=value can bypass some quirks around field extractions, and make searches faster for very large datasets (though that's an area of active work, and it's less true every year).",
+            "Earlier versions of sysmon didn't extract a filename by default, so we are adding that in here."
+        ],
+        "outlierValueTracked1": "filename",
+        "value": "index=* sourcetype=\"*WinEventLog:Security\" EventCode=4688 (svchost.exe New_Process_Name=*svchost.exe) OR (iexplore.exe New_Process_Name=*iexplore.exe) OR (cmd.exe New_Process_Name=*cmd.exe) OR (firefox.exe New_Process_Name=*firefox.exe) OR (explorer.exe New_Process_Name=*explorer.exe) \n| rex field=New_Process_Name \"^(?<path>.*?)(?<filename>[^\\\\\\/]*)$\" ",
+        "outlierValueTracked2": "path",
+        "prereqs": [{
+                "test": "| metasearch earliest=-2h latest=now index=* sourcetype=\"*WinEventLog:Security\" | stats count",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Begin ingesting Windows Security Logs",
+                "name": "Must have Windows Security Logs"
+            },
+            {
+                "test": "earliest=-2h latest=now sourcetype=\"*WinEventLog:Security\" 4688 EventCode=4688 index=* | head 100 | stats count ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Turn on Process Tracking in your Windows Audit logs (<a href=\"https://technet.microsoft.com/en-us/library/cc976411.aspx\">docs</a>)",
+                "name": "Must have Process Launch Logs (Event ID 4688)"
+            }
+        ],
+        "label": "New Paths for Common Executables - Live"
+    },
+    "New Logon Type for User - Demo": {
+        "description": [
+            "First we pull in our demo dataset."
+        ],
+        "outlierValueTracked1": "user",
+        "value": "|`Load_Sample_Log_Data(\"Interactive Logins\")`",
+        "outlierValueTracked2": "Logon_Type_Description",
+        "prereqs": [{
+            "test": "| rest splunk_server=local /servicesNS/-/-/data//lookup-table-files | eval blah=1, row=\"row\"| xyseries row title blah ",
+            "field": "anon_interactive_logons.csv",
+            "greaterorequalto": 1,
+            "resolution": "Verify that lookups installed with Splunk Security Essentials is present",
+            "name": "Must have Demo Lookup"
+        }],
+        "label": "New Logon Type for User - Demo"
+    },
+    "First Log On to Server - Accelerated": {
+        "description": [
+            "Here, tstats is pulling in one command a super-fast count per user, per system, per day of authentications.",
+            "It is usually easiest to work with data model acceleration after we've renamed the fields to something a little friendlier."
+        ],
+        "outlierValueTracked1": "user",
+        "value": "| tstats summariesonly=t allow_old_summaries=t count earliest(_time) AS earliest latest(_time) AS latest from datamodel=Authentication  groupby _time span=1d, Authentication.user Authentication.dest\n| rename \"Authentication.dest\" AS dest, \"Authentication.user\" as user",
+        "outlierValueTracked2": "dest",
+        "prereqs": [{
+                "test": "| tstats summariesonly=t allow_old_summaries=t count  from datamodel=Authentication where earliest=-2h ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "This search requires an accelerated authentication data model to run. If it is not present, consider ingesting Windows Security data via the Splunk Universal Forwarder, and then accelerating it with the Common Information App from <a href=\"http://apps.splunk.com/\">apps.splunk.com</a>.",
+                "name": "Must have an accelerated Authentication data model"
+            },
+            {
+                "test": "| tstats summariesonly=t allow_old_summaries=t dc(Authentication.dest) as count  from datamodel=Authentication where earliest=-2h",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "You should have a field called \"dest\" defined in your accelerated Authentication data model (referenced in tstats as Authentication.dest). If it is not present, consider ingesting Windows Security data via the Splunk Universal Forwarder, and then accelerating it with the Common Information App from <a href=\"http://apps.splunk.com/\">apps.splunk.com</a>.",
+                "name": "Authentication data model must have a field called dest defined"
+            },
+            {
+                "test": "| tstats summariesonly=t allow_old_summaries=t dc(Authentication.user) as count from datamodel=Authentication where earliest=-2h",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "You should have a field called \"user\" defined in your accelerated Authentication data model (referenced in tstats as Authentication.user). If it is not present, consider ingesting Windows Security data via the Splunk Universal Forwarder, and then accelerating it with the Common Information App from <a href=\"http://apps.splunk.com/\">apps.splunk.com</a>.",
+                "name": "Authentication data model must have the user field defined"
+            }
+        ],
+        "label": "First Log On to Server - Accelerated"
+    }
+}

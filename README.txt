@@ -1,4 +1,4 @@
-# Splunk Essentials for Financial Services Industry
+# Splunk Essentials for Telco
 
 ### System Requirements
 Supported on Linux, Mac OSX

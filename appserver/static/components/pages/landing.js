@@ -12,6 +12,13 @@ var Descriptions = new Object;
 //Descriptions["Container Monitoring"] = "By using Splunk to monitoring your Docker, Openshift, and Kubernetes environements get better insight into how your application and deployment platforms can work together."
 //Descriptions["Cloud Monitoring"] = "Regardless of what Cloud provider you use today, you should take these use cases for AWS, Azure, and GCP and expand your visibility into your next generation stacks."
 
+//Telco App Core Use Cases
+Descriptions["Subscriber Services"] = "Expedient and trouble free activation of High Speed Internet, Mobile Data, and Prepaid Mobile all require insight across many systems. These examples demonstrate how to track Activation across BSS/OSS, or similar stacks."
+Descriptions["Distributed Ledger Technology"] = "DLT is gaining moomentum in many markets. These examples show how to monitor transactions and the underlying systems in a Distributed Ledger Network."
+Descriptions["CDR"] = "Call Detail Records can provide insight into not only user activity, but also business analytics. These examples show how to derive insight from standard CDR logs."
+Descriptions["Physical Monitoring"] = "Examples around collecting Sensor/IOT data in Data Centers."
+
+//Not Used...
 Descriptions["Test"] = "Testing"
 Descriptions["Splunk"] = "Splunk Test Searches."
 Descriptions["Payment Response"] = "Processing payments is a core function that banks provide to customers. It is very important to be able to identify the status and response time of each payment and determine if service level agreements are being achieved."
@@ -38,6 +45,13 @@ var Icons = new Object;
 //Icons["Container Monitoring"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FSIAppModerization.png"
 //Icons["Cloud Monitoring"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FSIAppModerization.png"
 
+//Telco App Core use Cases
+Icons["Subscriber Services"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FSIAppModerization.png"
+Icons["Distributed Ledger Technology"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/PaymentResponse.png"
+Icons["CDR"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FixOrder.png"
+Icons["Physical Monitoring"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FSIAppModerization.png"
+
+// FSI
 Icons["Test"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FSIAppModerization.png"
 Icons["Splunk"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/ATMFraud.png"
 Icons["ATM Fraud"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/ATMFraud.png"

@@ -18,7 +18,7 @@
 <p> Please note that each example search starts with <b>|inputlookup ...|some time format function|...</b>. This is artificially done in this essentials app, so that you do not have to index any sample data. To use the examples for your environment, replace the inputlookup with the usual <b>index=... sourcetype=</b> with your normal time picking matching your data and field names.</p>
 <p><b>DISCLAIMER</b><br></br>
 Please check with your local government regulation to determine how you can use these use cases to determine credit worthiness for an individual or company. Splunk is not saying or implying that we can help determine risk. Fraud use case examples of possible fraud detection are not a guarantee that fraud will be found. Use of these use cases is just an example of what is possible.</p>
-          <h2>Financial Services Industy Use Cases Journey</h2>
+          <h2>Telco Use Cases Journey</h2>
           <div style="width:100%; padding-bottom: 25px;" class="column stagetablediv">
     <table id="stagetable">
       <tr>

@@ -1,6 +1,6 @@
 <nav search_view="search" color="#000000">
 	<view name="home" default='true' />
-  <collection label="FSI Use Cases Content">
+  <collection label="Telco Use Cases Content">
     <view name="contents"/>
     <divider />
     <view name="overview" />

@@ -68,7 +68,7 @@
   </row>
   <row>
     <panel>
-      <title>Splunk Essentials for the Financial Services Industries (for filters set above)</title>
+      <title>Splunk Essentials for the Telco (for filters set above)</title>
       <single>
         <title># of Datasources</title>
         <search>

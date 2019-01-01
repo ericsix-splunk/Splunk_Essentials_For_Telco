@@ -1,0 +1,23 @@
+<dashboard  stylesheet="vendor/bootstrap/bootstrap.css,vendor/bootstrap-multiselect/bootstrap-multiselect.css">
+
+  <label>Journey Stages</label>
+  <row>
+    <panel>
+      <html>
+ <hr class="essentialshr" />
+        <div class="lineheight24px"> 
+          <h2>Telco Use Cases Journey has 4 Stages</h2>
+          <div style="width:100%; padding-bottom: 25px;" class="column stagetablediv">
+	    <table id="stagetable">
+	      <tr>
+		<td>
+		  <img src="/static/app/Splunk_Essentials_For_Telco/images/general_images/oimap.png"></img>
+		</td>
+	      </tr>
+	    </table>
+	  </div>
+        </div>
+      </html>
+    </panel>
+  </row>
+</dashboard>

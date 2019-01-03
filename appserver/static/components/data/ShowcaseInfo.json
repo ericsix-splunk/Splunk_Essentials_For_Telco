@@ -1,6 +1,65 @@
 {
   "summaries":  {
 
+    "showcase_cdn_example_1": {
+        "id": "CDN - User Behavior - Top Browsers",
+        "domain": "CDN",
+        "help": "CDN User's Top Browsers",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "howToImplement": "<p>CDN Logs...say alot...alot!!!!!!Q!!!!!!!!!!",
+        "hasSearch": "Yes",
+        "category": "Content Delivery",
+        "knownFP": "unused",
+        "operationalize": "Words around how to operationalize things...",
+        "relevance": "This will analyze your CDN logs....",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN - User Behavior - Top Browsers",
+        "dashboard_type": "XML Panels with Screenshot",
+        "description": "Analyze the Top Browsers for your CDN.",
+        "released": "1.0.0",
+        "journey": "Stage_2",
+        "icon": "Core_Use_Case.png",
+        "name": "CDN - User Behavior - Top Browsers",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_connections | sort - _time | fields _time http_user_agent | rename http_user_agent AS useragent | eval os = case(match(useragent,\"Windows .. 5.1\"),\"Windows XP\",match(useragent,\"droid\"),\"Android\",match(useragent,\"Windows NT 6.1\"),\"Windows 7\",match(useragent,\"Win98\"),\"Windows 98\",match(useragent,\"Windows NT 6.3\"),\"Windows Server 2012\",match(useragent,\"Windows NT 6.2\"),\"Windows 8\",match(useragent,\"Windows NT 6.0\"),\"Windows Server 2008\",match(useragent,\"Windows Phone 8.1\"),\"Windows Mobile 8\",match(useragent,\"Mac OS X 10.10\"),\"OSX 10.10\",match(useragent,\"Mac OS X 10_9\"),\"OSX 10.9\",match(useragent,\"Mac OS X 10.6\"),\"OSX 10.6\",match(useragent,\"Mac OS X 10.5\"),\"OSX 10.5\",match(useragent,\"Mac OS X 10_8\"),\"OSX 10.8\",match(useragent,\"Mac OS X 10_7\"),\"OSX 10.7\",match(useragent,\"Apple TV\"),\"IOS\",match(useragent,\"iPad\"),\"IOS\",match(useragent,\"iPhone\"),\"IOS\",match(useragent,\"linux|Linux\"),\"Linux\") | eval browser = case(match(useragent,\"MSIE 10.0\"),\"IE 10.0\",match(useragent,\"MSIE 7.0\"),\"IE 7.0\",match(useragent,\"Chrome\"),\"Chrome\",match(useragent,\"Safari/\"),\"Safari\",match(useragent,\"Firefox\"),\"Firefox\",match(useragent,\"MSIE 9.0\"),\"IE 9.0\",match(useragent,\"ANVSDK ios\"),\"Anvato Player\",match(useragent,\"UCBrowser\"),\"UC Browser\",match(useragent,\"Opera\"),\"Opera\",match(useragent,\"Gecko Galeon\"),\"Gecko\",match(useragent,\"Netscape6\"),\"Netscape\") | eval arch = case(match(useragent,\"droid\"),\"android\",match(useragent,\"iPad\"),\"ipad\",match(useragent,\"iPod\"),\"ipod\",match(useragent,\"Apple TV\"),\"Apple TV\",match(useragent,\"iPhone\"),\"iphone\",match(os,\"Windows\"),\"x86_64\",match(useragent,\"Intel|x86_64\"),\"x86_64\") | fillnull value=\"UNKNOWN\" os arch browser | stats count by browser | sort - count",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "CDN - User Behavior - Top Browsers",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "cdn-ub-1.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn-ub-1.png"
+            }
+        ],
+        "hideSPLMode": false,
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "Top Browsers over the Latest Time Period",
+                "search": "| inputlookup cdn_connections | sort - _time | fields _time http_user_agent | rename http_user_agent AS useragent | eval os = case(match(useragent,\"Windows .. 5.1\"),\"Windows XP\",match(useragent,\"droid\"),\"Android\",match(useragent,\"Windows NT 6.1\"),\"Windows 7\",match(useragent,\"Win98\"),\"Windows 98\",match(useragent,\"Windows NT 6.3\"),\"Windows Server 2012\",match(useragent,\"Windows NT 6.2\"),\"Windows 8\",match(useragent,\"Windows NT 6.0\"),\"Windows Server 2008\",match(useragent,\"Windows Phone 8.1\"),\"Windows Mobile 8\",match(useragent,\"Mac OS X 10.10\"),\"OSX 10.10\",match(useragent,\"Mac OS X 10_9\"),\"OSX 10.9\",match(useragent,\"Mac OS X 10.6\"),\"OSX 10.6\",match(useragent,\"Mac OS X 10.5\"),\"OSX 10.5\",match(useragent,\"Mac OS X 10_8\"),\"OSX 10.8\",match(useragent,\"Mac OS X 10_7\"),\"OSX 10.7\",match(useragent,\"Apple TV\"),\"IOS\",match(useragent,\"iPad\"),\"IOS\",match(useragent,\"iPhone\"),\"IOS\",match(useragent,\"linux|Linux\"),\"Linux\") | eval browser = case(match(useragent,\"MSIE 10.0\"),\"IE 10.0\",match(useragent,\"MSIE 7.0\"),\"IE 7.0\",match(useragent,\"Chrome\"),\"Chrome\",match(useragent,\"Safari/\"),\"Safari\",match(useragent,\"Firefox\"),\"Firefox\",match(useragent,\"MSIE 9.0\"),\"IE 9.0\",match(useragent,\"ANVSDK ios\"),\"Anvato Player\",match(useragent,\"UCBrowser\"),\"UC Browser\",match(useragent,\"Opera\"),\"Opera\",match(useragent,\"Gecko Galeon\"),\"Gecko\",match(useragent,\"Netscape6\"),\"Netscape\") | eval arch = case(match(useragent,\"droid\"),\"android\",match(useragent,\"iPad\"),\"ipad\",match(useragent,\"iPod\"),\"ipod\",match(useragent,\"Apple TV\"),\"Apple TV\",match(useragent,\"iPhone\"),\"iphone\",match(os,\"Windows\"),\"x86_64\",match(useragent,\"Intel|x86_64\"),\"x86_64\") | fillnull value=\"UNKNOWN\" os arch browser | stats count by browser | sort - count",
+                "vizParameters": {
+                "count": "15",
+                    "drilldown": "none",
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+
     "showcase_physical_example_1": {
         "id": "Splunk Internal - Top Sourcetypes",
         "domain": "Application",
@@ -416,6 +475,7 @@
     "showcase_subscriber_services_example_1",
     "showcase_dlt_example_1",
     "showcase_cdr_example_1",
+    "showcase_cdn_example_1",
     "showcase_Splunk_Internal_Top_Sourcetypes",
     "showcase_Splunk_Search_Scheduler_Usage"
     ]

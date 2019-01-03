@@ -67,7 +67,7 @@ define(['jquery', 'module', "components/data/sendTelemetry", "components/control
 
             if (typeof $(".dashboard-header-title")[0] != "undefined") {
                 $(".dashboard-header-description").html("Assistant: " + $(".dashboard-header-title").first().html())
-                $(".dashboard-header-title").html("<a href=\"contents\">FSI Use Cases Content</a> / " + summary.name)
+                $(".dashboard-header-title").html("<a href=\"contents\">Telco Use Cases</a> / " + summary.name)
 
             } else {
                 //$(".dashboard-header-description").html("Assistant: " + $(".dashboard-header-title").first().html() )  

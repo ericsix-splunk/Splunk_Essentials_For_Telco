@@ -32,7 +32,7 @@ define(['json!components/data/ShowcaseInfo.json', 'splunkjs/mvc/simplexml/contro
 
             console.log("Got our Role Storage", role, roleDetails, ShowcaseInfo)
 
-            menuItemText = 'FSI Use Cases Content';
+            menuItemText = 'Telco Use Cases Content';
             $(menuItemSelector).text(menuItemText).attr('title', menuItemText);
         }
     };

@@ -59,6 +59,64 @@
         ]
     },
 
+    "showcase_physical_example_2": {
+        "id": "Splunk Internal - Top Sourcetypes",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Physical Monitoring",
+        "howToImplement": "<p>Subscriber services.....",
+        "hasSearch": "Yes",
+        "category": "Physical Monitoring",
+        "knownFP": "unused",
+        "operationalize": "Words around how to operationalize things...",
+        "relevance": "This looks at top sourcetypes in Splunk's internal logs....",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Splunk Internal Top Sourcetypes - Demo",
+        "dashboard_type": "XML Panels with Screenshot",
+        "description": "You use splunk, but do you know Splunk?",
+        "released": "1.0.0",
+        "journey": "Stage_1",
+        "icon": "Core_Use_Case.png",
+        "name": "Splunk Internal Top Sourcetypes",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "index=_internal earlist=-1week latest=now | top 5 sourcetype",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "Splunk Internal Top Sourcetypes - Demo",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/Wire_Transfer_Fraud_NewAccount.png"
+            }
+        ],
+        "hideSPLMode": false,
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "Top Internal Sourcetypes over the last 24 hours",
+                "search": "index=_internal earliest=-1d@d | top 10 sourcetype",
+                "vizParameters": {
+                "count": "15",
+                    "drilldown": "none",
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
     "showcase_cdr_example_1": {
         "id": "Splunk Internal - Top Sourcetypes",
         "domain": "Application",
@@ -353,6 +411,8 @@
  { 
    "default": { 
       "summaries":[
+    "showcase_physical_example_1",
+    "showcase_physical_example_2",
     "showcase_subscriber_services_example_1",
     "showcase_dlt_example_1",
     "showcase_cdr_example_1",

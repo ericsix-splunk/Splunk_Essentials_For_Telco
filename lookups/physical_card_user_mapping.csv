@@ -1,0 +1,14 @@
+cardId,employeeId,firstName,lastName,officeId,emailAddress,note
+00025026950352,25020001,G,Siver,LV-CSMO,g.siver@company.com,ops
+00025023268956,25020002,K,Hyde,LV-CSMO,k.hyde@company.com,facilities
+00025023268674,25020003,E,Roku,LV-CSMO,e.roku@company.com,network|server
+00025022265550,25020004,D,Lman,LV-CSMO,d.lman@company.com,security
+00025022472377,25020005,S,Siegward,LV-CSMO,s.siegward@company.com,engineering
+00025031265531,25020006,J,Komplain,LV-CSMO,j.komplain@company.com,support
+00066014296001,-,Card,01,CA-SF,helpdesk@company.com,customer|secure
+00066013296002,-,Card,02,CA-SF,helpdesk@company.com,customer|secure
+00066010625001,-,Card,01,LV-DC,helpdesk@company.com,customer
+00066010625002,-,Card,02,LV-DC,helpdesk@company.com,customer
+00066010625003,-,Card,03,LV-DC,helpdesk@company.com,customer|lost|deactivated
+00066010625004,-,Card,04,LV-DC,helpdesk@company.com,customer|deactivated
+00066010625005,-,Card,05,LV-DC,helpdesk@company.com,customer

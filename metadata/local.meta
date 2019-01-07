@@ -13,3 +13,17 @@ modtime = 1546361599.890453000
 [views/stages]
 version = 7.2.1
 modtime = 1546361327.662900000
+
+[lookups/cdn_cloudevent_status.csv]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = nobody
+version = 7.2.1
+modtime = 1546834333.927050000
+
+[lookups/cdn_user_by_country.csv]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = nobody
+version = 7.2.1
+modtime = 1546834344.445696000

@@ -27,3 +27,38 @@ export = none
 owner = nobody
 version = 7.2.1
 modtime = 1546834344.445696000
+
+[transforms/cdn_connections]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1546835155.374938000
+
+[transforms/physical_card_error_codes]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1546835166.182444000
+
+[transforms/physical_card_logs]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1546835177.451737000
+
+[transforms/physical_card_mapping]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1546835194.560917000
+
+[transforms/physical_card_user_mapping]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1546835208.783537000

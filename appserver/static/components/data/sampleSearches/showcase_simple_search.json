@@ -120,7 +120,35 @@
             "Reduce our data set to only our interesting fields for this example.",
             "Filter for only FIRE or POWER events."
                     ],
-        "value": "| inputlookup physical_card_logs \n| lookup physical_card_error_codes errorCode OUTPUTNEW status \n| lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description\n| fields _time badgereaderId description envAlarm errorCode powerStatus status \n| search envAlarm=\"FIRE\" OR envAlarm=\"POWER\"",        "label": "Security Auditing - Environmental Check"
+        "value": "| inputlookup physical_card_logs \n| lookup physical_card_error_codes errorCode OUTPUTNEW status \n| lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description\n| fields _time badgereaderId description envAlarm errorCode powerStatus status \n| search envAlarm=\"FIRE\" OR envAlarm=\"POWER\"",        
+        "label": "Security Auditing - Environmental Check"
+    },
+    
+    "Security Auditing - Environmental Reporting": {
+        "prereqs": [
+            {
+                "test": "| inputlookup physical_card_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Enrich our data...",
+            "Enrich our data... ",
+            "Filter for only FIRE or POWER events.",
+            "Sort by time, we need to make sure our data set is in order..",
+            "Filter through events by description, and keep track of when the last reader was seen",
+            "Calculate a duration between related events",
+            "",
+            "Fill null numeric values with a 0 to make sorting easier..",
+            "Humanize the Events..",
+            "Take our relevant fields and make a report friendly view.."
+                    ],
+        "value": "| inputlookup physical_card_logs \n| lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description \n| lookup physical_card_error_codes errorCode OUTPUT status \n| search envAlarm=\"FIRE\" OR envAlarm=\"POWER\" \n| sort _time \n| streamstats window=0 current=false latest(_time) AS previousEventTime latest(status) AS previousStatus BY description \n| eval duration = _time - previousEventTime \n| rename status AS currentStatus \n| fillnull value=0 duration \n| eval envAlarm=case(match(envAlarm,\"FIRE\"),\"Fire Alarm Detected in Zone\",match(envAlarm,\"POWER\"),\"Power Event Detected in Zone\") \n| fields _time description currentStatus duration envAlarm \n| rename description AS \"Reader Location\" currentStatus AS \"Lock Status\" envAlarm AS \"Alarm\" \n| convert ctime(previousEventTime) \n| where duration > 0 \n| rename duration AS \"Duration of Alarm (seconds)\" _time AS \"Time Cleared\" \n| convert ctime(\"Time Cleared\") \n| table Alarm \"Reader Location\" \"Lock Status\" \"Duration of Alarm (seconds)\" \"Time Cleared\"",       
+        "label": "Security Auditing - Environmental Reporting"
     },
 
     "Splunk Insights - AWS Cloudwatch Logs  Metrics - Demo": {

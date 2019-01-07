@@ -239,7 +239,7 @@
         "help": "Lets look at top Splunk Sourcetypes",
         "app": "Splunk_Essentials_For_Telco",
         "usecase": "Physical Monitoring",
-        "howToImplement": "<p>This search relies on a <b>RFID</b> / <b>Proximity</b> badge reader system logs and lookup tables that provide further enrichment around the User-to-Badges and a Reader to Card locations. <p>With this data available, you can substitute in sourcetype and lookup tables to use this search.",
+        "howToImplement": "<p>This search relies on a <b>RFID</b> / <b>Proximity</b> badge reader system logs and lookup tables that provide further enrichment around the Reader to Card locations and Error Codes. Matching the hardware codes to the environmental codes in the lookup is trivial, these are well documented by most hardware manufacturers.<p>With this data available, you can substitute in sourcetype and lookup tables to use this search over your desired time range.",
         "hasSearch": "Yes",
         "category": "Physical Monitoring",
         "knownFP": "unused",
@@ -290,6 +290,65 @@
             }
         ]
     },
+
+    "showcase_physical_search0005": {
+        "id": "Security Auditing - Environmental Reporting",
+        "domain": "Application",
+        "help": "Let's look at logs!",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Physical Monitoring",
+        "howToImplement": "<p>This search relies on a <b>RFID</b> / <b>Proximity</b> badge reader system logs and lookup tables that provide further enrichment around the Reader to Card locations and Error Codes. Matching the hardware codes to the environmental codes in the lookup is trivial, these are well documented by most hardware manufacturers.<p>With this data available, you can substitute in sourcetype and lookup tables to use this search over your desired time range.",
+        "hasSearch": "Yes",
+        "category": "Physical Monitoring",
+        "knownFP": "unused",
+        "operationalize": "Being able to monitor badge readers and correlate environmental factors to specific events is what data analytics is all about. Being able to identify a power outage in a hallway and resolve this before a customer has problems is good.<p>",
+        "relevance": "In this example we show a simple search that looks at environmental alerts coming out of our badge reader system. We then perform from analytics on the data to determine an event duration and then format these in a way that can be presented. ",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Security Auditing - Environmental Reporting",
+        "dashboard_type": "XML Panels with Screenshot",
+        "description": "Most modern badger readers support various environmental triggers such as fire alarms, electricity failures, and backup battery failovers. This example shows how to search our <b>RFID</b> / <b>Promixity</b> badge system events for triggered environmental alarms and generate a nicely formated and human readable report that can be used for Compliance, Regulatory Reporting, Root Cause Analysis, etc.<p>",
+        "released": "1.0.0",
+        "journey": "Stage_2",
+        "icon": "Core_Use_Case.png",
+        "name": "Security Auditing - Environmental Reporting",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Difficult",
+        "datasource": "Application Logs",
+        "highlight": "No",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup physical_card_logs | lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description | lookup physical_card_error_codes errorCode OUTPUT status | search envAlarm=\"FIRE\" OR envAlarm=\"POWER\" | sort _time | streamstats window=0 current=false latest(_time) AS previousEventTime latest(status) AS previousStatus BY description | eval duration = _time - previousEventTime | rename status AS currentStatus | fillnull value=0 duration | eval envAlarm=case(match(envAlarm,\"FIRE\"),\"Fire Alarm Detected in Zone\",match(envAlarm,\"POWER\"),\"Power Event Detected in Zone\") | fields _time description currentStatus duration envAlarm | rename description AS \"Reader Location\" currentStatus AS \"Lock Status\" envAlarm AS \"Alarm\" | convert ctime(previousEventTime) | where duration > 0 | rename duration AS \"Duration of Alarm (seconds)\" _time AS \"Time Cleared\" | convert ctime(\"Time Cleared\") | table Alarm \"Reader Location\" \"Lock Status\" \"Duration of Alarm (seconds)\" \"Time Cleared\"",
+                "examples": [
+            {
+                "name": "Security Auditing - Environmental Reporting",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "label": "Power and fire issues all in one day?",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/physical_search0005.png"
+            }
+        ],
+        "hideSPLMode": false,
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "Security Auditing - Environmental Reporting",
+                "search": "| inputlookup physical_card_logs | lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description | lookup physical_card_error_codes errorCode OUTPUT status | search envAlarm=\"FIRE\" OR envAlarm=\"POWER\" | sort _time | streamstats window=0 current=false latest(_time) AS previousEventTime latest(status) AS previousStatus BY description | eval duration = _time - previousEventTime | rename status AS currentStatus | fillnull value=0 duration | eval envAlarm=case(match(envAlarm,\"FIRE\"),\"Fire Alarm Detected in Zone\",match(envAlarm,\"POWER\"),\"Power Event Detected in Zone\") | fields _time description currentStatus duration envAlarm | rename description AS \"Reader Location\" currentStatus AS \"Lock Status\" envAlarm AS \"Alarm\" | convert ctime(previousEventTime) | where duration > 0 | rename duration AS \"Duration of Alarm (seconds)\" _time AS \"Time Cleared\" | convert ctime(\"Time Cleared\") | table Alarm \"Reader Location\" \"Lock Status\" \"Duration of Alarm (seconds)\" \"Time Cleared\"",
+                                "vizParameters": {
+                "count": "10",
+                    "drilldown": "none",
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+   
 
     "showcase_cdr_example_1": {
         "id": "Splunk Internal - Top Sourcetypes",
@@ -589,6 +648,7 @@
     "showcase_physical_search0002",
     "showcase_physical_search0003",
     "showcase_physical_search0004",
+    "showcase_physical_search0005",
     "showcase_subscriber_services_example_1",
     "showcase_dlt_example_1",
     "showcase_cdr_example_1",

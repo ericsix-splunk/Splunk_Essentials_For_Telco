@@ -59,37 +59,36 @@
         ]
     },
 
-
-    "showcase_physical_example_1": {
-        "id": "Splunk Internal - Top Sourcetypes",
+    "showcase_physical_search0001": {
+        "id": "User Tracking by Security",
         "domain": "Application",
-        "help": "Lets look at top Splunk Sourcetypes",
+        "help": "Provide a user trail....",
         "app": "Splunk_Essentials_For_Telco",
         "usecase": "Physical Monitoring",
-        "howToImplement": "<p>Subscriber services.....",
+        "howToImplement": "<p>This search relies on a <b>RFID</b> / <b>Proximity</b> badge reader system logs and lookup tables that provide further enrichment around the User-to-Badges, Error Codes, and a Reader to Card locations. <p>With this data available, you can substitute in sourcetype and lookup tables to use this search.",
         "hasSearch": "Yes",
         "category": "Physical Monitoring",
         "knownFP": "unused",
-        "operationalize": "Words around how to operationalize things...",
-        "relevance": "This looks at top sourcetypes in Splunk's internal logs....",
+        "operationalize": "This search allows us to \"monitor\" a specific badge as it is used around monitored facilities. In this usecase, this could be used for a variety of reasons such as: Activity Logging, Compliance, Regulatory Reporting, and HR Related Requests.",
+        "relevance": "This search takes data logged from RFID / Proxmity badge readers, enriches it with facilties and logging information, and then shows activity for a designated badge.",
         "includeSSE": "Yes",
-        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Splunk Internal Top Sourcetypes - Demo",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=User Tracking by Security",
         "dashboard_type": "XML Panels with Screenshot",
-        "description": "You use splunk, but do you know Splunk?",
+        "description": "Track a badge on it's journey through a designated time period.",
         "released": "1.0.0",
         "journey": "Stage_1",
         "icon": "Core_Use_Case.png",
-        "name": "Splunk Internal Top Sourcetypes",
+        "name": "User Tracking by Security",
         "displayapp": "Splunk_Essentials_For_Telco",
-        "SPLEase": "Easy",
+        "SPLEase": "Medium",
         "datasource": "Application Logs",
         "highlight": "Yes",
         "alertvolume": "unused",
-        "sampleSPL": "index=_internal earlist=-1week latest=now | top 5 sourcetype",
+        "sampleSPL": "| inputlookup physical_card_logs | lookup physical_card_error_codes errorCode OUTPUTNEW status | lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description | lookup physical_card_user_mapping cardId AS badgeId OUTPUTNEW firstName lastName emailAddress employeeId note officeId | search employeeId=\"25020002\" | fields - badgereaderId,envAlarm,errorCode,powerStatus | eval fullName = firstName+\" \"+lastName | fields _time badgeId employeeId fullName officeId description status note | rename badgeId AS \"Badge ID #\" employeeId AS \"Employee Number\" fullName AS \"Employee Name\" officeId AS \"Home Office\" description AS \"Card Reader Location\" status AS \"Read Status\" note AS \"Additional Notes..\"",
         "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
         "examples": [
             {
-                "name": "Splunk Internal Top Sourcetypes - Demo",
+                "name": "User Tracking by Security",
                 "label": "Demo Data"
             }
         ],
@@ -97,7 +96,7 @@
             {
                 "name": "Wire_Transfer_Fraud_NewAccount.png",
                 "label": "",
-                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/Wire_Transfer_Fraud_NewAccount.png"
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/physical_search0001.png"
             }
         ],
         "hideSPLMode": false,
@@ -107,8 +106,8 @@
                 "panel": "row1cell1",
                 "type": "viz",
                 "vizType": "TableElement",
-                "title": "Top Internal Sourcetypes over the last 24 hours",
-                "search": "index=_internal earliest=-1d@d | top 10 sourcetype",
+                "title": "User Tracking by Security",
+                "search": "| inputlookup physical_card_logs | lookup physical_card_error_codes errorCode OUTPUTNEW status | lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description | lookup physical_card_user_mapping cardId AS badgeId OUTPUTNEW firstName lastName emailAddress employeeId note officeId | search employeeId=\"25020002\" | fields - badgereaderId,envAlarm,errorCode,powerStatus | eval fullName = firstName+\" \"+lastName | fields _time badgeId employeeId fullName officeId description status note | rename badgeId AS \"Badge ID #\" employeeId AS \"Employee Number\" fullName AS \"Employee Name\" officeId AS \"Home Office\" description AS \"Card Reader Location\" status AS \"Read Status\" note AS \"Additional Notes..\"",
                 "vizParameters": {
                 "count": "15",
                     "drilldown": "none",
@@ -118,7 +117,65 @@
         ]
     },
 
-    "showcase_physical_example_2": {
+    "showcase_physical_search0002": {
+        "id": "Security Auditing - Secure Facilities",
+        "domain": "Application",
+        "help": "Security Auditing for Compliance..",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Physical Monitoring",
+        "howToImplement": "<p>This search relies on a <b>RFID</b> / <b>Proximity</b> badge reader system logs and lookup tables that provide further enrichment around the User-to-Badges and a Reader to Card locations. <p>With this data available, you can substitute in sourcetype and lookup tables to use this search.",
+        "hasSearch": "Yes",
+        "category": "Physical Monitoring",
+        "knownFP": "unused",
+        "operationalize": "Auditing of Physical Access is a requirement for many regulatory bodies and industrial certifications. Being able to associate ingress and egress traffic for designated rooms and zones, to badges, in near real-time expedites compliance and security.",
+        "relevance": "This examples searches <b>RFID</b> / <b>Proximity</b> logs for access to certain facilties and rooms. Reporting from this can be used for Security, Compliance, or Customer Reporting Requirements.",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Security Auditing - Secure Facilities",
+        "dashboard_type": "XML Panels with Screenshot",
+        "description": "Audit and Report on Room Access in a secure facility based on badge readers.",
+        "released": "1.0.0",
+        "journey": "Stage_2",
+        "icon": "Core_Use_Case.png",
+        "name": "Security Auditing - Secure Facilties Access",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "No",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup physical_card_logs | lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description active | lookup physical_card_user_mapping cardId AS badgeId | search description=\"LV-DC-2-DC-003-*\" | stats count list(description) AS Room list(status) AS Status list(badgeId) AS BadgeID list(employeeId) AS userId by _time | eval Personnel=if(match(userId,\"-\"),\"Customer Card\",\"Splunk Datacenter Staff\") | eval Direction=case(match(Room,\"-in\"),\"Ingress\",match(Room,\"-out\"),\"Egress\") | eval Room=case(match(Room,\"LV-DC-2-DC-003-\"),\"Secure Room - 3\") | fields _time Room Personnel Direction | rename _time AS \"Time\" | convert ctime(Time)",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "Security Auditing - Secure Facilities",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "label": "Table Showing Access In and Out of Secure Room 3 of this facility.",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/physical_search0002.png"
+            }
+        ],
+        "hideSPLMode": false,
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "Security Auditing - Secure Facilities",
+                "search": "| inputlookup physical_card_logs | lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description active | lookup physical_card_user_mapping cardId AS badgeId | search description=\"LV-DC-2-DC-003-*\" | stats count list(description) AS Room list(status) AS Status list(badgeId) AS BadgeID list(employeeId) AS userId by _time | eval Personnel=if(match(userId,\"-\"),\"Customer Card\",\"Splunk Datacenter Staff\") | eval Direction=case(match(Room,\"-in\"),\"Ingress\",match(Room,\"-out\"),\"Egress\") | eval Room=case(match(Room,\"LV-DC-2-DC-003-\"),\"Secure Room - 3\") | fields _time Room Personnel Direction | rename _time AS \"Time\" | convert ctime(Time)",
+                "vizParameters": {
+                "count": "15",
+                    "drilldown": "none",
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_physical_search0003": {
         "id": "Splunk Internal - Top Sourcetypes",
         "domain": "Application",
         "help": "Lets look at top Splunk Sourcetypes",
@@ -470,8 +527,9 @@
  { 
    "default": { 
       "summaries":[
-    "showcase_physical_example_1",
-    "showcase_physical_example_2",
+    "showcase_physical_search0001",
+    "showcase_physical_search0002",
+    "showcase_physical_search0003",
     "showcase_subscriber_services_example_1",
     "showcase_dlt_example_1",
     "showcase_cdr_example_1",

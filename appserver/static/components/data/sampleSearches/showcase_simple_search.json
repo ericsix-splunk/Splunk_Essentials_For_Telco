@@ -24,6 +24,60 @@
         "label": "CDN - User Behavior - Top Browsers"
     },
 
+    "User Tracking by Security": {
+        "prereqs": [
+            {
+                "test": "| inputlookup physical_card_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "",
+            "Enrich our data...",
+            "Enrich our data... ",
+            "Here we will search for a specific Employee Identifier.",
+            "Narrow our interesting fields down a bit..",
+            "",
+            "",
+            "Make this more Human Readable.."
+        ],
+        "value": "| inputlookup physical_card_logs \n| lookup physical_card_error_codes errorCode OUTPUTNEW status \n| lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description \n| lookup physical_card_user_mapping cardId AS badgeId OUTPUTNEW firstName lastName emailAddress employeeId note officeId \n| search employeeId=\"25020002\" \n| fields - badgereaderId,envAlarm,errorCode,powerStatus \n| eval fullName = firstName+\" \"+lastName \n| fields _time badgeId employeeId fullName officeId description status note \n| rename badgeId AS \"Badge ID #\" employeeId AS \"Employee Number\" fullName AS \"Employee Name\" officeId AS \"Home Office\" description AS \"Card Reader Location\" status AS \"Read Status\" note AS \"Additional Notes..\"",
+                "label": "User Tracking by Security"
+    },
+
+    "Security Auditing - Secure Facilities": {
+        "prereqs": [
+            {
+                "test": "| inputlookup physical_card_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Enrich our data...",
+            "Enrich our data... ",
+            "Perform some statistical analysis on the Room, Status of the Reader, and the Badge.",
+            "For this example, we mask Internal Employees Id's and Customer's Badges.",
+            "Figure out the direction of the badge read based on the actual card reader.",
+            "Match our room and give it a more human friendly name.",
+            "Select our fields for reporting.",
+            "Bit more of clean up..",
+            "",
+            "Can you read epoch? Convert this to readable form."
+        ],
+        "value": "| inputlookup physical_card_logs \n| lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description active \n| lookup physical_card_user_mapping cardId AS badgeId \n| search description=\"LV-DC-2-DC-003-*\" \n| stats count list(description) AS Room list(status) AS Status list(badgeId) AS BadgeID list(employeeId) AS userId by _time \n| eval Personnel=if(match(userId,\"-\"),\"Customer Card\",\"Splunk Datacenter Staff\") \n| eval Direction=case(match(Room,\"-in\"),\"Ingress\",match(Room,\"-out\"),\"Egress\") \n| eval Room=case(match(Room,\"LV-DC-2-DC-003-\"),\"Secure Room - 3\") \n| fields _time Room Personnel Direction \n| rename _time AS \"Time\" \n| convert ctime(Time)",
+              "label": "Security Auditing - Secure Facilities"
+    },
+
+
+
     "Splunk Internal Search Scheduler - Demo": {
         "prereqs": [
             {

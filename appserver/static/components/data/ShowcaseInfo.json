@@ -60,7 +60,7 @@
     },
 
     "showcase_physical_search0001": {
-        "id": "User Tracking by Security",
+        "id": "Security Auditing - Badge Monitoring",
         "domain": "Application",
         "help": "Provide a user trail....",
         "app": "Splunk_Essentials_For_Telco",
@@ -69,16 +69,16 @@
         "hasSearch": "Yes",
         "category": "Physical Monitoring",
         "knownFP": "unused",
-        "operationalize": "This search allows us to \"monitor\" a specific badge as it is used around monitored facilities. In this usecase, this could be used for a variety of reasons such as: Activity Logging, Compliance, Regulatory Reporting, and HR Related Requests.",
+        "operationalize": "This search allows us to \"monitor\" a specific badge as it is used around monitored facilities. This could be used for a variety of reasons such as: Activity Logging, Compliance, Regulatory Reporting, and HR Related Requests.",
         "relevance": "This search takes data logged from RFID / Proxmity badge readers, enriches it with facilties and logging information, and then shows activity for a designated badge.",
         "includeSSE": "Yes",
-        "dashboard": "showcase_simple_search?ml_toolkit.dataset=User Tracking by Security",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Security Auditing - Badge Monitoring",
         "dashboard_type": "XML Panels with Screenshot",
-        "description": "Track a badge on it's journey through a designated time period.",
+        "description": "Track a badge on it's journey through a designated time period.<p>",
         "released": "1.0.0",
         "journey": "Stage_1",
         "icon": "Core_Use_Case.png",
-        "name": "User Tracking by Security",
+        "name": "Security Auditing - Badge Monitoring",
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Medium",
         "datasource": "Application Logs",
@@ -88,14 +88,14 @@
         "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
         "examples": [
             {
-                "name": "User Tracking by Security",
+                "name": "Security Auditing - Badge Monitoring",
                 "label": "Demo Data"
             }
         ],
         "images": [
             {
                 "name": "Wire_Transfer_Fraud_NewAccount.png",
-                "label": "",
+                "label": "Tracking a specific badge.",
                 "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/physical_search0001.png"
             }
         ],
@@ -132,7 +132,7 @@
         "includeSSE": "Yes",
         "dashboard": "showcase_simple_search?ml_toolkit.dataset=Security Auditing - Secure Facilities",
         "dashboard_type": "XML Panels with Screenshot",
-        "description": "Audit and Report on Room Access in a secure facility based on badge readers.",
+        "description": "Audit and Report on Room Access in a secure facility based on badge readers.<p>",
         "released": "1.0.0",
         "journey": "Stage_2",
         "icon": "Core_Use_Case.png",
@@ -176,43 +176,43 @@
     },
 
     "showcase_physical_search0003": {
-        "id": "Splunk Internal - Top Sourcetypes",
+        "id": "Security Auditing - Abnormal Failures",
         "domain": "Application",
         "help": "Lets look at top Splunk Sourcetypes",
         "app": "Splunk_Essentials_For_Telco",
         "usecase": "Physical Monitoring",
-        "howToImplement": "<p>Subscriber services.....",
+        "howToImplement": "<p>This search relies on a <b>RFID</b> / <b>Proximity</b> badge reader system logs and lookup tables that provide further enrichment around the User-to-Badges and a Reader to Card locations. <p>With this data available, you can substitute in sourcetype and lookup tables to use this search.",
         "hasSearch": "Yes",
         "category": "Physical Monitoring",
         "knownFP": "unused",
-        "operationalize": "Words around how to operationalize things...",
-        "relevance": "This looks at top sourcetypes in Splunk's internal logs....",
+        "operationalize": "Security in facilities, especially Data Centers, is restricted and not only is there a need to control access but we also need to know who is accessing the facilities.<p>This example looks at where a badge has a high number of failures with an <b>ACCESS-DENIED</b> error. This could be indicative of a malicious user, or an employee with a badge problem. All of these should be immmediately actionable by facilities / security.",
+        "relevance": "In this example we look at how monitor abnormally high failures against a badge reader, or readers, over a time period. This can be indicative of a physical issue with a badge, or a security relevant situation where perhaps physical security is required.",
         "includeSSE": "Yes",
-        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Splunk Internal Top Sourcetypes - Demo",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Security Auditing - Abnormal Failures",
         "dashboard_type": "XML Panels with Screenshot",
-        "description": "You use splunk, but do you know Splunk?",
+        "description": "Let's find where access to badge readers has an abnormally high count within a 5 minute period.<p>",
         "released": "1.0.0",
-        "journey": "Stage_1",
+        "journey": "Stage_2",
         "icon": "Core_Use_Case.png",
-        "name": "Splunk Internal Top Sourcetypes",
+        "name": "Security Auditing - Abnormal Failures",
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Easy",
         "datasource": "Application Logs",
         "highlight": "Yes",
         "alertvolume": "unused",
-        "sampleSPL": "index=_internal earlist=-1week latest=now | top 5 sourcetype",
+        "sampleSPL": "| inputlookup physical_card_logs | lookup physical_card_error_codes errorCode OUTPUTNEW status | lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description active | lookup physical_card_user_mapping cardId AS badgeId | eval fullName=firstName+\" \"+lastName | fields _time badgeId description fullName status | search status=\"ACCESS-DENIED\" OR status=\"READ-SUCCESS\" | streamstats count reset_on_change=true window=2 by description | search (count > 1) AND status=\"ACCESS-DENIED\" | bin span=5m _time | stats count list(badgeId) AS Badge list(description) AS Location list(fullName) as Name by _time | where count > 1 | rename _time AS Time | convert ctime(Time) | table Time Location Badge Name",
         "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
         "examples": [
             {
-                "name": "Splunk Internal Top Sourcetypes - Demo",
+                "name": "Security Auditing - Abnormal Failures",
                 "label": "Demo Data"
             }
         ],
         "images": [
             {
                 "name": "Wire_Transfer_Fraud_NewAccount.png",
-                "label": "",
-                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/Wire_Transfer_Fraud_NewAccount.png"
+                "label": "A particular badge having a bad day.",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/physical_search0003.png"
             }
         ],
         "hideSPLMode": false,
@@ -222,10 +222,68 @@
                 "panel": "row1cell1",
                 "type": "viz",
                 "vizType": "TableElement",
-                "title": "Top Internal Sourcetypes over the last 24 hours",
-                "search": "index=_internal earliest=-1d@d | top 10 sourcetype",
+                "title": "Security Auditing - Abnormal Failures",
+                "search": "| inputlookup physical_card_logs | lookup physical_card_error_codes errorCode OUTPUTNEW status | lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description active | lookup physical_card_user_mapping cardId AS badgeId | eval fullName=firstName+\" \"+lastName | fields _time badgeId description fullName status | search status=\"ACCESS-DENIED\" OR status=\"READ-SUCCESS\" | streamstats count reset_on_change=true window=2 by description | search (count > 1) AND status=\"ACCESS-DENIED\" | bin span=5m _time | stats count list(badgeId) AS Badge list(description) AS Location list(fullName) as Name by _time | where count > 1 | rename _time AS Time | convert ctime(Time) | table Time Location Badge Name",
                 "vizParameters": {
                 "count": "15",
+                    "drilldown": "none",
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_physical_search0004": {
+        "id": "Security Auditing - Environmental Check",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Physical Monitoring",
+        "howToImplement": "<p>This search relies on a <b>RFID</b> / <b>Proximity</b> badge reader system logs and lookup tables that provide further enrichment around the User-to-Badges and a Reader to Card locations. <p>With this data available, you can substitute in sourcetype and lookup tables to use this search.",
+        "hasSearch": "Yes",
+        "category": "Physical Monitoring",
+        "knownFP": "unused",
+        "operationalize": "Being able to monitor badge readers and correlate environmental factors to specific events is what data analytics is all about. Being able to identify a power outage in a hallway and resolve this before a customer has problems is good.<p>",
+        "relevance": "In this example we show a simple search that looks at environmental alerts coming out of our badge reader system. ",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Security Auditing - Environmental Check",
+        "dashboard_type": "XML Panels with Screenshot",
+        "description": "Most modern badger readers support various environmental triggers such as fire alarms, electricity failures, and backup battery failovers. This example shows how to search our <b>RFID</b> / <b>Promixity</b> badge system events for triggered environmental alarms.<p>",
+        "released": "1.0.0",
+        "journey": "Stage_1",
+        "icon": "Core_Use_Case.png",
+        "name": "Security Auditing - Environmental Check",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "No",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup physical_card_logs | lookup physical_card_error_codes errorCode OUTPUTNEW status | lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description | fields _time badgereaderId description envAlarm errorCode powerStatus status | search envAlarm=\"FIRE\" OR envAlarm=\"POWER\"",    
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "Security Auditing - Environmental Check",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "label": "Fire in the West Stairwell?",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/physical_search0004.png"
+            }
+        ],
+        "hideSPLMode": false,
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "Security Auditing - Environmental Check",
+                "search": "| inputlookup physical_card_logs | lookup physical_card_error_codes errorCode OUTPUTNEW status | lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description | fields _time badgereaderId description envAlarm errorCode powerStatus status | search envAlarm=\"FIRE\" OR envAlarm=\"POWER\"",                
+                "vizParameters": {
+                "count": "10",
                     "drilldown": "none",
                     "refresh.display": "progressbar"
                 }
@@ -530,6 +588,7 @@
     "showcase_physical_search0001",
     "showcase_physical_search0002",
     "showcase_physical_search0003",
+    "showcase_physical_search0004",
     "showcase_subscriber_services_example_1",
     "showcase_dlt_example_1",
     "showcase_cdr_example_1",

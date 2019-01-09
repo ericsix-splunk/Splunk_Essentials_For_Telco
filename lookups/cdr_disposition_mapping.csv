@@ -1,0 +1,6 @@
+disposition,description
+NO ANSWER,No Answer
+CONGESTION,Unable to Place Call-Congested Network
+FAILED,Unable to Place Call-Congested Network/No Route
+BUSY,End Number Busy
+ANSWERED,Connected

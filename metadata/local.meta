@@ -62,3 +62,24 @@ export = none
 owner = w0rdp4ss!
 version = 7.2.1
 modtime = 1546835208.783537000
+
+[transforms/cdr_country_codes]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1546925981.197451000
+
+[transforms/cdr_logs]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1546927157.014720000
+
+[transforms/cdr_account_mappings]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1546937127.913173000

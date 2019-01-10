@@ -99,7 +99,7 @@
                 "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/physical_search0001.png"
             }
         ],
-        "hideSPLMode": false,
+        "hideSPLMode": "exception",
         "autoOpen": "supportingImages_table",
         "visualizations": [
             {
@@ -140,7 +140,7 @@
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Easy",
         "datasource": "Application Logs",
-        "highlight": "No",
+        "highlight": "Yes",
         "alertvolume": "unused",
         "sampleSPL": "| inputlookup physical_card_logs | lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description active | lookup physical_card_user_mapping cardId AS badgeId | search description=\"LV-DC-2-DC-003-*\" | stats count list(description) AS Room list(status) AS Status list(badgeId) AS BadgeID list(employeeId) AS userId by _time | eval Personnel=if(match(userId,\"-\"),\"Customer Card\",\"Splunk Datacenter Staff\") | eval Direction=case(match(Room,\"-in\"),\"Ingress\",match(Room,\"-out\"),\"Egress\") | eval Room=case(match(Room,\"LV-DC-2-DC-003-\"),\"Secure Room - 3\") | fields _time Room Personnel Direction | rename _time AS \"Time\" | convert ctime(Time)",
         "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
@@ -157,7 +157,7 @@
                 "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/physical_search0002.png"
             }
         ],
-        "hideSPLMode": false,
+        "hideSPLMode": "exception",
         "autoOpen": "supportingImages_table",
         "visualizations": [
             {
@@ -215,7 +215,7 @@
                 "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/physical_search0003.png"
             }
         ],
-        "hideSPLMode": false,
+        "hideSPLMode": "exception",
         "autoOpen": "supportingImages_table",
         "visualizations": [
             {
@@ -256,7 +256,7 @@
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Easy",
         "datasource": "Application Logs",
-        "highlight": "No",
+        "highlight": "Yes",
         "alertvolume": "unused",
         "sampleSPL": "| inputlookup physical_card_logs | lookup physical_card_error_codes errorCode OUTPUTNEW status | lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description | fields _time badgereaderId description envAlarm errorCode powerStatus status | search envAlarm=\"FIRE\" OR envAlarm=\"POWER\"",    
         "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
@@ -273,7 +273,7 @@
                 "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/physical_search0004.png"
             }
         ],
-        "hideSPLMode": false,
+        "hideSPLMode": "exception",
         "autoOpen": "supportingImages_table",
         "visualizations": [
             {
@@ -314,7 +314,7 @@
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Difficult",
         "datasource": "Application Logs",
-        "highlight": "No",
+        "highlight": "Yes",
         "alertvolume": "unused",
         "sampleSPL": "| inputlookup physical_card_logs | lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description | lookup physical_card_error_codes errorCode OUTPUT status | search envAlarm=\"FIRE\" OR envAlarm=\"POWER\" | sort _time | streamstats window=0 current=false latest(_time) AS previousEventTime latest(status) AS previousStatus BY description | eval duration = _time - previousEventTime | rename status AS currentStatus | fillnull value=0 duration | eval envAlarm=case(match(envAlarm,\"FIRE\"),\"Fire Alarm Detected in Zone\",match(envAlarm,\"POWER\"),\"Power Event Detected in Zone\") | fields _time description currentStatus duration envAlarm | rename description AS \"Reader Location\" currentStatus AS \"Lock Status\" envAlarm AS \"Alarm\" | convert ctime(previousEventTime) | where duration > 0 | rename duration AS \"Duration of Alarm (seconds)\" _time AS \"Time Cleared\" | convert ctime(\"Time Cleared\") | table Alarm \"Reader Location\" \"Lock Status\" \"Duration of Alarm (seconds)\" \"Time Cleared\"",
                 "examples": [
@@ -330,7 +330,7 @@
                 "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/physical_search0005.png"
             }
         ],
-        "hideSPLMode": false,
+        "hideSPLMode": "exception",
         "autoOpen": "supportingImages_table",
         "visualizations": [
             {
@@ -348,38 +348,36 @@
         ]
     },
 
-   
-
-    "showcase_cdr_example_1": {
-        "id": "Splunk Internal - Top Sourcetypes",
+    "showcase_subscriber_search0001": {
+        "id": "General Call Disposition Metrics",
         "domain": "Application",
         "help": "Lets look at top Splunk Sourcetypes",
         "app": "Splunk_Essentials_For_Telco",
-        "usecase": "CDR",
+        "usecase": "Subscriber Services",
         "howToImplement": "<p>Subscriber services.....",
         "hasSearch": "Yes",
-        "category": "CDR",
+        "category": "Subscriber Services",
         "knownFP": "unused",
         "operationalize": "Words around how to operationalize things...",
         "relevance": "This looks at top sourcetypes in Splunk's internal logs....",
         "includeSSE": "Yes",
-        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Splunk Internal Top Sourcetypes - Demo",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=General Call Disposition Metrics",
         "dashboard_type": "XML Panels with Screenshot",
         "description": "You use splunk, but do you know Splunk?",
         "released": "1.0.0",
         "journey": "Stage_1",
         "icon": "Core_Use_Case.png",
-        "name": "Splunk Internal Top Sourcetypes",
+        "name": "General Call Disposition Metrics",
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Easy",
         "datasource": "Application Logs",
         "highlight": "Yes",
         "alertvolume": "unused",
-        "sampleSPL": "index=_internal earlist=-1week latest=now | top 5 sourcetype",
+        "sampleSPL": "| inputlookup cdr_logs | lookup cdr_disposition_mapping disposition | stats count values(description) AS Description by disposition | rename disposition AS Disposition count AS Count | table Description Disposition Count | eval Description=if(match(Disposition,\"CONGESTED\"),\"Route Error\",Description) | sort - Count",
         "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
         "examples": [
             {
-                "name": "Splunk Internal Top Sourcetypes - Demo",
+                "name": "General Call Disposition Metrics",
                 "label": "Demo Data"
             }
         ],
@@ -387,18 +385,19 @@
             {
                 "name": "Wire_Transfer_Fraud_NewAccount.png",
                 "label": "",
-                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/Wire_Transfer_Fraud_NewAccount.png"
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0001.png"
             }
         ],
-        "hideSPLMode": false,
+        "hideSPLMode": "exception",
+
         "autoOpen": "supportingImages_table",
         "visualizations": [
             {
                 "panel": "row1cell1",
                 "type": "viz",
                 "vizType": "TableElement",
-                "title": "Top Internal Sourcetypes over the last 24 hours",
-                "search": "index=_internal earliest=-1d@d | top 10 sourcetype",
+                "title": "General Call Disposition Metrics",
+                "search": "| inputlookup cdr_logs | lookup cdr_disposition_mapping disposition | stats count values(description) AS Description by disposition | rename disposition AS Disposition count AS Count | table Description Disposition Count | eval Description=if(match(Disposition,\"CONGESTED\"),\"Route Error\",Description) | sort - Count",
                 "vizParameters": {
                 "count": "15",
                     "drilldown": "none",
@@ -407,6 +406,361 @@
             }
         ]
     },
+
+    "showcase_subscriber_search0002": {
+        "id": "Failed Call Metrics - Simple",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Subscriber Services",
+        "howToImplement": "<p>Subscriber services.....",
+        "hasSearch": "Yes",
+        "category": "Subscriber Services",
+        "knownFP": "unused",
+        "operationalize": "Words around how to operationalize things...",
+        "relevance": "This looks at top sourcetypes in Splunk's internal logs....",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Failed Call Metrics - Simple",
+        "dashboard_type": "XML Panels with Screenshot",
+        "description": "You use splunk, but do you know Splunk?",
+        "released": "1.0.0",
+        "journey": "Stage_1",
+        "icon": "Core_Use_Case.png",
+        "name": "Failed Call Metrics - Simple",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdr_logs | lookup cdr_disposition_mapping disposition | search disposition=\"FAILED\" OR disposition=\"CONGESTED\" | stats count values(description) AS Description by disposition | rename disposition AS Disposition count AS Count | table Description Disposition Count | eval Description=if(match(Disposition,\"CONGESTED\"),\"Route Error\",Description) | sort - Count",
+            "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "Failed Call Metrics - Simple",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0002.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "Failed Call Metrics - Simple",
+                "search": "| inputlookup cdr_logs | lookup cdr_disposition_mapping disposition | search disposition=\"FAILED\" OR disposition=\"CONGESTED\" | stats count values(description) AS Description by disposition | rename disposition AS Disposition count AS Count | table Description Disposition Count | eval Description=if(match(Disposition,\"CONGESTED\"),\"Route Error\",Description) | sort - Count",
+                "vizParameters": {
+                "count": "15",
+                    "drilldown": "none",
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_subscriber_search0003": {
+        "id": "Failed Call Metrics - Advanced",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Subscriber Services",
+        "howToImplement": "<p>Subscriber services.....",
+        "hasSearch": "Yes",
+        "category": "Subscriber Services",
+        "knownFP": "unused",
+        "operationalize": "Words around how to operationalize things...",
+        "relevance": "This looks at top sourcetypes in Splunk's internal logs....",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Failed Call Metrics - Advanced",
+        "dashboard_type": "XML Panels with Screenshot",
+        "description": "You use splunk, but do you know Splunk?",
+        "released": "1.0.0",
+        "journey": "Stage_1",
+        "icon": "Core_Use_Case.png",
+        "name": "Failed Call Metrics - Advanced",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=FAILED OR disposition=CONGESTED | eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | table _time src dst dstCountryCode Description disposition | rename _time AS Time src AS \"Source #\" dst AS \"Destination #\" disposition AS Disposition dstCountryCode AS \"Destination Country\"",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "Failed Call Metrics - Advanced",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0003.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "Failed Call Metrics - Advanced",
+                "search": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=FAILED OR disposition=CONGESTED | eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | table _time src dst dstCountryCode Description disposition | rename _time AS Time src AS \"Source #\" dst AS \"Destination #\" disposition AS Disposition dstCountryCode AS \"Destination Country\"",
+                "vizParameters": {
+                "count": "15",
+                    "drilldown": "none",
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_subscriber_search0004": {
+        "id": "Failed Call Metrics - Geo Stats",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Subscriber Services",
+        "howToImplement": "<p>Subscriber services.....",
+        "hasSearch": "Yes",
+        "category": "Subscriber Services",
+        "knownFP": "unused",
+        "operationalize": "Words around how to operationalize things...",
+        "relevance": "This looks at top sourcetypes in Splunk's internal logs....",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Failed Call Metrics - Geo Stats",
+        "dashboard_type": "XML Panels with Screenshot",
+        "description": "You use splunk, but do you know Splunk?",
+        "released": "1.0.0",
+        "journey": "Stage_1",
+        "icon": "Core_Use_Case.png",
+        "name": "Failed Call Metrics - Geo Stats",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Difficult",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=FAILED OR disposition=CONGESTED | eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | stats count by dstCountryName  | geom geo_countries allFeatures=true featureIdfield=dstCountryName",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "Failed Call Metrics - Geo Stats",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0004.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "Failed Call Metrics - Geo Stats",
+                "search": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=FAILED OR disposition=CONGESTED | eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | stats count by dstCountryName  | geom geo_countries allFeatures=true featureIdfield=dstCountryName", 
+                "vizParameters": {
+                "count": "15",
+                    "drilldown": "none",
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_subscriber_search0005": {
+        "id": "Failed Call Metrics - By Destination and Gateway",
+        "description": "General CDR Call Metrics - Failed Calls by Destination and Gateway<p>",
+        "relevance": "<p>Identify where calls are failing, and which routes \/ gateways they are routing through.",
+        "operationalize": "<p>This search gives us insight into where calls are failing and the path the system is routing the call through. Typically routing issues can be traced back to the underlying transit network, but with this information from our CDR logs, we can gain Operational Insight into where calls are encountering issues and proactively address these.",
+        "howToImplement": "<p>For this search our data source for the CDR must have the Destination\/Callee, along with failure status, and the path used. <p>From here, we use stats to help correlate fields within the event and then format the results in a easily readable report.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Subscriber Services",
+        "hasSearch": "Yes",
+        "category": "Subscriber Services",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Failed Call Metrics - By Destination and Gateway",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_2",
+        "icon": "Core_Use_Case.png",
+        "name": "Failed Call Metrics - By Destination and Gateway",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Medium",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=FAILED OR disposition=CONGESTED | eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | table src dst dstCountryCode partyBiD disposition Description _time | stats count values(dst) AS Destination values(disposition) AS Disposition values(Description) AS Description values(_time) as Time by partyBiD dst | rename partyBiD AS \"Routed Path\" | table Time Destination Description \"Routed Path\" count",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "Failed Call Metrics - By Destination and Gateway",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0005.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "Failed Call Metrics - By Destination and Gateway",
+                "search": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=FAILED OR disposition=CONGESTED | eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | table src dst dstCountryCode partyBiD disposition Description _time | stats count values(dst) AS Destination values(disposition) AS Disposition values(Description) AS Description values(_time) as Time by partyBiD dst | rename partyBiD AS \"Routed Path\" | table Time Destination Description \"Routed Path\" count",
+                "vizParameters": {
+                "count": "15",
+                    "drilldown": "none",
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_subscriber_search0006": {
+        "id": "General Call Metrics - Geo Stats",
+        "description": "General CDR Call Metrics - Mapping Successfully Dailed Calls<p>",
+        "relevance": "<p>Visual representation of where our succssfully connected calls are dialing.",
+        "operationalize": "<p>This search gives us insight into where our customers are calling the most in a visual representation.<p>From an opertational point of view, this view is a potential way to spot abnormalities in expected call behavior. And from a business persepective, we can use this information to potentially negotiate lower rates for this traffic, or perhaps raise our own prices.",
+        "howToImplement": "<p>For this search our data source for the CDR must have both a Source\/Caller and Destination\/Callee, along with succesful answer or busy status. (In this example, these two call statuses are what our metric is based on.) In addition to this, a country code is required in order to find the dailed party. In this example, we extract a country code from the dailed number, and then use a lookup to enrich this to a country name.<p>From here, we can use the top command to generate our data set and then choose a visualization, or reformat this into table.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Subscriber Services",
+        "hasSearch": "Yes",
+        "category": "Subscriber Services",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=General Call Metrics - Geo Stats",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_3",
+        "icon": "Core_Use_Case.png",
+        "name": "General Call Metrics - Geo Stats",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Medium",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=\"ANSWERED\" OR disposition=\"BUSY\" | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | stats count by dstCountryName | geom geo_countries allFeatures=true featureIdfield=dstCountryName",   
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "General Call Metrics - Geo Stats",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0006.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "General Call Metrics - Geo Stats",
+                "search": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=\"ANSWERED\" OR disposition=\"BUSY\" | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | stats count by dstCountryName | geom geo_countries allFeatures=true featureIdfield=dstCountryName",
+                "vizParameters": {
+                "count": "15",
+                    "drilldown": "none",
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_subscriber_search0007": {
+        "id": "General Call Metrics - Top Destination Countries",
+        "description": "General CDR Call Metrics - Finding the Top Called Countries<p>",
+        "relevance": "<p>Find our top dialed countries over the given time range.",
+        "operationalize": "<p>This search gives us insight into where our customers are calling the most. From a business point of view, we can use this information to potentially negotiate lower rates for this traffic, or perhaps raise our own prices.",
+        "howToImplement": "<p>For this search our data source for the CDR must have both a Source\/Caller and Destination\/Callee. In addition to this we need to also have a country code in order to find the dailed party. In this example, we extract a country code from the dailed number, and then use a lookup to enrich this to a country name.<p>From here, we can use the top command to generate our data set and then choose a visualization, or reformat this into table.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Subscriber Services",
+        "hasSearch": "Yes",
+        "category": "Subscriber Services",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=General Call Metrics - Top Destination Countries",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_3",
+        "icon": "Core_Use_Case.png",
+        "name": "General Call Metrics - Top Destination Countries",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdr_logs | eval _time = start  | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName  | top limit=10 dstCountryName",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "General Call Metrics - Top Destination Countries",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0007.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "General Call Metrics - Top Destination Countries",
+                "search": "| inputlookup cdr_logs | eval _time = start | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName | top limit=10 dstCountryName", 
+                "vizParameters": {
+                "count": "15",
+                    "drilldown": "none",
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
 
     "showcase_dlt_example_1": {
         "id": "Splunk Internal - Top Sourcetypes",
@@ -644,6 +998,13 @@
  { 
    "default": { 
       "summaries":[
+    "showcase_subscriber_search0001",
+    "showcase_subscriber_search0002",
+    "showcase_subscriber_search0003",
+    "showcase_subscriber_search0004",
+    "showcase_subscriber_search0005",
+    "showcase_subscriber_search0006",
+    "showcase_subscriber_search0007",
     "showcase_physical_search0001",
     "showcase_physical_search0002",
     "showcase_physical_search0003",
@@ -651,10 +1012,7 @@
     "showcase_physical_search0005",
     "showcase_subscriber_services_example_1",
     "showcase_dlt_example_1",
-    "showcase_cdr_example_1",
-    "showcase_cdn_example_1",
-    "showcase_Splunk_Internal_Top_Sourcetypes",
-    "showcase_Splunk_Search_Scheduler_Usage"
+    "showcase_cdn_example_1"
     ]
       }
      }

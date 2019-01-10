@@ -13,11 +13,11 @@ var Descriptions = new Object;
 //Descriptions["Cloud Monitoring"] = "Regardless of what Cloud provider you use today, you should take these use cases for AWS, Azure, and GCP and expand your visibility into your next generation stacks."
 
 //Telco App Core Use Cases
-Descriptions["Subscriber Services"] = "Expedient and trouble free activation of High Speed Internet, Mobile Data, and Prepaid Mobile all require insight across many systems. These examples demonstrate how to track Activation across BSS/OSS, or similar stacks."
+Descriptions["Subscriber Services"] = "Expedient and trouble free activation of High Speed Internet, Mobile Data, and Prepaid Mobile all require insight across many systems. These examples demonstrate how to track Activation across BSS/OSS, or similar stacks, along with CDR records and analytics examples."
 Descriptions["Telco Network Monitoring"] = "Telco's have a various networks : customer private networks, out of band, voice, core. This use case explores monitoring various components of these and how to understand business impact to outages."
 Descriptions["Content Delivery"] = "Content Deliver Networks are now quite commong in the Telco Market. This use case explores various components within CDN."
 Descriptions["Distributed Ledger Technology"] = "DLT is gaining moomentum in many markets. These examples show how to monitor transactions and the underlying systems in a Distributed Ledger Network."
-Descriptions["CDR"] = "Call Detail Records can provide insight into not only user activity, but also business analytics. These examples show how to derive insight from standard CDR logs."
+//Descriptions["CDR"] = "Call Detail Records can provide insight into not only user activity, but also business analytics. These examples show how to derive insight from standard CDR logs."
 Descriptions["Prepaid Mobile"] = "Prepaid / Top-up services are quite common throughout the world. This usecase explores examples around service activations, compliance, and fraud."
 Descriptions["Physical Monitoring"] = "Examples around collecting Sensor/IOT data in Data Centers."
 

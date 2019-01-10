@@ -24,6 +24,181 @@
         "label": "CDN - User Behavior - Top Browsers"
     },
 
+    "General Call Disposition Metrics": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdr_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "",
+            "Enrich our data...",
+            "Enrich our data... ",
+            "Here we will search for a specific Employee Identifier.",
+            "Narrow our interesting fields down a bit..",
+            "",
+            "",
+            "Make this more Human Readable.."
+        ],
+        "value": "| inputlookup cdr_logs \n| lookup cdr_disposition_mapping disposition \n| stats count values(description) AS Description by disposition \n| rename disposition AS Disposition count AS Count \n| table Description Disposition Count \n| eval Description=if(match(Disposition,\"CONGESTED\"),\"Route Error\",Description) \n| sort - Count",
+            "label": "General Call Disposition Metrics"
+    },
+
+    "Failed Call Metrics - Simple": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdr_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "",
+            "Enrich our data...",
+            "Enrich our data... ",
+            "Here we will search for a specific Employee Identifier.",
+            "Narrow our interesting fields down a bit..",
+            "",
+            "",
+            "Make this more Human Readable.."
+        ],
+        "value": "| inputlookup physical_card_logs \n| lookup physical_card_error_codes errorCode OUTPUTNEW status \n| lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description \n| lookup physical_card_user_mapping cardId AS badgeId OUTPUTNEW firstName lastName emailAddress employeeId note officeId \n| search employeeId=\"25020002\" \n| fields - badgereaderId,envAlarm,errorCode,powerStatus \n| eval fullName = firstName+\" \"+lastName \n| fields _time badgeId employeeId fullName officeId description status note \n| rename badgeId AS \"Badge ID #\" employeeId AS \"Employee Number\" fullName AS \"Employee Name\" officeId AS \"Home Office\" description AS \"Card Reader Location\" status AS \"Read Status\" note AS \"Additional Notes..\"",
+                "label": "Failed Call Metrics - Simple"
+    },
+
+    "Failed Call Metrics - Advanced": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdr_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "",
+            "Enrich our data...",
+            "Enrich our data... ",
+            "Here we will search for a specific Employee Identifier.",
+            "Narrow our interesting fields down a bit..",
+            "",
+            "",
+            "Make this more Human Readable.."
+        ],
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=FAILED OR disposition=CONGESTED \n| eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| table _time src dst dstCountryCode Description disposition \n| rename _time AS Time src AS \"Source #\" dst AS \"Destination #\" disposition AS Disposition dstCountryCode AS \"Destination Country\"",
+        "label": "Failed Call Metrics - Advanced"
+    },
+
+    "Failed Call Metrics - Geo Stats": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdr_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "",
+            "Enrich our data...",
+            "Enrich our data... ",
+            "Here we will search for a specific Employee Identifier.",
+            "Narrow our interesting fields down a bit..",
+            "",
+            "",
+            "Make this more Human Readable.."
+        ],
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=FAILED OR disposition=CONGESTED \n| eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| stats count by dstCountryName  \n| geom geo_countries allFeatures=true featureIdfield=dstCountryName",
+        "label": "Failed Call Metrics - Geo Stats"
+    },
+
+    "Failed Call Metrics - By Destination and Gateway": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdr_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "",
+            "Enrich our data...",
+            "Enrich our data... ",
+            "Here we will search for a specific Employee Identifier.",
+            "Narrow our interesting fields down a bit..",
+            "",
+            "",
+            "Make this more Human Readable.."
+        ],
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=FAILED OR disposition=CONGESTED \n| eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| table src dst dstCountryCode partyBiD disposition Description _time \n| stats count values(dst) AS Destination values(disposition) AS Disposition values(Description) AS Description values(_time) as Time by partyBiD dst \n| rename partyBiD AS \"Routed Path\" \n| table Time Destination Description \"Routed Path\" count",
+        "label": "Failed Call Metrics - By Destination and Gateway"
+    },
+
+    "General Call Metrics - Geo Stats": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdr_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "",
+            "Enrich our data...",
+            "Enrich our data... ",
+            "Here we will search for a specific Employee Identifier.",
+            "Narrow our interesting fields down a bit..",
+            "",
+            "",
+            "Make this more Human Readable.."
+        ],
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=\"ANSWERED\" OR disposition=\"BUSY\" \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| stats count by dstCountryName \n| geom geo_countries allFeatures=true featureIdfield=dstCountryName",
+        "label": "General Call Metrics - Geo Stats"
+    },
+
+    "General Call Metrics - Top Destination Countries": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdr_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "",
+            "Enrich our data...",
+            "Enrich our data... ",
+            "Here we will search for a specific Employee Identifier.",
+            "Narrow our interesting fields down a bit..",
+            "",
+            "",
+            "Make this more Human Readable.."
+        ],
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName \n| top limit=10 dstCountryName",   
+        "label": "General Call Metrics - Top Destination Countries"
+    },
+
     "Security Auditing - Badge Monitoring": {
         "prereqs": [
             {

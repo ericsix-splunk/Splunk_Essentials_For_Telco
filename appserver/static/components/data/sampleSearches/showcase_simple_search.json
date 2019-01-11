@@ -199,6 +199,132 @@
         "label": "General Call Metrics - Top Destination Countries"
     },
 
+    "General Call Metrics - Least Called Countries": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdr_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "",
+            "Enrich our data...",
+            "Enrich our data... ",
+            "Here we will search for a specific Employee Identifier.",
+            "Narrow our interesting fields down a bit..",
+            "",
+            "",
+            "Make this more Human Readable.."
+        ],
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| rare limit=10 dstCountryName",
+        "label": "General Call Metrics - Least Called Countries"
+    },
+
+    "General Call Metrics - Top Outbound Callers": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdr_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "",
+            "Enrich our data...",
+            "Enrich our data... ",
+            "Here we will search for a specific Employee Identifier.",
+            "Narrow our interesting fields down a bit..",
+            "",
+            "",
+            "Make this more Human Readable.."
+        ],
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| top dstCountryName by src \n| rename src AS \"Caller\" dstCountryName AS \"Destinaton Country\" count as Count \n| sort - Count \n| fields - percent \n| head 10",  
+        "label": "General Call Metrics - Top Outbound Callers"
+    },
+
+    "General Call Metrics - Top Call Durations by Destination": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdr_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "",
+            "Enrich our data...",
+            "Enrich our data... ",
+            "Here we will search for a specific Employee Identifier.",
+            "Narrow our interesting fields down a bit..",
+            "",
+            "",
+            "Make this more Human Readable.."
+        ],
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=\"ANSWERED\" OR disposition=\"BUSY\" \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| fields src dst dstCountryName duration \n| stats count list(dst) AS dst list(dstCountryName) as dstCountryName by duration src \n| rename duration AS \"Call Duration\" src AS \"Caller\" dst AS \"Called Number\" dstCountryName AS \"Destination Country\" \n| sort - \"Call Duration\"",
+        "label": "General Call Metrics - Top Call Durations by Destination"
+    },
+
+    "General Call Metrics - Shortest Call Durations by Destination": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdr_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "",
+            "Enrich our data...",
+            "Enrich our data... ",
+            "Here we will search for a specific Employee Identifier.",
+            "Narrow our interesting fields down a bit..",
+            "",
+            "",
+            "Make this more Human Readable.."
+        ],
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=\"ANSWERED\" OR disposition=\"BUSY\" \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| fields src dst dstCountryName duration \n| stats count list(dst) AS dst list(dstCountryName) as dstCountryName by duration src \n| rename duration AS \"Call Duration\" src AS \"Caller\" dst AS \"Called Number\" dstCountryName AS \"Destination Country\" \n| sort \"Call Duration\"",
+        "label": "General Call Metrics - Shortest Call Durations by Destination"
+    },
+
+    
+    "General Call Metrics - Session Tracking": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdr_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "",
+            "Enrich our data...",
+            "Enrich our data... ",
+            "Here we will search for a specific Employee Identifier.",
+            "Narrow our interesting fields down a bit..",
+            "",
+            "",
+            "Make this more Human Readable.."
+        ],
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| table _time accountcode channel src dst duration partyBiD \n| rex field=channel \".*-(?<sessionId>\\d+$)\" \n| search duration > 0 \n| convert dur2sec(duration) AS CallDuration \n| eval CallDuration=round((CallDuration/60),0).\" minutes\" \n| stats count values(sessionId) AS SessionID values(accountcode) AS AccountID values(dst) AS DestinationNumber values(_time) AS DialTime list(CallDuration) AS CallDuration by src dst \n| lookup cdr_account_mappings accountCode AS AccountID OUTPUT accountName billingState \n| rename src AS SourceNumber \n| table AccountID accountName billingState SourceNumnber DestinationNumber SessionID CallDuration DialTime",
+        "label": "General Call Metrics - Session Tracking"
+    },
+
     "Security Auditing - Badge Monitoring": {
         "prereqs": [
             {

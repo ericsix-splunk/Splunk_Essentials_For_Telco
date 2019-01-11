@@ -761,6 +761,300 @@
         ]
     },
 
+    "showcase_subscriber_search0008": {
+        "id": "General Call Metrics - Least Called Countries",
+        "description": "General CDR Call Metrics - Finding the Least Called Countries<p>",
+        "relevance": "<p>Find our top dialed countries over the given time range.",
+        "operationalize": "<p>This search gives us insight into where our customers are calling the most. From a business point of view, we can use this information to potentially negotiate lower rates for this traffic, or perhaps raise our own prices.",
+        "howToImplement": "<p>For this search our data source for the CDR must have both a Source\/Caller and Destination\/Callee. In addition to this we need to also have a country code in order to find the dailed party. In this example, we extract a country code from the dailed number, and then use a lookup to enrich this to a country name.<p>From here, we can use the rare command to generate our data set and then choose a visualization, or reformat this into table.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Subscriber Services",
+        "hasSearch": "Yes",
+        "category": "Subscriber Services",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=General Call Metrics - Least Called Countries",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_3",
+        "icon": "Core_Use_Case.png",
+        "name": "General Call Metrics - Least Called Countries",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | rare limit=10 dstCountryName",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "General Call Metrics - Least Called Countries",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0008.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "General Call Metrics - Least Called Countries",
+                "search": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | rare limit=10 dstCountryName",
+                "vizParameters": {
+                "count": "15",
+                    "drilldown": "none",
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_subscriber_search0009": {
+        "id": "General Call Metrics - Top Outbound Callers",
+        "description": "General CDR Call Metrics - Finding the Most Active Callers<p>",
+        "relevance": "<p>Find our top callers countries over the given time range.",
+        "operationalize": "<p>This search gives us insight into who our top customers are and where they are calling. From a business persepective, we can use this information for targeting marketing or campaigns, along with trending over periods to look at call routing and associated costs.",
+        "howToImplement": "<p>For this search our data source for the CDR must have both a Source\/Caller and Destination\/Callee. In addition to this we need to also have a country code in order to find the dailed party. In this example, we extract a country code from the dailed number, and then use a lookup to enrich this to a country name.<p>From here, we can use the rare command to generate our data set and then choose a visualization, or reformat this into table.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Subscriber Services",
+        "hasSearch": "Yes",
+        "category": "Subscriber Services",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=General Call Metrics - Top Outbound Callers",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_3",
+        "icon": "Core_Use_Case.png",
+        "name": "General Call Metrics - Top Outbound Callers",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdr_logs | eval _time = start | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | top dstCountryName by src | rename src AS \"Caller\" dstCountryName AS \"Destinaton Country\" count as Count | sort - Count | fields - percent | head 10",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "General Call Metrics - Top Outbound Callers",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0009.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "General Call Metrics - Top Outbound Callers",
+                "search": "| inputlookup cdr_logs | eval _time = start | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | top dstCountryName by src | rename src AS \"Caller\" dstCountryName AS \"Destinaton Country\" count as Count | sort - Count | fields - percent | head 10",
+                "vizParameters": {
+                "count": "10",
+                    "drilldown": "none",
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_subscriber_search0010": {
+        "id": "General Call Metrics - Top Call Durations by Destination",
+        "description": "General CDR Call Metrics - Finding Top Call Durations by Destination<p>",
+        "relevance": "<p>Find our top call durations over the given time range.",
+        "operationalize": "<p>This search gives us insight into who our top customers are and where they are calling. From a business persepective, we can use this information for targeting marketing or campaigns, along with trending over periods to look at call routing and associated costs.",
+        "howToImplement": "<p>For this search our data source for the CDR must have both a Source\/Caller and Destination\/Callee. In addition to this we need to also have a country code in order to find the dailed party. In this example, we extract a country code from the dailed number, and then use a lookup to enrich this to a country name.<p>From here, we can use the rare command to generate our data set and then choose a visualization, or reformat this into table.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Subscriber Services",
+        "hasSearch": "Yes",
+        "category": "Subscriber Services",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=General Call Metrics - Top Call Durations by Destination",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_3",
+        "icon": "Core_Use_Case.png",
+        "name": "General Call Metrics - Top Call Durations by Destination",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=\"ANSWERED\" OR disposition=\"BUSY\" | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | fields src dst dstCountryName duration | stats count list(dst) AS dst list(dstCountryName) as dstCountryName by duration src | rename duration AS \"Call Duration\" src AS \"Caller\" dst AS \"Called Number\" dstCountryName AS \"Destination Country\" | sort - \"Call Duration\"",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "General Call Metrics - Top Call Durations by Destination",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0010.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "General Call Metrics - Top Call Durations by Destination",
+                "search": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=\"ANSWERED\" OR disposition=\"BUSY\" | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | fields src dst dstCountryName duration | stats count list(dst) AS dst list(dstCountryName) as dstCountryName by duration src | rename duration AS \"Call Duration\" src AS \"Caller\" dst AS \"Called Number\" dstCountryName AS \"Destination Country\" | sort - \"Call Duration\"",
+                "vizParameters": {
+                "count": "10",
+                    "drilldown": "none",
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_subscriber_search0011": {
+        "id": "General Call Metrics - Shortest Call Durations by Destination",
+        "description": "General CDR Call Metrics - Finding Shortest Call Durations by Destination<p>",
+        "relevance": "<p>Find our shortest call durations and their destinations. This could be used to identify fraud or abuse against the system.",
+        "operationalize": "<p>This search gives us insight to where calls with the shortest duration time are going.  From a business perspective, a high volume of calls like this to countries with high call tariffs might be indicative of malicious activity.",
+        "howToImplement": "<p>For this search our data source for the CDR must have both a Source\/Caller and Destination\/Callee. In addition to this we need to also have a country code in order to find the dailed party. In this example, we extract a country code from the dailed number, and then use a lookup to enrich this to a country name.<p>From here, we can use the rare command to generate our data set and then choose a visualization, or reformat this into table.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Subscriber Services",
+        "hasSearch": "Yes",
+        "category": "Subscriber Services",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=General Call Metrics - Shortest Call Durations by Destination",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_3",
+        "icon": "Core_Use_Case.png",
+        "name": "General Call Metrics - Shortest Call Durations by Destination",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=\"ANSWERED\" OR disposition=\"BUSY\" | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | fields src dst dstCountryName duration | stats count list(dst) AS dst list(dstCountryName) as dstCountryName by duration src | rename duration AS \"Call Duration\" src AS \"Caller\" dst AS \"Called Number\" dstCountryName AS \"Destination Country\" | sort \"Call Duration\"",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "General Call Metrics - Shortest Call Durations by Destination",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0011.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "General Call Metrics - Shortest Call Durations by Destination",
+                "search": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=\"ANSWERED\" OR disposition=\"BUSY\" | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | fields src dst dstCountryName duration | stats count list(dst) AS dst list(dstCountryName) as dstCountryName by duration src | rename duration AS \"Call Duration\" src AS \"Caller\" dst AS \"Called Number\" dstCountryName AS \"Destination Country\" | sort \"Call Duration\"",
+                "vizParameters": {
+                "count": "10",
+                    "drilldown": "none",
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_subscriber_search0012": {
+        "id": "General Call Metrics - Session Tracking",
+        "description": "General CDR Call Metrics - Finding Shortest Call Durations by Destination<p>",
+        "relevance": "<p>Find our shortest call durations and their destinations. This could be used to identify fraud or abuse against the system.",
+        "operationalize": "<p>This search gives us insight to where calls with the shortest duration time are going.  From a business perspective, a high volume of calls like this to countries with high call tariffs might be indicative of malicious activity.",
+        "howToImplement": "<p>For this search our data source for the CDR must have both a Source\/Caller and Destination\/Callee. In addition to this we need to also have a country code in order to find the dailed party. In this example, we extract a country code from the dailed number, and then use a lookup to enrich this to a country name.<p>From here, we can use the rare command to generate our data set and then choose a visualization, or reformat this into table.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Subscriber Services",
+        "hasSearch": "Yes",
+        "category": "Subscriber Services",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=General Call Metrics - Session Tracking",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_2",
+        "icon": "Core_Use_Case.png",
+        "name": "General Call Metrics - Session Tracking",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Medium",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdr_logs | eval _time = start | table _time accountcode channel src dst duration partyBiD | rex field=channel \".*-(?<sessionId>\\d+$)\" | search duration > 0 | convert dur2sec(duration) AS CallDuration | eval CallDuration=round((CallDuration/60),0).\" minutes\" | stats count values(sessionId) AS SessionID values(accountcode) AS AccountID values(dst) AS DestinationNumber values(_time) AS DialTime list(CallDuration) AS CallDuration by src dst | lookup cdr_account_mappings accountCode AS AccountID OUTPUT accountName billingState | rename src AS SourceNumber | table AccountID accountName billingState SourceNumber DestinationNumber SessionID CallDuration DialTime",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "General Call Metrics - Session Tracking",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0012.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "General Call Metrics - Session Tracking",
+                "search": "| inputlookup cdr_logs | eval _time = start | table _time accountcode channel src dst duration partyBiD | rex field=channel \".*-(?<sessionId>\\d+$)\" | search duration > 0 | convert dur2sec(duration) AS CallDuration | eval CallDuration=round((CallDuration/60),0).\" minutes\" | stats count values(sessionId) AS SessionID values(accountcode) AS AccountID values(dst) AS DestinationNumber values(_time) AS DialTime list(CallDuration) AS CallDuration by src dst | lookup cdr_account_mappings accountCode AS AccountID OUTPUT accountName billingState | rename src AS SourceNumber | table AccountID accountName billingState SourceNumber DestinationNumber SessionID CallDuration DialTime",
+                "vizParameters": {
+                "count": "10",
+                    "drilldown": "none",
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
 
     "showcase_dlt_example_1": {
         "id": "Splunk Internal - Top Sourcetypes",
@@ -1005,6 +1299,11 @@
     "showcase_subscriber_search0005",
     "showcase_subscriber_search0006",
     "showcase_subscriber_search0007",
+    "showcase_subscriber_search0008",
+    "showcase_subscriber_search0009",
+    "showcase_subscriber_search0010",
+    "showcase_subscriber_search0011",
+    "showcase_subscriber_search0012",
     "showcase_physical_search0001",
     "showcase_physical_search0002",
     "showcase_physical_search0003",

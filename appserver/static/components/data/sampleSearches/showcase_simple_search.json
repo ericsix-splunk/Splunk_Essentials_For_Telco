@@ -245,7 +245,7 @@
             "",
             "Make this more Human Readable.."
         ],
-        "value": "| inputlookup cdr_logs \n| eval _time = start \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| top dstCountryName by src \n| rename src AS \"Caller\" dstCountryName AS \"Destinaton Country\" count as Count \n| sort - Count \n| fields - percent \n| head 10",  
+        "value": "| inputlookup cdr_logs \n| eval _time = start | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| top dstCountryName by src \n| rename src AS \"Caller\" dstCountryName AS \"Destinaton Country\" count as Count",
         "label": "General Call Metrics - Top Outbound Callers"
     },
 

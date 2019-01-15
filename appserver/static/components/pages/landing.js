@@ -14,7 +14,7 @@ var Descriptions = new Object;
 
 //Telco App Core Use Cases
 Descriptions["Subscriber Services"] = "Expedient and trouble free activation of High Speed Internet, Mobile Data, and Prepaid Mobile all require insight across many systems. These examples demonstrate how to track Activation across BSS/OSS, or similar stacks, along with CDR records and analytics examples."
-Descriptions["Telco Network Monitoring"] = "Telco's have a various networks : customer private networks, out of band, voice, core. This use case explores monitoring various components of these and how to understand business impact to outages."
+Descriptions["Service Availability"] = "Telco's have a various networks : customer private networks, out of band, voice, core. This use case explores monitoring various components of these and how to understand business impact to outages."
 Descriptions["Content Delivery"] = "Content Deliver Networks are now quite commong in the Telco Market. This use case explores various components within CDN."
 Descriptions["Distributed Ledger Technology"] = "DLT is gaining moomentum in many markets. These examples show how to monitor transactions and the underlying systems in a Distributed Ledger Network."
 //Descriptions["CDR"] = "Call Detail Records can provide insight into not only user activity, but also business analytics. These examples show how to derive insight from standard CDR logs."
@@ -29,7 +29,7 @@ var Icons = new Object;
 
 //Telco App Core use Cases
 Icons["Subscriber Services"] =  "/static/app/Splunk_Essentials_For_Telco/images/general_images/FixOrder.png"
-Icons["Telco Network Monitoring"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FixOrder.png"
+Icons["Service Availability"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FixOrder.png"
 Icons["Content Delivery"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FixOrder.png"
 Icons["Distributed Ledger Technology"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/PaymentResponse.png"
 Icons["CDR"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FixOrder.png"

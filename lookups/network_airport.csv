@@ -1,0 +1,6 @@
+airPortName,lat,long,longNAme
+SFO,37.615223,-122.389977,San Francisco International Airport
+SFOidep,37.616714,-122.389484,SFO - International Departures
+SFOt2e,37.617599,-122.381499,SFO - Terminal 2 East
+SFOt2s,37.614799,-122.382395,SFO - Terminal 2 South
+SFOt3,37.620771,-122.38931,SFO - Terminal 3 Main

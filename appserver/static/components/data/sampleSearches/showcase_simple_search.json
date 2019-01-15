@@ -452,6 +452,27 @@
         "label": "Security Auditing - Environmental Reporting"
     },
 
+    "WIFI AP Association": {
+        "prereqs": [
+            {
+                "test": "| inputlookup telco_wifi_mapping | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamp...",
+            " ",
+            "Chart the count of Access PointIDs over 15 minute buckets.",
+            "Formatting with a lookup, remove for real data source."
+                    ],
+        "value": "| inputlookup telco_wifi_mapping \n| eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") \n| sort - _time \n| timechart count fixedrange=false span=15m by apID",
+       "label": "WIFI AP Association"
+    },
+
     "Splunk Insights - AWS Cloudwatch Logs  Metrics - Demo": {
         "prereqs": [
             {

@@ -473,6 +473,96 @@
        "label": "WIFI AP Association"
     },
 
+    "WIFI AP Access Duration Stats": {
+        "prereqs": [
+            {
+                "test": "| inputlookup telco_wifi_mapping | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamp...",
+            " ",
+            "Convert our timestamps to EPOCH times, which makes numeric operations easier.",
+            "Calculate our Average / Maximum / Minimum connection durations.",
+            "Convert to minutes",
+            "Convert to minutes",
+            "In most cases this is 0, or few seconds, but show in minutes.",
+            "Make this more report friendly for the humans."
+                    ],
+        "value": "| inputlookup telco_wifi_mapping \n| eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") \n| sort _time \n| convert timeformat=\"%Y-%m-%d %T\" mktime(accessTime) AS accessTime mktime(accessDisconnectTime) AS accessDisconnectTime \n| eval accessDuration = accessDisconnectTime-accessTime \n| stats avg(accessDuration) as avgAccessDur max(accessDuration) as maxAccessdur min(accessDuration) as minAccessdur by apID \n| eval avgAccessDur=round(avgAccessDur/60,2) \n| eval maxAccessdur=round(maxAccessdur/60,2) \n| eval minAccessdur=round(minAccessdur/60,2) \n| rename apID AS \"WIFI AP Name\" avgAccessDur AS \"Average Duration (Minutes)\" maxAccessdur AS \"Maximum Duration (Minutes)\" minAccessdur AS \"Minimum Duration (Minutes)\"",
+        "label": "WIFI AP Access Duration Stats"
+    },
+    
+    "WIFI AP Geostats Access by Time": {
+        "prereqs": [
+            {
+                "test": "| inputlookup telco_wifi_mapping | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamp...",
+            " ",
+            "Chart the count of Access PointIDs over 15 minute buckets.",
+            "Formatting with a lookup, remove for real data source."
+                    ],
+        "value": "| inputlookup telco_wifi_mapping \n| eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") \n| sort - _time \n| timechart count fixedrange=false span=15m by apID",
+       "label": "WIFI AP Geostats Access by Time"
+    },
+
+    "WIFI AP Networks Users Connect To": {
+        "prereqs": [
+            {
+                "test": "| inputlookup telco_wifi_mapping | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamp...",
+            "Sort our time..",
+            "Here we start run stats against our network connections by Access Point and Network",
+            "Running stats here again gives us a per AP and per Network connection list.",
+            "Make this more human readable."
+                    ],
+        "value": "| inputlookup telco_wifi_mapping \n| eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") \n| sort - _time \n| stats count values(apInfoNetwork) AS apInfoNetworks by apID apInfoNetwork \n| stats list(apInfoNetwork) AS apInfoNetwork list(apID) as apID list(count) as Count \n| rename apInfoNetwork AS \"Connected Network\" apID AS \"Access Point Connected\" Count AS \"Connection Count\"", 
+        "label": "WIFI AP Networks Users Connect To"
+    },
+
+    "WIFI AP Access Users Top Cities": {
+        "prereqs": [
+            {
+                "test": "| inputlookup telco_wifi_mapping | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamp...",
+            "Sort our time..",
+            "We just want our known cities in this search. ",
+            "Find our top cities."
+                    ],
+        "value": "| inputlookup telco_wifi_mapping \n| eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") \n| sort - _time \n| where userCity != \"UNKNOWN\" \n| top userCity",
+        "label": "WIFI AP Access Users Top Cities"
+    },
+
+
     "Splunk Insights - AWS Cloudwatch Logs  Metrics - Demo": {
         "prereqs": [
             {

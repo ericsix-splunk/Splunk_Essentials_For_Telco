@@ -24,6 +24,128 @@
         "label": "CDN - User Behavior - Top Browsers"
     },
 
+    "Cache Hit Ratio by Number of Requests": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdn_general_operations | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamps..",
+            "Pull our fields of interest from the sourcetype(s)",
+            "Start calculating our hit ratio with our messageBytes by time and contentprovider",
+            "Calculate total hits and total bytes transferred from our cache",
+            "Summate our total requests and cached content values",
+            "Calculate a hit ratio of cached content and format it..",
+            ""
+        ],
+        "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") \n| fields _time messageBytes cached cp \n| stats count values(messageBytes) AS totalBytes by _time cp cached \n| stats sum(count) AS totalRequests sum(totalBytes) as totalBytes by cached  \n| stats sum(totalRequests) as totalRequested sum(eval(totalRequests*if(cached==\"true\",1,0))) as \"cached\" \n| eval cacheRequestedHitRatio=round(cached/totalRequested * 100, 2) \n| fields cacheRequestedHitRatio",
+        "label": "Cache Hit Ratio by Number of Requests"
+    },
+
+    "Cache Hit Ratio by Amount of Traffic": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdn_general_operations | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamps..",
+            "Pull our fields of interest from the sourcetype(s)",
+            "Start calculating our hit ratio with our messageBytes by time and contentprovider",
+            "Calculate total hits and total bytes transferred from our cache",
+            "Summate our total requests and cached content values",
+            "Calculate a hit ratio of cached content and format it..",
+            ""
+        ],
+        "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") \n| fields _time messageBytes cached \n| stats sum(messageBytes) as \"totalBytes\", sum(eval(messageBytes * if(cached==\"true\",1,0))) as \"cachedBytes\" \n| eval cacheTrafficHitRatio=round(cachedBytes/totalBytes*100,2) \n| fields cacheTrafficHitRatio",
+        "label": "Cache Hit Ratio by Amount of Traffic"
+    },
+
+    
+    "CDN Total Number of Requests": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdn_general_operations | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamps..",
+            "Pull our fields of interest from the sourcetype(s)",
+            "Start calculating our hit ratio with our messageBytes by time and contentprovider",
+            "Calculate total hits and total bytes transferred from our cache",
+            "Summate our total requests and cached content values",
+            "Calculate a hit ratio of cached content and format it..",
+            ""
+        ],
+        "value": "| inputlookup cdn_general_operations \n| eval _time=strptime(_time, \"%Y-%m-%d %H:%M:%S\") \n| stats count",
+        "label": "CDN Total Number of Requests"
+    },
+
+    "CDN Total Amount of Traffic": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdn_general_operations | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamps..",
+            "Pull our fields of interest from the sourcetype(s)",
+            "Start calculating our hit ratio with our messageBytes by time and contentprovider",
+            "Calculate total hits and total bytes transferred from our cache",
+            "Summate our total requests and cached content values",
+            "Calculate a hit ratio of cached content and format it..",
+            ""
+        ],
+        "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") \n| fields _time messageBytes \n| stats sum(messageBytes) as totalTrafficBytes \n| eval totalTrafficGBytes=totalTrafficBytes/pow(10,9) \n| fields totalTrafficGBytes",
+        "label": "CDN Total Amount of Traffic"
+    },
+
+
+    "CDN Total Number of Errors Over Time": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdn_general_operations | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamps..",
+            "Pull our fields of interest from the sourcetype(s)",
+            "Start calculating our hit ratio with our messageBytes by time and contentprovider",
+            "Calculate total hits and total bytes transferred from our cache",
+            "Summate our total requests and cached content values",
+            "Calculate a hit ratio of cached content and format it..",
+            ""
+        ],
+        "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") \n| convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time \n| sort _time \n| fields _time messageBytes cached cp status \n| eval statusFailed=if(status >= 400, 1, 0) \n| search statusFailed=\"1\" \n| timechart fixedrange=false span=1m sum(statusFailed) AS \"Error Events\"",    
+        "label": "CDN Total Number of Errors Over Time"
+    },
+
     "General Call Disposition Metrics": {
         "prereqs": [
             {
@@ -560,26 +682,5 @@
                     ],
         "value": "| inputlookup telco_wifi_mapping \n| eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") \n| sort - _time \n| where userCity != \"UNKNOWN\" \n| top userCity",
         "label": "WIFI AP Access Users Top Cities"
-    },
-
-
-    "Splunk Insights - AWS Cloudwatch Logs  Metrics - Demo": {
-        "prereqs": [
-            {
-                "test": "|inputlookup splunk_insights_-_aws_cloudwatch_logs__metrics | stats count  ",
-                "field": "count",
-                "greaterorequalto": 1,
-                "resolution": "Verify that lookups installed with Splunk Essentials for Application Analytics is present",
-                "name": "splunk_insights_-_aws_cloudwatch_logs__metrics lookup file"
-            }
-        ],
-        "description": [
-            "First we pull in our demo dataset.",
-            "<enter comments for line 2 of your search>",
-            "<enter comments for line 3 of your search>",
-            "..."
-        ],
-        "value": "|inputlookup splunk_insights_-_aws_cloudwatch_logs__metrics | search  ADD_REAL_SPL_HERE",
-        "label": "Splunk Insights - AWS Cloudwatch Logs  Metrics - Demo"
     }
 }

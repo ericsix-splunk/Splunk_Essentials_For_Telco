@@ -104,3 +104,10 @@ export = none
 owner = w0rdp4ss!
 version = 7.2.1
 modtime = 1547313764.910578000
+
+[transforms/cdn_general_operations]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1547780978.229024000

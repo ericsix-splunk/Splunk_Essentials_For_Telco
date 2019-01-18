@@ -1,59 +1,395 @@
 {
   "summaries":  {
 
-    "showcase_cdn_example_1": {
-        "id": "CDN - User Behavior - Top Browsers",
-        "domain": "CDN",
-        "help": "CDN User's Top Browsers",
+    "showcase_cdn_search0001": {
+        "id": "Cache Hit Ratio by Number of Requests",
+        "domain": "Content Delivery",
+        "help": "Cache Hit Ratio by Number of Requests",
         "app": "Splunk_Essentials_For_Telco",
         "usecase": "Content Delivery",
-        "howToImplement": "<p>CDN Logs...say alot...alot!!!!!!Q!!!!!!!!!!",
+        "howToImplement": "This search requires that you have CDN applications logs that have time series data for a total message size transferred per request, the content provider / identifier, and the status of the content. E,g., if the requested content is cached, or not.<p>",
         "hasSearch": "Yes",
         "category": "Content Delivery",
         "knownFP": "unused",
-        "operationalize": "Words around how to operationalize things...",
-        "relevance": "This will analyze your CDN logs....",
+        "operationalize": "Having an understanding of how much content is being delivered by CDN Caches allows us to understand how to better operationalize our networks for Content Delivery.",
+        "relevance": "This analyzes your CDN logs and gives you an understanding of the amount of your content that is being accessed from Cached Content based on number of requests.",
         "includeSSE": "Yes",
-        "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN - User Behavior - Top Browsers",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Cache Hit Ratio by Number of Requests",
         "dashboard_type": "XML Panels with Screenshot",
-        "description": "Analyze the Top Browsers for your CDN.",
+        "description": "Ratio of Requests that are accessing content from Cache Network, and not directly from the central content provider. <p>",
         "released": "1.0.0",
-        "journey": "Stage_2",
+        "journey": "Stage_3",
         "icon": "Core_Use_Case.png",
-        "name": "CDN - User Behavior - Top Browsers",
+        "name": "Cache Hit Ratio by Number of Requests",
         "displayapp": "Splunk_Essentials_For_Telco",
-        "SPLEase": "Easy",
+        "SPLEase": "Intermediate",
         "datasource": "Application Logs",
         "highlight": "Yes",
         "alertvolume": "unused",
-        "sampleSPL": "| inputlookup cdn_connections | sort - _time | fields _time http_user_agent | rename http_user_agent AS useragent | eval os = case(match(useragent,\"Windows .. 5.1\"),\"Windows XP\",match(useragent,\"droid\"),\"Android\",match(useragent,\"Windows NT 6.1\"),\"Windows 7\",match(useragent,\"Win98\"),\"Windows 98\",match(useragent,\"Windows NT 6.3\"),\"Windows Server 2012\",match(useragent,\"Windows NT 6.2\"),\"Windows 8\",match(useragent,\"Windows NT 6.0\"),\"Windows Server 2008\",match(useragent,\"Windows Phone 8.1\"),\"Windows Mobile 8\",match(useragent,\"Mac OS X 10.10\"),\"OSX 10.10\",match(useragent,\"Mac OS X 10_9\"),\"OSX 10.9\",match(useragent,\"Mac OS X 10.6\"),\"OSX 10.6\",match(useragent,\"Mac OS X 10.5\"),\"OSX 10.5\",match(useragent,\"Mac OS X 10_8\"),\"OSX 10.8\",match(useragent,\"Mac OS X 10_7\"),\"OSX 10.7\",match(useragent,\"Apple TV\"),\"IOS\",match(useragent,\"iPad\"),\"IOS\",match(useragent,\"iPhone\"),\"IOS\",match(useragent,\"linux|Linux\"),\"Linux\") | eval browser = case(match(useragent,\"MSIE 10.0\"),\"IE 10.0\",match(useragent,\"MSIE 7.0\"),\"IE 7.0\",match(useragent,\"Chrome\"),\"Chrome\",match(useragent,\"Safari/\"),\"Safari\",match(useragent,\"Firefox\"),\"Firefox\",match(useragent,\"MSIE 9.0\"),\"IE 9.0\",match(useragent,\"ANVSDK ios\"),\"Anvato Player\",match(useragent,\"UCBrowser\"),\"UC Browser\",match(useragent,\"Opera\"),\"Opera\",match(useragent,\"Gecko Galeon\"),\"Gecko\",match(useragent,\"Netscape6\"),\"Netscape\") | eval arch = case(match(useragent,\"droid\"),\"android\",match(useragent,\"iPad\"),\"ipad\",match(useragent,\"iPod\"),\"ipod\",match(useragent,\"Apple TV\"),\"Apple TV\",match(useragent,\"iPhone\"),\"iphone\",match(os,\"Windows\"),\"x86_64\",match(useragent,\"Intel|x86_64\"),\"x86_64\") | fillnull value=\"UNKNOWN\" os arch browser | stats count by browser | sort - count",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | fields _time messageBytes cached cp | stats count values(messageBytes) AS totalBytes by _time cp cached | stats sum(count) AS totalRequests sum(totalBytes) as totalBytes by cached  | stats sum(totalRequests) as totalRequested sum(eval(totalRequests*if(cached==\"true\",1,0))) as \"cached\" | eval cacheRequestedHitRatio=round(cached/totalRequested * 100, 2) | fields cacheRequestedHitRatio",
         "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
         "examples": [
             {
-                "name": "CDN - User Behavior - Top Browsers",
+                "name": "Cache Hit Ratio by Number of Requests",
                 "label": "Demo Data"
             }
         ],
         "images": [
             {
-                "name": "cdn-ub-1.png",
+                "name": "cdn_search0002.png",
                 "label": "",
-                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn-ub-1.png"
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0001.png"
             }
         ],
-        "hideSPLMode": false,
+        "hideSPLMode": "exception",
         "autoOpen": "supportingImages_table",
         "visualizations": [
             {
                 "panel": "row1cell1",
                 "type": "viz",
-                "vizType": "TableElement",
-                "title": "Top Browsers over the Latest Time Period",
-                "search": "| inputlookup cdn_connections | sort - _time | fields _time http_user_agent | rename http_user_agent AS useragent | eval os = case(match(useragent,\"Windows .. 5.1\"),\"Windows XP\",match(useragent,\"droid\"),\"Android\",match(useragent,\"Windows NT 6.1\"),\"Windows 7\",match(useragent,\"Win98\"),\"Windows 98\",match(useragent,\"Windows NT 6.3\"),\"Windows Server 2012\",match(useragent,\"Windows NT 6.2\"),\"Windows 8\",match(useragent,\"Windows NT 6.0\"),\"Windows Server 2008\",match(useragent,\"Windows Phone 8.1\"),\"Windows Mobile 8\",match(useragent,\"Mac OS X 10.10\"),\"OSX 10.10\",match(useragent,\"Mac OS X 10_9\"),\"OSX 10.9\",match(useragent,\"Mac OS X 10.6\"),\"OSX 10.6\",match(useragent,\"Mac OS X 10.5\"),\"OSX 10.5\",match(useragent,\"Mac OS X 10_8\"),\"OSX 10.8\",match(useragent,\"Mac OS X 10_7\"),\"OSX 10.7\",match(useragent,\"Apple TV\"),\"IOS\",match(useragent,\"iPad\"),\"IOS\",match(useragent,\"iPhone\"),\"IOS\",match(useragent,\"linux|Linux\"),\"Linux\") | eval browser = case(match(useragent,\"MSIE 10.0\"),\"IE 10.0\",match(useragent,\"MSIE 7.0\"),\"IE 7.0\",match(useragent,\"Chrome\"),\"Chrome\",match(useragent,\"Safari/\"),\"Safari\",match(useragent,\"Firefox\"),\"Firefox\",match(useragent,\"MSIE 9.0\"),\"IE 9.0\",match(useragent,\"ANVSDK ios\"),\"Anvato Player\",match(useragent,\"UCBrowser\"),\"UC Browser\",match(useragent,\"Opera\"),\"Opera\",match(useragent,\"Gecko Galeon\"),\"Gecko\",match(useragent,\"Netscape6\"),\"Netscape\") | eval arch = case(match(useragent,\"droid\"),\"android\",match(useragent,\"iPad\"),\"ipad\",match(useragent,\"iPod\"),\"ipod\",match(useragent,\"Apple TV\"),\"Apple TV\",match(useragent,\"iPhone\"),\"iphone\",match(os,\"Windows\"),\"x86_64\",match(useragent,\"Intel|x86_64\"),\"x86_64\") | fillnull value=\"UNKNOWN\" os arch browser | stats count by browser | sort - count",
+                "vizType": "SingleElement",
+                "title": "Cache Hit Ratio by Number of Requests",
+                "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | fields _time messageBytes cached cp | stats count values(messageBytes) AS totalBytes by _time cp cached | stats sum(count) AS totalRequests sum(totalBytes) as totalBytes by cached  | stats sum(totalRequests) as totalRequested sum(eval(totalRequests*if(cached==\"true\",1,0))) as \"cached\" | eval cacheRequestedHitRatio=round(cached/totalRequested * 100, 2) | fields cacheRequestedHitRatio",
                 "vizParameters": {
                 "count": "15",
-                    "drilldown": "none",
-                    "refresh.display": "progressbar"
+                "colorBy" : "value",
+                "colorMode" : "none",
+                "drilldown" : "none",
+                "numberPrecision" : "0.00",
+                "rangeColors" : "[\"0x53a051\",\"0x0877a6\",\"0xf8be34\",\"0xf1813f\",\"0xdc4e41\"]",
+                "rangeValues" : "[0,30,70,100]",
+                "showSparkline" : "1",
+                "showTrendIndicator" : "1",
+                "trellis.enabled" : "0",
+                "trellis.scales.shared" : "1",
+                "trellis.size" : "medium",
+                "trendColorInterpretation" : "standard",
+                "trendDisplayMode" : "absolute",
+                "underLabel" : "Cache Hit Ratio",
+                "unit" : "%",
+                "unitPosition" : "after",
+                "useColors" : "1",
+                "useThousandSeparators" : "1",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+     "showcase_cdn_search0002": {
+        "id": "Cache Hit Ratio by Amount of Traffic",
+        "description": "Ratio of Traffic that is accessing the Cache, and not directly from the central content provider.<p>",
+        "relevance": "<p>This search shows us what ratio of our traffic is accessing cached content.",
+        "operationalize": "This search gives us insight to what ratio of the traffic for our Content is coming from our Caches. Based on the value of this, the business can make informed decisions about where to increase, or decrease, caching capabilities.<p>",
+        "howToImplement": "This search requires that you have CDN applications logs that have time series data for a total message size transferred per request, and the status of the content. E,g., if the requested content is cached, or not.<p>",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "hasSearch": "Yes",
+        "category": "Content Delivery",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Cache Hit Ratio by Amount of Traffic",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_3",
+        "icon": "Core_Use_Case.png",
+        "name": "Cache Hit Ratio by Amount of Traffic",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | fields _time messageBytes cached | stats sum(messageBytes) as \"totalBytes\", sum(eval(messageBytes * if(cached==\"true\",1,0))) as \"cachedBytes\" | eval cacheTrafficHitRatio=round(cachedBytes/totalBytes*100,2) | fields cacheTrafficHitRatio",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "Cache Hit Ratio by Amount of Traffic",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "cdn_search0002.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0002.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "SingleElement",
+                "title": "Cache Hit Ratio by Amount of Traffic",
+                "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | fields _time messageBytes cached | stats sum(messageBytes) as \"totalBytes\", sum(eval(messageBytes * if(cached==\"true\",1,0))) as \"cachedBytes\" | eval cacheTrafficHitRatio=round(cachedBytes/totalBytes*100,2) | fields cacheTrafficHitRatio",
+                "vizParameters": {
+                "count": "15",
+                "colorBy" : "value",
+                "colorMode" : "none",
+                "drilldown" : "none",
+                "numberPrecision" : "0.00",
+                "rangeColors" : "[\"0x53a051\",\"0x0877a6\",\"0xf8be34\",\"0xf1813f\",\"0xdc4e41\"]",
+                "rangeValues" : "[0,30,70,100]",
+                "showSparkline" : "1",
+                "showTrendIndicator" : "1",
+                "trellis.enabled" : "0",
+                "trellis.scales.shared" : "1",
+                "trellis.size" : "medium",
+                "trendColorInterpretation" : "standard",
+                "trendDisplayMode" : "absolute",
+                "underLabel" : "Cache Hit Ratio",
+                "unit" : "%",
+                "unitPosition" : "after",
+                "useColors" : "1",
+                "useThousandSeparators" : "1",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_cdn_search0003": {
+        "id": "Total Number of Requests for the CDN Network(s)",
+        "description": "Total number of requests that are CDN is serving up, including both cached and non-cached content.<p>",
+        "relevance": "<p>This search shows us the total number of requests that our CDN is serving up.",
+        "operationalize": "This search gives us an understanding of the total number of request our CDN is historically serving. Based on the value of this, the business can make informed decisions about when and where to increase, or decrease, caching capabilities.<p>",
+        "howToImplement": "This search requires that you have CDN applications logs that have time series data for a total message size transferred per request, and the status of the content. E,g., if the requested content is cached, or not.<p>",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "hasSearch": "Yes",
+        "category": "Content Delivery",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN Total Number of Requests",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_3",
+        "icon": "Core_Use_Case.png",
+        "name": "CDN Total Number of Requests",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval _time=strptime(_time, \"%Y-%m-%d %H:%M:%S\") | stats count",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "CDN Total Number of Requests",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "cdn_search0003.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0003.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "SingleElement",
+                "title": "CDN Total Number of Requests",
+                "search": "| inputlookup cdn_general_operations | eval _time=strptime(_time, \"%Y-%m-%d %H:%M:%S\") | stats count",
+                "vizParameters": {
+                "count": "15",
+                "colorBy" : "value",
+                "colorMode" : "none",
+                "drilldown" : "none",
+                "numberPrecision" : "0.00",
+                "rangeColors" : "[\"0x53a051\",\"0x0877a6\",\"0xf8be34\",\"0xf1813f\",\"0xdc4e41\"]",
+                "rangeValues" : "[0,30,70,100]",
+                "showSparkline" : "1",
+                "showTrendIndicator" : "1",
+                "trellis.enabled" : "0",
+                "trellis.scales.shared" : "1",
+                "trellis.size" : "medium",
+                "trendColorInterpretation" : "standard",
+                "trendDisplayMode" : "absolute",
+                "underLabel" : "Number of Requests",
+                "unit" : "",
+                "unitPosition" : "after",
+                "useColors" : "1",
+                "useThousandSeparators" : "1",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_cdn_search0004": {
+        "id": "CDN Total Amount of Traffic",
+        "description": "The total amount of traffic served by the CDN.<p>",
+        "relevance": "<p>This example shows us the total amount of data transferred out the CDN.",
+        "operationalize": "This search gives us an understanding of the total amount of traffic our CDN has served. Based on the value of this, the business can make informed decisions about when and where to increase, or decrease, caching capabilities.<p>",
+        "howToImplement": "This search requires that you have CDN applications logs that have time series data for a total message size transferred per request.<p>",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "hasSearch": "Yes",
+        "category": "Content Delivery",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN Total Amount of Traffic",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_3",
+        "icon": "Core_Use_Case.png",
+        "name": "CDN Total Amount of Traffic",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | fields _time messageBytes | stats sum(messageBytes) as totalTrafficBytes | eval totalTrafficGBytes=totalTrafficBytes/pow(10,9) | fields totalTrafficGBytes",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "CDN Total Amount of Traffic",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "cdn_search0004.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0004.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "SingleElement",
+                "title": "CDN Total Amount of Traffic",
+                "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | fields _time messageBytes | stats sum(messageBytes) as totalTrafficBytes | eval totalTrafficGBytes=totalTrafficBytes/pow(10,9) | fields totalTrafficGBytes",
+                "vizParameters": {
+                "count": "15",
+                "colorBy" : "value",
+                "colorMode" : "none",
+                "drilldown" : "none",
+                "numberPrecision" : "0.00",
+                "rangeColors" : "[\"0x53a051\",\"0x0877a6\",\"0xf8be34\",\"0xf1813f\",\"0xdc4e41\"]",
+                "rangeValues" : "[0,30,70,100]",
+                "showSparkline" : "1",
+                "showTrendIndicator" : "1",
+                "trellis.enabled" : "0",
+                "trellis.scales.shared" : "1",
+                "trellis.size" : "medium",
+                "trendColorInterpretation" : "standard",
+                "trendDisplayMode" : "absolute",
+                "underLabel" : "Delivered.",
+                "unit" : "GB",
+                "unitPosition" : "after",
+                "useColors" : "1",
+                "useThousandSeparators" : "1",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_cdn_search0005": {
+        "id": "CDN Total Number of Errors Over Time",
+        "description": "The total number of Errors Over Time for the CDN.<p>",
+        "relevance": "<p>This example shows us the total number of errors over time for the CDN.",
+        "operationalize": "This search gives us an understanding of the total number of HTTP errors to our CDN. Where these values are high gives us insight to where we maybe having hardware, software, or general content delivery issues. Being able to identify these quickly, and resolve the problems is great for business.<p>",
+        "howToImplement": "This search requires that you have CDN applications logs that have time series data for a http response code. At a minimum you need http response codes 400+.<p>",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "hasSearch": "Yes",
+        "category": "Content Delivery",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN Total Number of Errors Over Time",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_1",
+        "icon": "Core_Use_Case.png",
+        "name": "CDN Total Number of Errors Over Time",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time | sort _time | fields _time messageBytes cached cp status | eval statusFailed=if(status >= 400, 1, 0) | search statusFailed=\"1\" | timechart fixedrange=false span=1m sum(statusFailed) AS \"Error Events\"",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "CDN Total Number of Errors Over Time",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "cdn_search0005.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0005.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "ChartElement",
+                "title": "CDN Total Number of Errors Over Time",
+                "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time | sort _time | fields _time messageBytes cached cp status | eval statusFailed=if(status >= 400, 1, 0) | search statusFailed=\"1\" | timechart fixedrange=false span=1m sum(statusFailed) AS \"Error Events\"",
+                "vizParameters": {
+                "charting.axisLabelsX.majorLabelStyle.overflowMode" : "ellipsisNone",
+                "charting.axisLabelsX.majorLabelStyle.rotation" : "0",
+                "charting.axisTitleX.text" : "Time",
+                "charting.axisTitleX.visibility" : "visible",
+                "charting.axisTitleY.text" : "Number of Errors",
+                "charting.axisTitleY.visibility" : "visible",
+                "charting.axisTitleY2.visibility" : "visible",
+                "charting.axisX.abbreviation" : "none",
+                "charting.axisX.scale" : "linear",
+                "charting.axisY.abbreviation" : "none",
+                "charting.axisY.scale" : "linear",
+                "charting.axisY2.abbreviation" : "none",
+                "charting.axisY2.enabled" : "0",
+                "charting.axisY2.scale" : "inherit",
+                "charting.chart" : "area",
+                "charting.chart.bubbleMaximumSize" : "50",
+                "charting.chart.bubbleMinimumSize" : "10",
+                "charting.chart.bubbleSizeBy" : "area",
+                "charting.chart.nullValueMode" : "connect",
+                "charting.chart.showDataLabels" : "minmax",
+                "charting.chart.sliceCollapsingThreshold" : "0.01",
+                "charting.chart.stackMode" : "default",
+                "charting.chart.style" : "shiny",
+                "charting.drilldown" : "none",
+                "charting.layout.splitSeries" : "0",
+                "charting.layout.splitSeries.allowIndependentYRanges" : "0",
+                "charting.legend.labelStyle.overflowMode" : "ellipsisEnd",
+                "charting.legend.mode" : "standard",
+                "charting.legend.placement" : "right",
+                "charting.lineWidth" : "2",
+                "refresh.display" : "progressbar",
+                "trellis.enabled" : "0",
+                "trellis.scales.shared" : "1",
+                "trellis.size" : "medium",
+                "refresh.display": "progressbar"
                 }
             }
         ]
@@ -1767,10 +2103,10 @@
         "domain": "Application",
         "help": "Lets look at Splunk Job Scheduler",
         "app": "Splunk_Essentials_For_Telco",
-        "usecase": "CDR",
+        "usecase": "Distributed Ledger Technology",
         "howToImplement": "<p>Check internal logs..",
         "hasSearch": "Yes",
-        "category": "CDR",
+        "category": "Distributed Ledger Technology",
         "knownFP": "unused",
         "operationalize": "Words around how to operationalize things...",
         "relevance": "This looks at job scheduling in Splunk's internal logs....",
@@ -1848,7 +2184,11 @@
     "showcase_physical_search0005",
     "showcase_subscriber_services_example_1",
     "showcase_dlt_example_1",
-    "showcase_cdn_example_1"
+    "showcase_cdn_search0001",
+    "showcase_cdn_search0002",
+    "showcase_cdn_search0003",
+    "showcase_cdn_search0004",
+    "showcase_cdn_search0005"
     ]
       }
      }

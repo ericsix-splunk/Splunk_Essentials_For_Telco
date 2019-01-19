@@ -571,7 +571,7 @@
         ]
     },
 
-     "showcase_cdn_search0008": {
+    "showcase_cdn_search0008": {
         "id": "CDN Geostats of Requests by Location",
         "description": "Find out where our requstest are coming from and map the results with Splunk's geostats command.<p>",
         "relevance": "<p>This gives us a visual representation of where Requests for Content are coming from.",
@@ -646,6 +646,234 @@
                 "trellis.enabled" : "0",
                 "trellis.scales.shared" : "1",
                 "trellis.size" : "medium",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_cdn_search0009": {
+        "id": "CDN Average Bandwidth Used Over Time",
+        "description": "Find the Average Bandwidth being used for downloading content from the CDN.<p>",
+        "relevance": "<p>This gives us a visual representation of how much bandwidth is being used to consume content from the CDN.",
+        "operationalize": "Understanding how much bandwidth requests are using allows us to make more informed decisions about capacity and planning for the network.<p>",
+        "howToImplement": "This search requires that you have CDN applications logs that have time series data for the amount of data downloaded and the total time it took for the download to complete. <p>",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "hasSearch": "Yes",
+        "category": "Content Delivery",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN Average Bandwidth Used Over Time",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_3",
+        "icon": "Core_Use_Case.png",
+        "name": "CDN Average Bandwidth Used Over Time",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time | fields _time messageBytes netPerfdownloadTime| sort 0 _time | eval bandwidthUsedMbps = ((messageBytes/netPerfdownloadTime)*1000/1024/128) | timechart fixedrange=false span=1m avg(bandwidthUsedMbps) AS avgBandwidthUsedMbps",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "CDN Average Bandwidth Used Over Time",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "cdn_search0009.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0009.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "ChartElement",
+                "title": "CDN Average Bandwidth Used Over Time",
+                "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time | fields _time messageBytes netPerfdownloadTime| sort 0 _time | eval bandwidthUsedMbps = ((messageBytes/netPerfdownloadTime)*1000/1024/128) | timechart fixedrange=false span=1m avg(bandwidthUsedMbps) AS avgBandwidthUsedMbps",
+                "vizParameters": {
+                "drilldown" : "none",
+                "charting.axisLabelsX.majorLabelStyle.overflowMode" : "ellipsisNone",
+                "charting.axisLabelsX.majorLabelStyle.rotation" : "0",
+                "charting.axisTitleX.text" : "Time",
+                "charting.axisTitleX.visibility" : "visible",
+                "charting.axisTitleY.text" : "Download Rate",
+                "charting.axisTitleY.visibility" : "visible",
+                "charting.axisTitleY2.visibility" : "visible",
+                "charting.axisX.abbreviation" : "none",
+                "charting.axisX.scale" : "linear",
+                "charting.axisY.abbreviation" : "none",
+                "charting.axisY.scale" : "linear",
+                "charting.axisY2.abbreviation" : "none",
+                "charting.axisY2.enabled" : "0",
+                "charting.axisY2.scale" : "inherit",
+                "charting.chart" : "area",
+                "charting.chart.bubbleMaximumSize" : "50",
+                "charting.chart.bubbleMinimumSize" : "10",
+                "charting.chart.bubbleSizeBy" : "area",
+                "charting.chart.nullValueMode" : "connect",
+                "charting.chart.showDataLabels" : "none",
+                "charting.chart.sliceCollapsingThreshold" : "0.01",
+                "charting.chart.stackMode" : "default",
+                "charting.chart.style" : "shiny",
+                "charting.drilldown" : "none",
+                "charting.layout.splitSeries" : "0",
+                "charting.layout.splitSeries.allowIndependentYRanges" : "0",
+                "charting.legend.labelStyle.overflowMode" : "ellipsisMiddle",
+                "charting.legend.mode" : "standard",
+                "charting.legend.placement" : "right",
+                "charting.lineWidth" : "2",
+                "trellis.enabled" : "0",
+                "trellis.scales.shared" : "1",
+                "trellis.size" : "medium",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_cdn_search0010": {
+        "id": "CDN Average Last Mile Round Trip Time",
+        "description": "This example gives us the average round trip time for the \"last mile\" of the CDN.<p>",
+        "relevance": "<p>For Telco's offering CDN, monitoring roundtrip times of \"the last mile\" is beneficial for content delivery.",
+        "operationalize": "Understanding latency from the backhaul network to the \"last mile\", or Edge Servers / CPE, enables informed decisions about capacity management and planning.<p>",
+        "howToImplement": "This search requires that you have CDN applications logs that have time series data for the round trip time of what's defined as the Last Mile equipment. Typically this kind of data doesn't come from application logs, but from network monitoring tools or custom alerting solutions.<p>",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "hasSearch": "Yes",
+        "category": "Content Delivery",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN Average Last Mile Round Trip Time",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_2",
+        "icon": "Core_Use_Case.png",
+        "name": "CDN Average Last Mile Round Trip Time",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | sort 0 _time | fields _time netPerflastMileRTT | stats avg(netPerflastMileRTT) AS avgLastMileRTT | eval avgLastMileRTT=round(avgLastMileRTT,3)",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "CDN Average Last Mile Round Trip Time",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "cdn_search0010.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0010.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "SingleElement",
+                "title": "CDN Average Last Mile Round Trip Time",
+                "search": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| sort 0 _time \n| fields _time netPerflastMileRTT \n| stats avg(netPerflastMileRTT) AS avgLastMileRTT \n| eval avgLastMileRTT=round(avgLastMileRTT,3)",
+                "vizParameters": {
+                "drilldown" : "none",
+                "colorBy" : "value",
+                "colorMode" : "block",
+                "drilldown" : "none",
+                "numberPrecision" : "0.000",
+                "rangeColors" : "[\"0x53a051\",\"0xf1813f\",\"0xdc4e41\"]",
+                "rangeValues" : "[75,100]",
+                "showSparkline" : "1",
+                "showTrendIndicator" : "1",
+                "trellis.enabled" : "0",
+                "trellis.scales.shared" : "1",
+                "trellis.size" : "medium",
+                "trendColorInterpretation" : "standard",
+                "trendDisplayMode" : "absolute",
+                "underLabel" : "Last Mile Round Trip Time",
+                "unit" : "ms",
+                "unitPosition" : "after",
+                "useColors" : "1",
+                "useThousandSeparators" : "0",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_cdn_search0011": {
+        "id": "CDN High Latency Edge Networks",
+        "description": "This example gives us the Edge / Region CDN's with the highest/slowest response times.<p>",
+        "relevance": "<p>Understanding network behavior is a business priority. Being able to identify where Edge delivery is being impacted, or degredated, and remediate it is critical.",
+        "operationalize": "If we can identify when Regions / Edges are experiencing high response times and degredation in services, we can better troubleshoot and remediate these issues. We can also use this to further understand regional user behavior and aid in forcasting network capacity.<p>",
+        "howToImplement": "This search requires that you have CDN applications logs that have time series data for the response time and ip data for clients accessing the CDN.<p>",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "hasSearch": "Yes",
+        "category": "Content Delivery",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN High Latency Edge Networks",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_2",
+        "icon": "Core_Use_Case.png",
+        "name": "CDN High Latency Edge Networks",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | sort 0 _time | fields _time responseTime requestClientIp | iplocation requestClientIp | eval City=case(City==\"\",\"Unknown\",1=1,City) | eval Region=case(Region==\"\",\"Unknown\",1=1,Region) | eval HostingEdge = Region.\" - \".Country | stats avg(responseTime) AS avgResponseTime by HostingEdge | eval \"Average Response Time\"=round(avgResponseTime,3) | rename HostingEdge AS \"Edge Hosting Region\"| sort - \"Average Response Time\" | fields \"Edge Hosting Region\" \"Average Response Time\"",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "CDN High Latency Edge Networks",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "cdn_search0011.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0011.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "CDN High Latency Edge Networks",
+                "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | sort 0 _time | fields _time responseTime requestClientIp | iplocation requestClientIp | eval City=case(City==\"\",\"Unknown\",1=1,City) | eval Region=case(Region==\"\",\"Unknown\",1=1,Region) | eval HostingEdge = Region.\" - \".Country | stats avg(responseTime) AS avgResponseTime by HostingEdge | eval \"Average Response Time\"=round(avgResponseTime,3) | rename HostingEdge AS \"Edge Hosting Region\"| sort - \"Average Response Time\" | fields \"Edge Hosting Region\" \"Average Response Time\"",
+                "vizParameters": {
+                "drilldown" : "none",
+                "colorBy" : "value",
+                "colorMode" : "block",
+                "drilldown" : "none",
                 "refresh.display": "progressbar"
                 }
             }
@@ -905,7 +1133,7 @@
         "icon": "Core_Use_Case.png",
         "name": "Security Auditing - Environmental Reporting",
         "displayapp": "Splunk_Essentials_For_Telco",
-        "SPLEase": "Difficult",
+        "SPLEase": "Intermediate",
         "datasource": "Application Logs",
         "highlight": "Yes",
         "alertvolume": "unused",
@@ -1139,7 +1367,7 @@
         "icon": "Core_Use_Case.png",
         "name": "Failed Call Metrics - Geo Stats",
         "displayapp": "Splunk_Essentials_For_Telco",
-        "SPLEase": "Difficult",
+        "SPLEase": "Intermediate",
         "datasource": "Application Logs",
         "highlight": "Yes",
         "alertvolume": "unused",
@@ -2448,7 +2676,10 @@
     "showcase_cdn_search0005",
     "showcase_cdn_search0006",
     "showcase_cdn_search0007",
-    "showcase_cdn_search0008"
+    "showcase_cdn_search0008",
+    "showcase_cdn_search0009",
+    "showcase_cdn_search0010",
+    "showcase_cdn_search0011"
     ]
       }
      }

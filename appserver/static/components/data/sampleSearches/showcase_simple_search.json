@@ -192,7 +192,6 @@
         "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| sort 0 _time \n| fields _time responseTime \n| timechart fixedrange=false span=1m avg(responseTime) AS avgResponseTime \n| eval avgResponseTime=round(avgResponseTime,3)",
         "label": "CDN Average Respone Time over Time"
     },
-
     
     "CDN Geostats of Requests by Location": {
         "prereqs": [
@@ -216,6 +215,83 @@
         "value": "| inputlookup cdn_general_operations \n| eval _time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| sort 0 _time \n| fields _time requestClientIp \n| iplocation requestClientIp \n| geostats count latfield=lat longfield=lon",    
         "label": "CDN Geostats of Requests by Location"
     },
+   
+    "CDN Average Bandwidth Used Over Time": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdn_general_operations | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamps..",
+            "This will make sure our timestamp is in true timestamp format and not text.",
+            "These are the only fields we are interested in for this search.",
+            "",
+            "Calculate the bandwidth used and convert it to MBps.",
+            "Chart our average bandwidth, in 1 minute buckets, over time. We used fixedrange=false since this is data from a lookup."
+        ],
+        "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") \n| convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time \n| fields _time messageBytes netPerfdownloadTime \n| sort 0 _time \n| eval bandwidthUsedMbps = ((messageBytes/netPerfdownloadTime)*1000/1024/128) \n| timechart fixedrange=false span=1m avg(bandwidthUsedMbps) AS avgBandwidthUsedMbps",
+        "label": "CDN Average Bandwidth Used Over Time"
+    },
+
+    "CDN Average Last Mile Round Trip Time": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdn_general_operations | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamps..",
+            "This will make sure our timestamp is in true timestamp format and not text.",
+            "These are the only fields we are interested in for this search.",
+            "",
+            "Calculate the bandwidth used and convert it to MBps.",
+            "Chart our average bandwidth, in 1 minute buckets, over time. We used fixedrange=false since this is data from a lookup."
+        ],
+        "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") \n| convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time \n| fields _time messageBytes netPerfdownloadTime \n| sort 0 _time \n| eval bandwidthUsedMbps = ((messageBytes/netPerfdownloadTime)*1000/1024/128) \n| timechart fixedrange=false span=1m avg(bandwidthUsedMbps) AS avgBandwidthUsedMbps",
+        "label": "CDN Average Last Mile Round Trip Time"
+    },
+
+    "CDN High Latency Edge Networks": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdn_general_operations | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamps..",
+            "This will make sure our timestamp is in true timestamp format and not text.",
+            "",
+            "These are the only fields we are interested in for this search.",
+            "Use the iplocation command to enrich our dataset with geodata.",
+            "Fill unknown City values with Unknown value.",
+            "Fill unknown Region values with Unknown value.",
+            "Create a new field that will be an identifier for the edge location.",
+            "Calculate the average response time for the data set by the Hosting Region",
+            "",
+            "",
+            "Sort by the highest response time",
+            "Make the results more human friendly."
+        ],
+        "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| sort 0 _time \n| fields _time responseTime requestClientIp \n| iplocation requestClientIp \n| eval City=case(City==\"\",\"Unknown\",1=1,City) \n| eval Region=case(Region==\"\",\"Unknown\",1=1,Region) \n| eval HostingEdge = Region.\" - \".Country \n| stats avg(responseTime) AS avgResponseTime by HostingEdge \n| eval \"Average Response Time\"=round(avgResponseTime,3) \n| rename HostingEdge AS \"Edge Hosting Region\"\n| sort - \"Average Response Time\" \n| fields \"Edge Hosting Region\" \"Average Response Time\"",
+        "label": "CDN High Latency Edge Networks"
+    },
+
 
     "General Call Disposition Metrics": {
         "prereqs": [

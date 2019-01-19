@@ -329,7 +329,7 @@
         "datasource": "Application Logs",
         "highlight": "Yes",
         "alertvolume": "unused",
-        "sampleSPL": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time | sort _time | fields _time messageBytes cached cp status | eval statusFailed=if(status >= 400, 1, 0) | search statusFailed=\"1\" | timechart fixedrange=false span=1m sum(statusFailed) AS \"Error Events\"",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time | sort 0 _time | fields _time messageBytes cached cp status | eval statusFailed=if(status >= 400, 1, 0) | search statusFailed=\"1\" | timechart fixedrange=false span=1m sum(statusFailed) AS \"Error Events\"",
         "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
         "examples": [
             {
@@ -353,7 +353,7 @@
                 "type": "viz",
                 "vizType": "ChartElement",
                 "title": "CDN Total Number of Errors Over Time",
-                "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time | sort _time | fields _time messageBytes cached cp status | eval statusFailed=if(status >= 400, 1, 0) | search statusFailed=\"1\" | timechart fixedrange=false span=1m sum(statusFailed) AS \"Error Events\"",
+                "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time | sort 0 _time | fields _time messageBytes cached cp status | eval statusFailed=if(status >= 400, 1, 0) | search statusFailed=\"1\" | timechart fixedrange=false span=1m sum(statusFailed) AS \"Error Events\"",
                 "vizParameters": {
                 "charting.axisLabelsX.majorLabelStyle.overflowMode" : "ellipsisNone",
                 "charting.axisLabelsX.majorLabelStyle.rotation" : "0",
@@ -386,6 +386,263 @@
                 "charting.legend.placement" : "right",
                 "charting.lineWidth" : "2",
                 "refresh.display" : "progressbar",
+                "trellis.enabled" : "0",
+                "trellis.scales.shared" : "1",
+                "trellis.size" : "medium",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_cdn_search0006": {
+        "id": "CDN Total Amount of Traffic Transferred Over Time",
+        "description": "The total amount of traffic transferred over the CDN.<p>",
+        "relevance": "<p>This example shows us the total amount of traffic our CDN is using.",
+        "operationalize": "This search gives us an understanding of the total amount of traffic within the CDN. Where these values are high gives us insight to where we may need to increase capacity, or perhaps increase content delivery pricing. Being able to identify these quickly, and resolve the problems is great for business.<p>",
+        "howToImplement": "This search requires that you have CDN applications logs that have time series data and total bytes of data transferred. <p>",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "hasSearch": "Yes",
+        "category": "Content Delivery",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN Total Amount of Traffic Transferred Over Time",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_1",
+        "icon": "Core_Use_Case.png",
+        "name": "CDN Total Amount of Traffic Transferred Over Time",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time | sort 0 _time | fields _time messageBytes | eval trafficMbs=messageBytes/pow(1024,2) | timechart span=15s fixedrange=false sum(trafficMbs) as trafficMbs ",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "CDN Total Amount of Traffic Transferred Over Time",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "cdn_search0006.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0006.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "ChartElement",
+                "title": "CDN Total Amount of Traffic Transferred Over Time",
+                "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time | sort 0 _time | fields _time messageBytes | eval trafficMbs=messageBytes/pow(1024,2) | timechart span=15s fixedrange=false sum(trafficMbs) as trafficMbs",
+                "vizParameters": {
+                "charting.axisLabelsX.majorLabelStyle.overflowMode" : "ellipsisNone",
+                "charting.axisLabelsX.majorLabelStyle.rotation" : "0",
+                "charting.axisTitleX.text" : "Time",
+                "charting.axisTitleX.visibility" : "visible",
+                "charting.axisTitleY.text" : "Traffic (Mbps)",
+                "charting.axisTitleY.visibility" : "visible",
+                "charting.axisTitleY2.visibility" : "visible",
+                "charting.axisX.abbreviation" : "none",
+                "charting.axisX.scale" : "linear",
+                "charting.axisY.abbreviation" : "none",
+                "charting.axisY.scale" : "linear",
+                "charting.axisY2.abbreviation" : "none",
+                "charting.axisY2.enabled" : "0",
+                "charting.axisY2.scale" : "inherit",
+                "charting.chart" : "area",
+                "charting.chart.bubbleMaximumSize" : "50",
+                "charting.chart.bubbleMinimumSize" : "10",
+                "charting.chart.bubbleSizeBy" : "area",
+                "charting.chart.nullValueMode" : "connect",
+                "charting.chart.showDataLabels" : "none",
+                "charting.chart.sliceCollapsingThreshold" : "0.01",
+                "charting.chart.stackMode" : "stacked",
+                "charting.chart.style" : "shiny",
+                "charting.drilldown" : "none",
+                "charting.layout.splitSeries" : "0",
+                "charting.layout.splitSeries.allowIndependentYRanges" : "0",
+                "charting.legend.labelStyle.overflowMode" : "ellipsisMiddle",
+                "charting.legend.mode" : "standard",
+                "charting.legend.placement" : "right",
+                "charting.lineWidth" : "2",
+                "trellis.size" : "medium",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_cdn_search0007": {
+        "id": "CDN Average Respone Time over Time",
+        "description": "The Average Response time, in MS, of content delivered from the CDN.<p>",
+        "relevance": "<p>The average response time for content delivered in the CDN.",
+        "operationalize": "This search gives us an understanding of the average response times in the CDN. Where these values are high gives us insight to where we may have technical issues that need to be investigated.<p>",
+        "howToImplement": "This search requires that you have CDN applications logs that have time series data and response time for each request. <p>",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "hasSearch": "Yes",
+        "category": "Content Delivery",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN Average Respone Time over Time",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_1",
+        "icon": "Core_Use_Case.png",
+        "name": "CDN Average Respone Time over Time",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | sort 0 _time | fields _time responseTime | timechart fixedrange=false span=1m avg(responseTime) AS avgResponseTime | eval avgResponseTime=round(avgResponseTime,3)",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "CDN Average Respone Time over Time",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "cdn_search0007.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0007.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "ChartElement",
+                "title": "CDN Average Respone Time over Time",
+                "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | sort 0 _time | fields _time responseTime | timechart fixedrange=false span=1m avg(responseTime) AS avgResponseTime | eval avgResponseTime=round(avgResponseTime,3)",
+                "vizParameters": {
+                "charting.axisLabelsX.majorLabelStyle.overflowMode" : "ellipsisNone",
+                "charting.axisLabelsX.majorLabelStyle.rotation" : "0",
+                "charting.axisTitleX.text" : "Time",
+                "charting.axisTitleX.visibility" : "visible",
+                "charting.axisTitleY.text" : "Average Respone Time (ms)",
+                "charting.axisTitleY.visibility" : "visible",
+                "charting.axisTitleY2.visibility" : "visible",
+                "charting.axisX.abbreviation" : "none",
+                "charting.axisX.scale" : "linear",
+                "charting.axisY.abbreviation" : "none",
+                "charting.axisY.scale" : "linear",
+                "charting.axisY2.abbreviation" : "none",
+                "charting.axisY2.enabled" : "0",
+                "charting.axisY2.scale" : "inherit",
+                "charting.chart" : "area",
+                "charting.chart.bubbleMaximumSize" : "50",
+                "charting.chart.bubbleMinimumSize" : "10",
+                "charting.chart.bubbleSizeBy" : "area",
+                "charting.chart.nullValueMode" : "connect",
+                "charting.chart.showDataLabels" : "none",
+                "charting.chart.sliceCollapsingThreshold" : "0.01",
+                "charting.chart.stackMode" : "stacked",
+                "charting.chart.style" : "shiny",
+                "charting.drilldown" : "none",
+                "charting.layout.splitSeries" : "0",
+                "charting.layout.splitSeries.allowIndependentYRanges" : "0",
+                "charting.legend.labelStyle.overflowMode" : "ellipsisMiddle",
+                "charting.legend.mode" : "standard",
+                "charting.legend.placement" : "right",
+                "charting.lineWidth" : "2",
+                "trellis.size" : "medium",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+     "showcase_cdn_search0008": {
+        "id": "CDN Geostats of Requests by Location",
+        "description": "Find out where our requstest are coming from and map the results with Splunk's geostats command.<p>",
+        "relevance": "<p>This gives us a visual representation of where Requests for Content are coming from.",
+        "operationalize": "Understanding where our requests are coming from allows us to make more informed decisions about capacity and planning for the network.<p>",
+        "howToImplement": "This search requires that you have CDN applications logs that have time series data and an IP address of the requestor. <p>",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "hasSearch": "Yes",
+        "category": "Content Delivery",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN Geostats of Requests by Location",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_3",
+        "icon": "Core_Use_Case.png",
+        "name": "CDN Geostats of Requests by Location",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval _time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | sort 0 _time | fields _time requestClientIp | iplocation requestClientIp | geostats count latfield=lat longfield=lon",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "CDN Geostats of Requests by Location",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "cdn_search0008.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0008.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "MapElement",
+                "title": "CDN Geostats of Requests by Location",
+                "search": "| inputlookup cdn_general_operations | eval _time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | sort 0 _time | fields _time requestClientIp | iplocation requestClientIp | geostats count latfield=lat longfield=lon",
+                "vizParameters": {
+                "drilldown" : "none",
+                "mapping.choroplethLayer.colorBins" : "5",
+                "mapping.choroplethLayer.colorMode" : "auto",
+                "mapping.choroplethLayer.maximumColor" : "0xaf575a",
+                "mapping.choroplethLayer.minimumColor" : "0x62b3b2",
+                "mapping.choroplethLayer.neutralPoint" : "0",
+                "mapping.choroplethLayer.shapeOpacity" : "0.75",
+                "mapping.choroplethLayer.showBorder" : "1",
+                "mapping.data.maxClusters" : "100",
+                "mapping.legend.placement" : "bottomright",
+                "mapping.map.center" : "(0,0)",
+                "mapping.map.panning" : "1",
+                "mapping.map.scrollZoom" : "0",
+                "mapping.map.zoom" : "2",
+                "mapping.markerLayer.markerMaxSize" : "50",
+                "mapping.markerLayer.markerMinSize" : "10",
+                "mapping.markerLayer.markerOpacity" : "0.8",
+                "mapping.tileLayer.maxZoom" : "7",
+                "mapping.tileLayer.minZoom" : "0",
+                "mapping.tileLayer.tileOpacity" : "1",
+                "mapping.type" : "marker",
                 "trellis.enabled" : "0",
                 "trellis.scales.shared" : "1",
                 "trellis.size" : "medium",
@@ -2188,7 +2445,10 @@
     "showcase_cdn_search0002",
     "showcase_cdn_search0003",
     "showcase_cdn_search0004",
-    "showcase_cdn_search0005"
+    "showcase_cdn_search0005",
+    "showcase_cdn_search0006",
+    "showcase_cdn_search0007",
+    "showcase_cdn_search0008"
     ]
       }
      }

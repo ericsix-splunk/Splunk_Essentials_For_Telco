@@ -142,8 +142,79 @@
             "Calculate a hit ratio of cached content and format it..",
             ""
         ],
-        "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") \n| convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time \n| sort _time \n| fields _time messageBytes cached cp status \n| eval statusFailed=if(status >= 400, 1, 0) \n| search statusFailed=\"1\" \n| timechart fixedrange=false span=1m sum(statusFailed) AS \"Error Events\"",    
+        "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") \n| convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time \n| sort 0 _time \n| fields _time messageBytes cached cp status \n| eval statusFailed=if(status >= 400, 1, 0) \n| search statusFailed=\"1\" \n| timechart fixedrange=false span=1m sum(statusFailed) AS \"Error Events\"",    
         "label": "CDN Total Number of Errors Over Time"
+    },
+
+    
+    "CDN Total Amount of Traffic Transferred Over Time": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdn_general_operations | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamps..",
+            "This will make sure our timestamp is in true timestamp format and not text.",
+            "",
+            "These are the only fields we are interested in for this search.",
+            "Calculate Mbps from the given rate.",
+            "Use timechart here with a 15second bucket span and fixedrange false because this is coming from a lookup file."
+        ],
+        "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") \n| convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time \n| sort 0 _time \n| fields _time messageBytes \n| eval trafficMbs=messageBytes/pow(1024,2) \n| timechart span=15s fixedrange=false sum(trafficMbs) as trafficMbs", 
+        "label": "CDN Total Amount of Traffic Transferred Over Time"
+    },
+
+    "CDN Average Respone Time over Time": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdn_general_operations | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamps..",
+            "This will make sure our timestamp is in true timestamp format and not text.",
+            "",
+            "These are the only fields we are interested in for this search.",
+            "Timechart the average response time, with a 1m span and fixedrange because this is coming from a lookup file.",
+            "Format our time for a bit more human readable format."
+        ],
+        "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| sort 0 _time \n| fields _time responseTime \n| timechart fixedrange=false span=1m avg(responseTime) AS avgResponseTime \n| eval avgResponseTime=round(avgResponseTime,3)",
+        "label": "CDN Average Respone Time over Time"
+    },
+
+    
+    "CDN Geostats of Requests by Location": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdn_general_operations | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamps..",
+            "This will make sure our timestamp is in true timestamp format and not text.",
+            "",
+            "These are the only fields we are interested in for this search.",
+            "Use the IPLocation command to enrich our existing requesting IP with Geolocation data.",
+            "Use Geostats with the enriched data to get a mapped visualizaton of all our requestors."
+        ],
+        "value": "| inputlookup cdn_general_operations \n| eval _time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| sort 0 _time \n| fields _time requestClientIp \n| iplocation requestClientIp \n| geostats count latfield=lat longfield=lon",    
+        "label": "CDN Geostats of Requests by Location"
     },
 
     "General Call Disposition Metrics": {

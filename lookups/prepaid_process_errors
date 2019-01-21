@@ -1,0 +1,8 @@
+pMessage,pDetails
+SUCCESS,Transaction Successful
+FAILED,Transaction Failed - Unknown
+ERROR-B993,Maximum # of SIMs Reached for User
+ERROR-A303,Top Up/Activation Failed
+ERROR-A505,Inventory Insufficient
+ERROR-C808,CRM Update Failed
+ERROR-UNKNOWN,No Response from System

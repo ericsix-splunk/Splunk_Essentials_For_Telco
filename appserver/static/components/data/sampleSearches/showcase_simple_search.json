@@ -1,4 +1,44 @@
  {
+    "02A Geomapping of Orders by Count": {
+        "prereqs": [
+            {
+                "test": "| inputlookup prepaid_o2a_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Only use the field(s) we want..",
+            "Enrich our orderlocation with a lookup that contains geodata.",
+            "Use geostats to map this data out specifying the lat and long fields. We also adjust the bin size to get finer resolution of the locations."
+        ],
+        "value": "| inputlookup prepaid_o2a_logs \n| fields orderLocation \n| lookup prepaid_locations orderLocation \n| geostats count latfield=lat longfield=lon binspanlat=19 binspanlong=19",
+        "label": "02A Geomapping of Orders by Count"
+    },
+
+    "02A Top New Prepaid Purchasing Countries": {
+        "prereqs": [
+            {
+                "test": "| inputlookup prepaid_o2a_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Only use the field(s) we want..",
+            "Enrich our orderlocation with a lookup that contains geodata.",
+            "Use geostats to map this data out specifying the lat and long fields. We also adjust the bin size to get finer resolution of the locations."
+        ],
+        "value": "| inputlookup prepaid_o2a_logs \n| fields iDCountry orderType \n| search orderType=\"NEW\" \n| eval iDCountry=upper(iDCountry) \n| top iDCountry",
+        "label": "02A Top New Prepaid Purchasing Countries"
+    },
+
     "CDN - User Behavior - Top Browsers": {
         "prereqs": [
             {
@@ -23,6 +63,8 @@
         "value": "| inputlookup cdn_connections \n| sort - _time \n| fields _time http_user_agent \n| rename http_user_agent AS useragent \n| eval os = case(match(useragent,\"Windows .. 5.1\"),\"Windows XP\",match(useragent,\"droid\"),\"Android\",match(useragent,\"Windows NT 6.1\"),\"Windows 7\",match(useragent,\"Win98\"),\"Windows 98\",match(useragent,\"Windows NT 6.3\"),\"Windows Server 2012\",match(useragent,\"Windows NT 6.2\"),\"Windows 8\",match(useragent,\"Windows NT 6.0\"),\"Windows Server 2008\",match(useragent,\"Windows Phone 8.1\"),\"Windows Mobile 8\",match(useragent,\"Mac OS X 10.10\"),\"OSX 10.10\",match(useragent,\"Mac OS X 10_9\"),\"OSX 10.9\",match(useragent,\"Mac OS X 10.6\"),\"OSX 10.6\",match(useragent,\"Mac OS X 10.5\"),\"OSX 10.5\",match(useragent,\"Mac OS X 10_8\"),\"OSX 10.8\",match(useragent,\"Mac OS X 10_7\"),\"OSX 10.7\",match(useragent,\"Apple TV\"),\"IOS\",match(useragent,\"iPad\"),\"IOS\",match(useragent,\"iPhone\"),\"IOS\",match(useragent,\"linux|Linux\"),\"Linux\") \n| eval browser = case(match(useragent,\"MSIE 10.0\"),\"IE 10.0\",match(useragent,\"MSIE 7.0\"),\"IE 7.0\",match(useragent,\"Chrome\"),\"Chrome\",match(useragent,\"Safari/\"),\"Safari\",match(useragent,\"Firefox\"),\"Firefox\",match(useragent,\"MSIE 9.0\"),\"IE 9.0\",match(useragent,\"ANVSDK ios\"),\"Anvato Player\",match(useragent,\"UCBrowser\"),\"UC Browser\",match(useragent,\"Opera\"),\"Opera\",match(useragent,\"Gecko Galeon\"),\"Gecko\",match(useragent,\"Netscape6\"),\"Netscape\") \n| eval arch = case(match(useragent,\"droid\"),\"android\",match(useragent,\"iPad\"),\"ipad\",match(useragent,\"iPod\"),\"ipod\",match(useragent,\"Apple TV\"),\"Apple TV\",match(useragent,\"iPhone\"),\"iphone\",match(os,\"Windows\"),\"x86_64\",match(useragent,\"Intel|x86_64\"),\"x86_64\") \n| fillnull value=\"UNKNOWN\" os arch browser \n| stats count by browser \n| sort - count",
         "label": "CDN - User Behavior - Top Browsers"
     },
+
+
 
     "Cache Hit Ratio by Number of Requests": {
         "prereqs": [

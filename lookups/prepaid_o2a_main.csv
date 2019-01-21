@@ -1,0 +1,3 @@
+timestamp,orderLocation,orderTracking,hashedCustomerName,IdType,customerIdNumber,orderType,category,service,productSKU,simCardSerialNM
+2019-01-03 00:05:00,store1,20190103-000001,**HASH**,PASSPORT,XXXXXX1234,NEW,MOBILE,4G,4G001-7D,100-0000000001
+2019-01-03 00:07:00,store1,20190103-000002,**HASH**,NID,XXXXXX0001,NEW,MOBILE,4G,4G001-7D,100-0000000002

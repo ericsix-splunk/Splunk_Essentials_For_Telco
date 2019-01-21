@@ -1,1 +1,0 @@
-| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | sort 0 _time | fields _time netPerflastMileRTT | stats avg(netPerflastMileRTT) AS avgLastMileRTT | eval avgLastMileRTT=round(avgLastMileRTT,3)

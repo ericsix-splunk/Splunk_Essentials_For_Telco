@@ -1,6 +1,149 @@
 {
   "summaries":  {
 
+    "showcase_prepaid_mobile_search0001": {
+        "id": "02A Geomapping of Orders by Count",
+        "description": "Order To Activation Geomapping of our completed orders for our prepaid mobile services. This includes new and topup prepaid services.<p>",
+        "relevance": "<p>A visual representation of where our orders are being placed. Using this information the business can make more informed decisions about where to increase Retail Capacity and during what times this would have the most impact. For example, at the airport during arrival times of flights from certain countries that have a large prepaid purchase history.",
+        "operationalize": "<p>This search gives us insight to where our activations / services are being purchased from.  From a business perspective, this gives us a general understanding of where our customers are purchasing services and where we could potentially increase capacity for retail space.",
+        "howToImplement": "<p>For this search, our data source for the transactions need to have a location. We then enrich that location data with a lookup that contains the latitude and longitude, and then we map this out with Splunk's geostats command.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Prepaid Mobile",
+        "hasSearch": "Yes",
+        "category": "Prepaid Mobile",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=02A Geomapping of Orders by Count",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_4",
+        "icon": "Core_Use_Case.png",
+        "name": "02A Geomapping of Orders by Count",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup prepaid_o2a_logs | fields orderLocation | lookup prepaid_locations orderLocation | geostats count latfield=lat longfield=lon binspanlat=19 binspanlong=19",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "02A Geomapping of Orders by Count",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "prepaid_mobile_search0001.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/prepaid_mobile_search0001.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "MapElement",
+                "title": "02A Geomapping of Orders by Count",
+                "search": "| inputlookup prepaid_o2a_logs | fields orderLocation | lookup prepaid_locations orderLocation | geostats count latfield=lat longfield=lon binspanlat=19 binspanlong=19",
+                "vizParameters": {
+                "drilldown": "none",
+                "mapping.choroplethLayer.colorBins" : "5",
+                "mapping.choroplethLayer.colorMode" : "auto",
+                "mapping.choroplethLayer.maximumColor" : "0xaf575a",
+                "mapping.choroplethLayer.minimumColor" : "0x62b3b2",
+                "mapping.choroplethLayer.neutralPoint" : "0",
+                "mapping.choroplethLayer.shapeOpacity" : "0.75",
+                "mapping.choroplethLayer.showBorder" : "1",
+                "mapping.data.maxClusters" : "100",
+                "mapping.legend.placement" : "bottomright",
+                "mapping.map.center" : "(1.32,103.9)",
+                "mapping.map.panning" : "1",
+                "mapping.map.scrollZoom" : "0",
+                "mapping.map.zoom" : "12",
+                "mapping.markerLayer.markerMaxSize" : "50",
+                "mapping.markerLayer.markerMinSize" : "10",
+                "mapping.markerLayer.markerOpacity" : "0.8",
+                "mapping.showTiles" : "1",
+                "mapping.tileLayer.maxZoom" : "19",
+                "mapping.tileLayer.minZoom" : "0",
+                "mapping.tileLayer.tileOpacity" : "1",
+                "mapping.tileLayer.url" : "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                "mapping.type" : "marker",
+                "trellis.enabled" : "0",
+                "trellis.scales.shared" : "1",
+                "trellis.size" : "medium",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_prepaid_mobile_search0002": {
+        "id": "02A Top New Prepaid Purchasing Countries",
+        "description": "Order To Activation Chart of our top purchasing countries.<p>",
+        "relevance": "<p>A visual representation of where top net-new purchases are originating from. Using this information the business can make more informed decisions about where to increase Marketing Campaignes and during what times this would have the most impact. For example, during Christmas in Western Countries, or during Chinese New Years.<p>",
+        "operationalize": "<p>This search gives us insight to where our net-new customers are from based on their Order Details.  From a business perspective, this gives us an understanding of where our customers are from and how marketing or campaigns could drive business.",
+        "howToImplement": "<p>For this search, our data source for the transactions need to be enriched with information about the customer. In this example a billing system, and regulatory requirements, have us record either a Passport or Federal ID for the customer. We then use this data point with each transaction and chart this.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Prepaid Mobile",
+        "hasSearch": "Yes",
+        "category": "Prepaid Mobile",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=02A Top New Prepaid Purchasing Countries",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_4",
+        "icon": "Core_Use_Case.png",
+        "name": "02A Top New Prepaid Purchasing Countries",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup prepaid_o2a_logs | fields iDCountry orderType | search orderType=\"NEW\" | eval iDCountry=upper(iDCountry) | top iDCountry",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "02A Top New Prepaid Purchasing Countries",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "prepaid_mobile_search0002.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/prepaid_mobile_search0002.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "ChartElement",
+                "title": "02A Top New Prepaid Purchasing Countries",
+                "search": "| inputlookup prepaid_o2a_logs | fields iDCountry orderType | search orderType=\"NEW\" | eval iDCountry=upper(iDCountry) | top iDCountry",
+                "vizParameters": {
+                "drilldown": "none",
+                "charting.chart" : "pie",
+                "charting.drilldown" : "none",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
     "showcase_cdn_search0001": {
         "id": "Cache Hit Ratio by Number of Requests",
         "domain": "Content Delivery",
@@ -76,7 +219,7 @@
         ]
     },
 
-     "showcase_cdn_search0002": {
+    "showcase_cdn_search0002": {
         "id": "Cache Hit Ratio by Amount of Traffic",
         "description": "Ratio of Traffic that is accessing the Cache, and not directly from the central content provider.<p>",
         "relevance": "<p>This search shows us what ratio of our traffic is accessing cached content.",
@@ -2645,6 +2788,8 @@
  { 
    "default": { 
       "summaries":[
+    "showcase_prepaid_mobile_search0001",
+    "showcase_prepaid_mobile_search0002",
     "showcase_sa_search0001",
     "showcase_sa_search0002",
     "showcase_sa_search0003",

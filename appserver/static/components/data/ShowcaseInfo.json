@@ -270,10 +270,10 @@
 
     "showcase_prepaid_mobile_search0005": {
         "id": "O2A End-To-End Transactional Status Overtime",
-        "description": "End to End Transaction Status of the Order to Activation Process.<p>",
-        "relevance": "<p>A visual representation of our top selling Packages. This example allows the business to make an informed decisions about what the most popular services are that have been sold over time.<p>",
-        "operationalize": "<p>This search gives us insight to what services our customers are purchasing based on their Order Details.  From a business perspective, this gives us an understanding of what our customers want and how marketing or campaigns could drive business.",
-        "howToImplement": "<p>For this search, our data source for the transactions needs have a successful transaction status and product. We then enrich the data with a description of that product SKU from a lookup that has SKU's mapped to a friendly name.",
+        "description": "End-to-End Transaction Status of the Order to Activation Process.<p>",
+        "relevance": "<p>This example gives us the End-to-End status, over time, of our Order to Activation Process. This example shows us the successful, or failed attempts at service activation. This is gives us general insight into how our O2A process is working with a visual representation of status. We might recognize a high number of failures as some form of system outage, or problem that needs to be investigated.<p>",
+        "operationalize": "<p>This search gives us a timeline for our activations and a visual representation of successful vs failed activations.  With this information, we can determine if there is a service delivery issue within our O2A processes, or if there are issues with a particular network or component.",
+        "howToImplement": "<p>For this search, our data source for the transactions needs have a transaction status that indicates either a success, or a failure. We then chart these over time.",
         "domain": "Application",
         "help": "Lets look at top Splunk Sourcetypes",
         "app": "Splunk_Essentials_For_Telco",
@@ -320,6 +320,8 @@
                 "search": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | fields _time transactionStatus | timechart span=10m fixedrange=false count by transactionStatus",
                 "vizParameters": {
                 "drilldown": "none",
+                "charting.chart":"area",
+                "charting.drilldown" : "none",
                 "refresh.display": "progressbar"
                 }
             }

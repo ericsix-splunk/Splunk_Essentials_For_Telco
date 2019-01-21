@@ -111,3 +111,24 @@ export = none
 owner = w0rdp4ss!
 version = 7.2.1
 modtime = 1547780978.229024000
+
+[transforms/prepaid_o2a_products]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1548057607.443472000
+
+[transforms/prepaid_locations]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1548057618.413213000
+
+[transforms/prepaid_o2a_logs]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1548057628.483418000

@@ -3,7 +3,7 @@
 
     "showcase_prepaid_mobile_search0001": {
         "id": "02A Geomapping of Orders by Count",
-        "description": "Order To Activation Geomapping of our completed orders for our prepaid mobile services. This includes new and topup prepaid services.<p>",
+        "description": "Order To Activation Geomapping of our completed orders for our prepaid mobile services. This includes NEW and TOPUP prepaid services.<p>",
         "relevance": "<p>A visual representation of where our orders are being placed. Using this information the business can make more informed decisions about where to increase Retail Capacity and during what times this would have the most impact. For example, at the airport during arrival times of flights from certain countries that have a large prepaid purchase history.",
         "operationalize": "<p>This search gives us insight to where our activations / services are being purchased from.  From a business perspective, this gives us a general understanding of where our customers are purchasing services and where we could potentially increase capacity for retail space.",
         "howToImplement": "<p>For this search, our data source for the transactions need to have a location. We then enrich that location data with a lookup that contains the latitude and longitude, and then we map this out with Splunk's geostats command.",
@@ -101,7 +101,7 @@
         "dashboard": "showcase_simple_search?ml_toolkit.dataset=02A Top New Prepaid Purchasing Countries",
         "dashboard_type": "XML Panels with Screenshot",
         "released": "1.0.0",
-        "journey": "Stage_4",
+        "journey": "Stage_3",
         "icon": "Core_Use_Case.png",
         "name": "02A Top New Prepaid Purchasing Countries",
         "displayapp": "Splunk_Essentials_For_Telco",
@@ -143,6 +143,189 @@
             }
         ]
     },
+
+    "showcase_prepaid_mobile_search0003": {
+        "id": "O2A Timechart of Ordertypes",
+        "description": "Order To Activation Timechart of our purchased items.<p>",
+        "relevance": "<p>A visual representation of what we sold over the specified time range. This example allows the business to make an informed decisions about what services are being sold over time. .<p>",
+        "operationalize": "<p>This search gives us insight to what services our customers are purchasng based on their Order Details.  From a business perspective, this gives us an understanding of what our customers want and how marketing or campaigns could drive business.",
+        "howToImplement": "<p>For this search, our data source for the transactions needs have a ordertype field which must correspond to the Service Description of what is being sold.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Prepaid Mobile",
+        "hasSearch": "Yes",
+        "category": "Prepaid Mobile",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=O2A Timechart of Ordertypes",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_3",
+        "icon": "Core_Use_Case.png",
+        "name": "O2A Timechart of Ordertypes",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | fields _time orderType orderLocation IdType customerIdNumber | search orderType=\"*\" | timechart fixedrange=false span=30m count by orderType",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "O2A Timechart of Ordertypes",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "prepaid_mobile_search0003.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/prepaid_mobile_search0003.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "ChartElement",
+                "title": "O2A Timechart of Ordertypes",
+                "search": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | fields _time orderType orderLocation IdType customerIdNumber | search orderType=\"*\" | timechart fixedrange=false span=30m count by orderType",
+                "vizParameters": {
+                "drilldown": "none",
+                "charting.axisTitleX.text" : "Time",
+                "charting.axisTitleY.text" : "Order Count",
+                "charting.chart" : "column",
+                "charting.chart.showDataLabels" : "none",
+                "charting.chart.stackMode" : "stacked",
+                "charting.drilldown" : "none",
+                "refresh.display" : "progressbar",
+                "charting.drilldown" : "none",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_prepaid_mobile_search0004": {
+        "id": "O2A Top Selling Packages",
+        "description": "Order To Activation Top Selling Packages.<p>",
+        "relevance": "<p>A visual representation of our top selling Packages. This example allows the business to make an informed decisions about what the most popular services are that have been sold over time.<p>",
+        "operationalize": "<p>This search gives us insight to what services our customers are purchasing based on their Order Details.  From a business perspective, this gives us an understanding of what our customers want and how marketing or campaigns could drive business.",
+        "howToImplement": "<p>For this search, our data source for the transactions needs have a successful transaction status and product. We then enrich the data with a description of that product SKU from a lookup that has SKU's mapped to a friendly name.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Prepaid Mobile",
+        "hasSearch": "Yes",
+        "category": "Prepaid Mobile",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=O2A Top Selling Packages",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_3",
+        "icon": "Core_Use_Case.png",
+        "name": "O2A Top Selling Packages",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup prepaid_o2a_logs | fields _time productSKU transactionStatus | search transactionStatus=\"SUCCESS\" | lookup prepaid_o2a_products productSKU | top description",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",  
+        "examples": [
+            {
+                "name": "O2A Top Selling Packages",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "prepaid_mobile_search0004.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/prepaid_mobile_search0004.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "GraphElement",
+                "title": "O2A Top Selling Packages",
+                "search": "| inputlookup prepaid_o2a_logs | fields _time productSKU transactionStatus | search transactionStatus=\"SUCCESS\" | lookup prepaid_o2a_products productSKU | top description",
+                "vizParameters": {
+                "drilldown": "none",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_prepaid_mobile_search0005": {
+        "id": "O2A End-To-End Transactional Status Overtime",
+        "description": "End to End Transaction Status of the Order to Activation Process.<p>",
+        "relevance": "<p>A visual representation of our top selling Packages. This example allows the business to make an informed decisions about what the most popular services are that have been sold over time.<p>",
+        "operationalize": "<p>This search gives us insight to what services our customers are purchasing based on their Order Details.  From a business perspective, this gives us an understanding of what our customers want and how marketing or campaigns could drive business.",
+        "howToImplement": "<p>For this search, our data source for the transactions needs have a successful transaction status and product. We then enrich the data with a description of that product SKU from a lookup that has SKU's mapped to a friendly name.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Prepaid Mobile",
+        "hasSearch": "Yes",
+        "category": "Prepaid Mobile",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=O2A End-To-End Transactional Status Overtime",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_3",
+        "icon": "Core_Use_Case.png",
+        "name": "O2A End-To-End Transactional Status Overtime",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | fields _time transactionStatus | timechart span=10m fixedrange=false count by transactionStatus",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",  
+        "examples": [
+            {
+                "name": "O2A End-To-End Transactional Status Overtime",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "prepaid_mobile_search0005.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/prepaid_mobile_search0005.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "ChartElement",
+                "title": "O2A End-To-End Transactional Status Overtime",
+                "search": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | fields _time transactionStatus | timechart span=10m fixedrange=false count by transactionStatus",
+                "vizParameters": {
+                "drilldown": "none",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
 
     "showcase_cdn_search0001": {
         "id": "Cache Hit Ratio by Number of Requests",
@@ -2790,6 +2973,9 @@
       "summaries":[
     "showcase_prepaid_mobile_search0001",
     "showcase_prepaid_mobile_search0002",
+    "showcase_prepaid_mobile_search0003",
+    "showcase_prepaid_mobile_search0004",
+    "showcase_prepaid_mobile_search0005",
     "showcase_sa_search0001",
     "showcase_sa_search0002",
     "showcase_sa_search0003",

@@ -39,6 +39,74 @@
         "label": "02A Top New Prepaid Purchasing Countries"
     },
 
+    
+    "O2A Timechart of Ordertypes": {
+        "prereqs": [
+            {
+                "test": "| inputlookup prepaid_o2a_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamp properly.",
+            "Convert our timestamp to a true timestamp format.",
+            "Only use the field(s) we want..",
+            "Search for all Order Types (New and TopUp).",
+            "Timechart these with a stacked visualization. Also use fixedrange=false since this is a lookup table.."
+        ],
+        "value": "| inputlookup prepaid_o2a_logs \n| eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| fields _time orderType orderLocation IdType customerIdNumber \n| search orderType=\"*\" \n| timechart fixedrange=false span=30m count by orderType ",
+        "label": "O2A Timechart of Ordertypes"
+    },
+
+
+    "O2A Top Selling Packages": {
+        "prereqs": [
+            {
+                "test": "| inputlookup prepaid_o2a_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamp properly.",
+            "Convert our timestamp to a true timestamp format.",
+            "Only use the field(s) we want..",
+            "Search for all Order Types (New and TopUp).",
+            "Timechart these with a stacked visualization. Also use fixedrange=false since this is a lookup table.."
+        ],
+        "value": "| inputlookup prepaid_o2a_logs \n| fields _time productSKU transactionStatus \n| search transactionStatus=\"SUCCESS\" \n| lookup prepaid_o2a_products productSKU \n| top description",
+        "label": "O2A Top Selling Packages"
+    },
+    
+    "O2A End-To-End Transactional Status Overtime": {
+        "prereqs": [
+            {
+                "test": "| inputlookup prepaid_o2a_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamp properly.",
+            "Convert our timestamp to a true timestamp format.",
+            "Only use the field(s) we want..",
+            "Search for all Order Types (New and TopUp).",
+            "Timechart these with a stacked visualization. Also use fixedrange=false since this is a lookup table.."
+        ],
+        "value": "| inputlookup prepaid_o2a_logs \n| eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| fields _time transactionStatus \n| timechart span=10m fixedrange=false count by transactionStatus",
+        "label": "O2A End-To-End Transactional Status Overtime"
+    },
+
     "CDN - User Behavior - Top Browsers": {
         "prereqs": [
             {

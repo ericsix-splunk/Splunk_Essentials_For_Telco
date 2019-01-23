@@ -132,3 +132,10 @@ export = system
 owner = w0rdp4ss!
 version = 7.2.1
 modtime = 1548057628.483418000
+
+[transforms/prepaid_mobile_errors]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1548177323.100541000

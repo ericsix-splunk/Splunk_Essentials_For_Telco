@@ -107,6 +107,55 @@
         "label": "O2A End-To-End Transactional Status Overtime"
     },
 
+    "02A By Process Errors over Time": {
+        "prereqs": [
+            {
+                "test": "| inputlookup prepaid_o2a_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamp properly.",
+            "Convert our timestamp to a true timestamp format.",
+            "Only use the field(s) we want..",
+            "Create a numeric value for the order status.. Ok is 0, and anything else is 1.",
+            "Use eventstats to create a running total of our status counts.",
+            "Create a timechart with a 10minute span of the sum of our per process counts and name the processess. Use fixedrange true because this is a lookup."
+        ],
+        "value": "| inputlookup prepaid_o2a_logs \n| eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| fields _time p1* p2* p3* p4* \n| eval p1=case(p1Status==\"OK\",0,1=1,\"1\"), p2=case(p2Status==\"OK\",0,1=1,\"1\"), p3=case(p3Status==\"OK\",0,1=1,\"1\"),p4=case(p4Status==\"OK\",0,1=1,\"1\") \n| eventstats sum(p1) AS p1cnt sum(p2) AS p2cnt sum(p3) AS p3cnt sum(p4) AS p4cnt by _time \n| timechart fixedrange=false span=10m sum(p1cnt) AS \"Billing Systems\" sum(p2cnt) as \"Fullfilment\" sum(p3cnt) AS \"Service Activation\" sum(p4cnt) AS \"CRM\"",
+        "label": "02A By Process Errors over Time"
+    },
+
+    "Provisioning and Activation Errors by Type": {
+        "prereqs": [
+            {
+                "test": "| inputlookup prepaid_o2a_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamp properly.",
+            "Convert our timestamp to a true timestamp format.",
+            "Searching in our Service Activation Process for failures.",
+            "Only use the field(s) we want..",
+            "Enrich our error messages with more Human Readable data.",
+            "Get values for our individual error messages and details by time.",
+            "Search for where we have a count > 0",
+            "Run this through stats again to get a count by Error Message.",
+            "Use xyseries here to create a chartable view of our Error Details by Error Message."
+                    ],
+        "value": "| inputlookup prepaid_o2a_logs \n| eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| search p3Status=\"FAIL\" \n| fields _time p3* customer* \n| lookup prepaid_mobile_errors pMessage AS p3Message \n| stats count values(pDetails) AS \"FailureReason\" values(p3Message) AS \"ErrorMessage\" by _time \n| search count > 0 \n| stats sum(count) AS count by FailureReason ErrorMessage \n| xyseries   ErrorMessage FailureReason count",
+        "label": "Provisioning and Activation Errors by Type"
+    },
+
     "CDN - User Behavior - Top Browsers": {
         "prereqs": [
             {

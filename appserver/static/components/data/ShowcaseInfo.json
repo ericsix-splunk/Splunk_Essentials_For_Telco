@@ -459,7 +459,7 @@
         ]
     },
 
-     "showcase_prepaid_mobile_search0008": {
+    "showcase_prepaid_mobile_search0008": {
         "id": "02A Provisioning Errors by Customer ID",
         "name": "Order and Provisioning Errors with Customer ID",
         "description": "Order To Activation Order and Provision Errors with Customer ID and Additional Information.<p>",
@@ -516,6 +516,67 @@
                 "drilldown" : "none",
                 "rowNumbers" : "true",
                 "wrap" : "false",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_prepaid_mobile_search0009": {
+        "id": "02A Compliance Reporting - Potential SIM Abuse",
+        "name": "Regulatory - Activation Errors due to Potential SIM Abuse.",
+        "description": "Activations that have failed because of regulatory requirements or policy. In this case, we have a limitation to the number of SIMs a user can own on a network.<p>",
+        "relevance": "<p>This search provides a report of Order and Provisioning Errors that have occured based on a threshold of active / registered SIMs in the systems we are collecting data from. This provides a report for the associated customer details such as their Customer Identification, number associated to the activation, Order / Transaction ID(s), and where applicable a location where the transaction was attemped.",
+        "operationalize": "<p>In the case where there are regulatory and reporting requirement, wheter by law or just internal, a report like this can be used to provide more details on the transacrtions in question. In this example, our carrier has a reporting requirement where users can only own three (3) SIMS on their network. This report shows where User's are trying to purchase / activate over the threshhold. This kind of report can be automated and warnings can be sent to the user's email address, phone number, order process, or if the transaction is in a physical location an alert can be posted.",
+        "howToImplement": "<p>This search will require O2A log data from billing, activations, and CMS data. In this example, we have failed transactions, locations of the failed transactions, a specific error code (SIM Count Failure) and a lookup to map this error code to a human understandable message, along with some additional information around the User and the Trasnsaction IDs / Order IDs that failed. ",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Prepaid Mobile",
+        "hasSearch": "Yes",
+        "category": "Prepaid Mobile",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=02A Compliance Reporting - Potential SIM Abuse",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_2",
+        "icon": "Core_Use_Case.png",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | search p3Status=\"FAIL\" | fields _time p3* customer* order* | lookup prepaid_mobile_errors pMessage AS p3Message | search p3Message=\"ERROR-B993\" | lookup prepaid_locations orderLocation OUTPUT description | stats count values(customerIdNumber) AS customerIdNumber values(orderTracking) AS orderTracking values(pDetails) as Details list(description) AS Location by customerID | sort - count",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "02A Compliance Reporting - Potential SIM Abuse",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "prepaid_mobile_search0009.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/prepaid_mobile_search0009.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "02A Compliance Reporting - Potential SIM Abuse",
+                "search": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | search p3Status=\"FAIL\" | fields _time p3* customer* order* | lookup prepaid_mobile_errors pMessage AS p3Message | search p3Message=\"ERROR-B993\" | lookup prepaid_locations orderLocation OUTPUT description | stats count values(customerIdNumber) AS customerIdNumber values(orderTracking) AS orderTracking values(pDetails) as Details list(description) AS Location by customerID | sort - count",
+                "vizParameters": {
+                "drilldown": "none",
+                "count" : "10",
+                "dataOverlayMode" : "none",
+                "drilldown" : "none",
                 "refresh.display": "progressbar"
                 }
             }
@@ -2624,11 +2685,12 @@
     },
 
     "showcase_subscriber_search0012": {
-        "id": "General Call Metrics - Session Tracking",
-        "description": "General CDR Call Metrics - Finding Shortest Call Durations by Destination<p>",
-        "relevance": "<p>Find our shortest call durations and their destinations. This could be used to identify fraud or abuse against the system.",
-        "operationalize": "<p>This search gives us insight to where calls with the shortest duration time are going.  From a business perspective, a high volume of calls like this to countries with high call tariffs might be indicative of malicious activity.",
-        "howToImplement": "<p>For this search our data source for the CDR must have both a Source\/Caller and Destination\/Callee. In addition to this we need to also have a country code in order to find the dailed party. In this example, we extract a country code from the dailed number, and then use a lookup to enrich this to a country name.<p>From here, we can use the rare command to generate our data set and then choose a visualization, or reformat this into table.",
+        "id": "General Call Metrics - Cumulative Minutes by Caller",
+        "name": "Cumulative Call Minutes by Subscriber.",
+        "description": "Calculate the cumulative call durations by Subscriber with a list of countries called.<p>",
+        "relevance": "<p>Find and calculate total minutes called and which country users have called. .",
+        "operationalize": "<p>This search gives us insight to where our users are calling and the total duration of all their calls. From a business perspective, this information can be used for targeted marketing campaings, billing reconcilliation, capacity and service forecasting.",
+        "howToImplement": "<p>For this search our data source for the CDR must have both a Source\/Caller and Destination\/Callee. In addition to this we need to also have a country code. In this example, we extract a country code from the dailed number, and then use a lookup to enrich this to a country code. From here we process this with the stats command, and use the nomv to make the dailed countries fields single value. ",
         "domain": "Application",
         "help": "Lets look at top Splunk Sourcetypes",
         "app": "Splunk_Essentials_For_Telco",
@@ -2637,28 +2699,27 @@
         "category": "Subscriber Services",
         "knownFP": "unused",
         "includeSSE": "Yes",
-        "dashboard": "showcase_simple_search?ml_toolkit.dataset=General Call Metrics - Session Tracking",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=General Call Metrics - Cumulative Minutes by Caller",
         "dashboard_type": "XML Panels with Screenshot",
         "released": "1.0.0",
-        "journey": "Stage_2",
+        "journey": "Stage_3",
         "icon": "Core_Use_Case.png",
-        "name": "General Call Metrics - Session Tracking",
         "displayapp": "Splunk_Essentials_For_Telco",
-        "SPLEase": "Medium",
+        "SPLEase": "Intermediate",
         "datasource": "Application Logs",
         "highlight": "Yes",
         "alertvolume": "unused",
-        "sampleSPL": "| inputlookup cdr_logs | eval _time = start | table _time accountcode channel src dst duration partyBiD | rex field=channel \".*-(?<sessionId>\\d+$)\" | search duration > 0 | convert dur2sec(duration) AS CallDuration | eval CallDuration=round((CallDuration/60),0).\" minutes\" | stats count values(sessionId) AS SessionID values(accountcode) AS AccountID values(dst) AS DestinationNumber values(_time) AS DialTime list(CallDuration) AS CallDuration by src dst | lookup cdr_account_mappings accountCode AS AccountID OUTPUT accountName billingState | rename src AS SourceNumber | table AccountID accountName billingState SourceNumber DestinationNumber SessionID CallDuration DialTime",
+        "sampleSPL": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=\"ANSWERED\" OR billable > 0 | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | fields _time accountcode src billable dstCountryCode | convert dur2sec(billable) AS calculatedBillableS | stats values(accountcode) AS Account values(dstCountryCode) AS CalledCountries sum(eval(round((calculatedBillableS/60),0))) AS BillableMinutes by src | nomv CalledCountries | rename src AS \"Caller\" BillableMinutes AS \"Billable Minutes\" | table Account Caller CalledCountries \"Billable Minutes\" | sort - \"Billable Minutes\"",
         "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
         "examples": [
             {
-                "name": "General Call Metrics - Session Tracking",
+                "name": "General Call Metrics - Cumulative Minutes by Caller",
                 "label": "Demo Data"
             }
         ],
         "images": [
             {
-                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "name": "subscriber_search0012.png",
                 "label": "",
                 "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0012.png"
             }
@@ -2671,9 +2732,8 @@
                 "panel": "row1cell1",
                 "type": "viz",
                 "vizType": "TableElement",
-                "title": "General Call Metrics - Session Tracking",
-                "search": "| inputlookup cdr_logs | eval _time = start | table _time accountcode channel src dst duration partyBiD | rex field=channel \".*-(?<sessionId>\\d+$)\" | search duration > 0 | convert dur2sec(duration) AS CallDuration | eval CallDuration=round((CallDuration/60),0).\" minutes\" | stats count values(sessionId) AS SessionID values(accountcode) AS AccountID values(dst) AS DestinationNumber values(_time) AS DialTime list(CallDuration) AS CallDuration by src dst | lookup cdr_account_mappings accountCode AS AccountID OUTPUT accountName billingState | rename src AS SourceNumber | table AccountID accountName billingState SourceNumber DestinationNumber SessionID CallDuration DialTime",
-                "vizParameters": {
+                "title": "General Call Metrics - Cumulative Minutes by Caller",
+                "search": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=\"ANSWERED\" OR billable > 0 | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | fields _time accountcode src billable dstCountryCode | convert dur2sec(billable) AS calculatedBillableS | stats values(accountcode) AS Account values(dstCountryCode) AS CalledCountries sum(eval(round((calculatedBillableS/60),0))) AS BillableMinutes by src | nomv CalledCountries | rename src AS \"Caller\" BillableMinutes AS \"Billable Minutes\" | table Account Caller CalledCountries \"Billable Minutes\" | sort - \"Billable Minutes\"",                "vizParameters": {
                 "count": "10",
                     "drilldown": "none",
                     "refresh.display": "progressbar"
@@ -3085,6 +3145,7 @@
     "showcase_prepaid_mobile_search0006",
     "showcase_prepaid_mobile_search0007",
     "showcase_prepaid_mobile_search0008",
+    "showcase_prepaid_mobile_search0009",
     "showcase_sa_search0001",
     "showcase_sa_search0002",
     "showcase_sa_search0003",

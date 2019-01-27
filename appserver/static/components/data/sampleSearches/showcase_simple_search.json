@@ -49,6 +49,32 @@
         "value": "| inputlookup physical_environmental \n| eval _time=strptime(dateTime, \"%Y/%m/%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| rex field=sensorLocation \"(Room(?<Room>[^\\-]+)-Row(?<Row>[^-]+)-Rack(?<Rack>[^-]+)-(?<Sensor>[^-]+))\" \n| eval Location=Room.\"-\".Row.\":\".Rack.\"-\".Sensor, tempF=sensorValue \n| fields _time Sensor tempF Row Rack \n| search Sensor=* OR Rack=* \n| eval Sensor=Row.Rack.\"-\".Sensor \n| timechart span=1m fixedrange=false avg(tempF) AS AverageTempF by Sensor",
         "label": "Rack Sensor Temperature Trending by Rack Sensors"
     },
+    
+    "02A Compliance Reporting - Potential SIM Abuse": {
+        "prereqs": [
+            {
+                "test": "| inputlookup prepaid_o2a_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Fix our timestamp from our lookup.",
+            "Convert our timestamp to a recognized timestamp format..",
+            "Search for our failed processes.",
+            "Only use the field(s) we want..",
+            "Enrich our error messages with more human friendly details.",
+            "Search for our SIM Activation Error Message..",
+            "Add location data to our search results.",
+            "Calculate our counts of Orders and Location based on the CustomerID",
+            ""
+                    ],
+        "value": "| inputlookup prepaid_o2a_logs \n| eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| search p3Status=\"FAIL\" \n| fields _time p3* customer* order* \n| lookup prepaid_mobile_errors pMessage AS p3Message \n| search p3Message=\"ERROR-B993\" \n| lookup prepaid_locations orderLocation OUTPUT description \n| stats count values(customerIdNumber) AS customerIdNumber values(orderTracking) AS orderTracking values(pDetails) as Details list(description) AS Location by customerID \n| sort - count",
+        "label": "02A Compliance Reporting - Potential SIM Abuse"
+    },
 
     "02A Provisioning Errors by Customer ID": {
         "prereqs": [
@@ -258,8 +284,6 @@
         "value": "| inputlookup cdn_connections \n| sort - _time \n| fields _time http_user_agent \n| rename http_user_agent AS useragent \n| eval os = case(match(useragent,\"Windows .. 5.1\"),\"Windows XP\",match(useragent,\"droid\"),\"Android\",match(useragent,\"Windows NT 6.1\"),\"Windows 7\",match(useragent,\"Win98\"),\"Windows 98\",match(useragent,\"Windows NT 6.3\"),\"Windows Server 2012\",match(useragent,\"Windows NT 6.2\"),\"Windows 8\",match(useragent,\"Windows NT 6.0\"),\"Windows Server 2008\",match(useragent,\"Windows Phone 8.1\"),\"Windows Mobile 8\",match(useragent,\"Mac OS X 10.10\"),\"OSX 10.10\",match(useragent,\"Mac OS X 10_9\"),\"OSX 10.9\",match(useragent,\"Mac OS X 10.6\"),\"OSX 10.6\",match(useragent,\"Mac OS X 10.5\"),\"OSX 10.5\",match(useragent,\"Mac OS X 10_8\"),\"OSX 10.8\",match(useragent,\"Mac OS X 10_7\"),\"OSX 10.7\",match(useragent,\"Apple TV\"),\"IOS\",match(useragent,\"iPad\"),\"IOS\",match(useragent,\"iPhone\"),\"IOS\",match(useragent,\"linux|Linux\"),\"Linux\") \n| eval browser = case(match(useragent,\"MSIE 10.0\"),\"IE 10.0\",match(useragent,\"MSIE 7.0\"),\"IE 7.0\",match(useragent,\"Chrome\"),\"Chrome\",match(useragent,\"Safari/\"),\"Safari\",match(useragent,\"Firefox\"),\"Firefox\",match(useragent,\"MSIE 9.0\"),\"IE 9.0\",match(useragent,\"ANVSDK ios\"),\"Anvato Player\",match(useragent,\"UCBrowser\"),\"UC Browser\",match(useragent,\"Opera\"),\"Opera\",match(useragent,\"Gecko Galeon\"),\"Gecko\",match(useragent,\"Netscape6\"),\"Netscape\") \n| eval arch = case(match(useragent,\"droid\"),\"android\",match(useragent,\"iPad\"),\"ipad\",match(useragent,\"iPod\"),\"ipod\",match(useragent,\"Apple TV\"),\"Apple TV\",match(useragent,\"iPhone\"),\"iphone\",match(os,\"Windows\"),\"x86_64\",match(useragent,\"Intel|x86_64\"),\"x86_64\") \n| fillnull value=\"UNKNOWN\" os arch browser \n| stats count by browser \n| sort - count",
         "label": "CDN - User Behavior - Top Browsers"
     },
-
-
 
     "Cache Hit Ratio by Number of Requests": {
         "prereqs": [
@@ -805,6 +829,34 @@
         "label": "General Call Metrics - Shortest Call Durations by Destination"
     },
 
+    "General Call Metrics - Cumulative Minutes by Caller": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdr_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Set our timestamp field..",
+            "Enrich our data with the call disposition mapping...",
+            "Search for calls that are billable.. In our case Answered, or billable greater then 0.. ",
+            "We need to extract a country code from the dialed number We use the assumption that the country code is what preceeds a 10 digit number.",
+            "Enrich based on the country code extracted field and add new fields.",
+            "Restrict to only the fields we are interested in..",
+            "Convert our call duration to a more math friendly number",
+            "Run our values for accountcode and dstcountrycode through stats by the SRC. In the same stats pipeline, we calculate our billable minutes based on the summated call duratioms, by SRC.",
+            "Take our multivalued field and convert it to single values.",
+            "Make it more human readable.",
+            "Output a table..",
+            "Sort on our Billable Minutes."
+        ],
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=\"ANSWERED\" OR billable > 0 \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| fields _time accountcode src billable dstCountryCode \n| convert dur2sec(billable) AS calculatedBillableS \n| stats values(accountcode) AS Account values(dstCountryCode) AS CalledCountries sum(eval(round((calculatedBillableS/60),0))) AS BillableMinutes by src \n| nomv CalledCountries \n| rename src AS \"Caller\" BillableMinutes AS \"Billable Minutes\" \n| table Account Caller CalledCountries \"Billable Minutes\" \n| sort - \"Billable Minutes\"",
+        "label": "General Call Metrics - Cumulative Minutes by Caller"
+    },
     
     "General Call Metrics - Session Tracking": {
         "prereqs": [

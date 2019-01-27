@@ -1,4 +1,4 @@
-timestamp,orderLocation,orderTracking,customerID,IdType,iDCountry,customerIdNumber,customerIdNumber,orderType,category,service,productSKU,simCardSerialNM,p1Status,p1Message,p2Status,p2Message,p3Status,p3Message,p4Status,p4Message,transactionStatus
+timestamp,orderLocation,orderTracking,customerID,IdType,iDCountry,customerIdNumberOld,customerIdNumber,orderType,category,service,productSKU,simCardSerialNM,p1Status,p1Message,p2Status,p2Message,p3Status,p3Message,p4Status,p4Message,transactionStatus
 2019-01-03 0:05:44,store001,20190103-51614,SGNKDD8186849,passport,USA,919829166,6577778930,NEW,mobile,4G,4G001-7D,POAS7580913,OK,SUCCESS,OK,SUCCESS,OK,SUCCESS,OK,SUCCESS,SUCCESS
 2019-01-03 0:09:23,store001,20190103-16721,SGTZDE5300025,passport,Japan,851304839,6577773764,NEW,mobile,4G,4G003-30D+P,JVEY7004719,OK,SUCCESS,OK,SUCCESS,OK,SUCCESS,OK,SUCCESS,SUCCESS
 2019-01-03 0:15:30,affil001,20190103-45554,SGNPJF8589041,nationalid,Singapore,SGXZK7778176,6577774493,TOPUP,mobile,4G,DTU-5G300V,OTMT9964237,OK,SUCCESS,OK,SUCCESS,OK,SUCCESS,OK,SUCCESS,SUCCESS

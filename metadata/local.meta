@@ -128,10 +128,10 @@ modtime = 1548057618.413213000
 
 [transforms/prepaid_o2a_logs]
 access = read : [ * ], write : [ admin, power ]
-export = system
+export = none
 owner = w0rdp4ss!
 version = 7.2.1
-modtime = 1548057628.483418000
+modtime = 1548337820.596898000
 
 [transforms/prepaid_mobile_errors]
 access = read : [ * ], write : [ admin, power ]
@@ -139,3 +139,15 @@ export = none
 owner = w0rdp4ss!
 version = 7.2.1
 modtime = 1548177323.100541000
+
+[transforms/physical_environmental]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1548337805.473516000
+
+[views/temperature_sensor_average_over_time]
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1548415593.588430000

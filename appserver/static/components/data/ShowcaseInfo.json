@@ -3,8 +3,9 @@
 
     "showcase_prepaid_mobile_search0001": {
         "id": "02A Geomapping of Orders by Count",
+        "name": "Geomap of Order Locations",
         "description": "Order To Activation Geomapping of our completed orders for our prepaid mobile services. This includes NEW and TOPUP prepaid services.<p>",
-        "relevance": "<p>A visual representation of where our orders are being placed. Using this information the business can make more informed decisions about where to increase Retail Capacity and during what times this would have the most impact. For example, at the airport during arrival times of flights from certain countries that have a large prepaid purchase history.",
+        "relevance": "<p>A visual representation of where our orders have been being placed. Using this information the business can make more informed decisions about where to increase Retail Capacity and during what times this would have the most impact. For example, at the airport during arrival times of flights from certain countries that have a large prepaid purchase history.",
         "operationalize": "<p>This search gives us insight to where our activations / services are being purchased from.  From a business perspective, this gives us a general understanding of where our customers are purchasing services and where we could potentially increase capacity for retail space.",
         "howToImplement": "<p>For this search, our data source for the transactions need to have a location. We then enrich that location data with a lookup that contains the latitude and longitude, and then we map this out with Splunk's geostats command.",
         "domain": "Application",
@@ -20,7 +21,6 @@
         "released": "1.0.0",
         "journey": "Stage_4",
         "icon": "Core_Use_Case.png",
-        "name": "02A Geomapping of Orders by Count",
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Easy",
         "datasource": "Application Logs",
@@ -86,6 +86,7 @@
 
     "showcase_prepaid_mobile_search0002": {
         "id": "02A Top New Prepaid Purchasing Countries",
+        "name": "Top Purchasing Countries of New Prepaid Services",
         "description": "Order To Activation Chart of our top purchasing countries.<p>",
         "relevance": "<p>A visual representation of where top net-new purchases are originating from. Using this information the business can make more informed decisions about where to increase Marketing Campaignes and during what times this would have the most impact. For example, during Christmas in Western Countries, or during Chinese New Years.<p>",
         "operationalize": "<p>This search gives us insight to where our net-new customers are from based on their Order Details.  From a business perspective, this gives us an understanding of where our customers are from and how marketing or campaigns could drive business.",
@@ -103,7 +104,6 @@
         "released": "1.0.0",
         "journey": "Stage_3",
         "icon": "Core_Use_Case.png",
-        "name": "02A Top New Prepaid Purchasing Countries",
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Easy",
         "datasource": "Application Logs",
@@ -146,7 +146,8 @@
 
     "showcase_prepaid_mobile_search0003": {
         "id": "O2A Timechart of Ordertypes",
-        "description": "Order To Activation Timechart of our purchased items.<p>",
+        "name": "Volume of Types of Orders by Time",
+        "description": "Visual representation of our services that are being purchased over time.<p>",
         "relevance": "<p>A visual representation of what we sold over the specified time range. This example allows the business to make an informed decisions about what services are being sold over time. .<p>",
         "operationalize": "<p>This search gives us insight to what services our customers are purchasng based on their Order Details.  From a business perspective, this gives us an understanding of what our customers want and how marketing or campaigns could drive business.",
         "howToImplement": "<p>For this search, our data source for the transactions needs have a ordertype field which must correspond to the Service Description of what is being sold.",
@@ -163,7 +164,6 @@
         "released": "1.0.0",
         "journey": "Stage_3",
         "icon": "Core_Use_Case.png",
-        "name": "O2A Timechart of Ordertypes",
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Easy",
         "datasource": "Application Logs",
@@ -212,7 +212,8 @@
 
     "showcase_prepaid_mobile_search0004": {
         "id": "O2A Top Selling Packages",
-        "description": "Order To Activation Top Selling Packages.<p>",
+        "name": "Top Selling Services / SKUs within our Service Catalog.",
+        "description": "This shows us our top selling Services / SKUs over a specified time period.<p>",
         "relevance": "<p>A visual representation of our top selling Packages. This example allows the business to make an informed decisions about what the most popular services are that have been sold over time.<p>",
         "operationalize": "<p>This search gives us insight to what services our customers are purchasing based on their Order Details.  From a business perspective, this gives us an understanding of what our customers want and how marketing or campaigns could drive business.",
         "howToImplement": "<p>For this search, our data source for the transactions needs have a successful transaction status and product. We then enrich the data with a description of that product SKU from a lookup that has SKU's mapped to a friendly name.",
@@ -229,7 +230,6 @@
         "released": "1.0.0",
         "journey": "Stage_3",
         "icon": "Core_Use_Case.png",
-        "name": "O2A Top Selling Packages",
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Easy",
         "datasource": "Application Logs",
@@ -270,8 +270,9 @@
 
     "showcase_prepaid_mobile_search0005": {
         "id": "O2A End-To-End Transactional Status Overtime",
-        "description": "End-to-End Transaction Status of the Order to Activation Process.<p>",
-        "relevance": "<p>This example gives us the End-to-End status, over time, of our Order to Activation Process. This example shows us the successful, or failed attempts at service activation. This is gives us general insight into how our O2A process is working with a visual representation of status. We might recognize a high number of failures as some form of system outage, or problem that needs to be investigated.<p>",
+        "name": "End-To-End Transactional Status Overview",
+        "description": "End-to-End Transaction Status of the Order to Activation Process of our Services.<p>",
+        "relevance": "<p>This example gives us the End-to-End status, over time, of our Order to Activation Process. This example shows us the successful, or failed attempts for customers purchasing or renewing services. This is gives us general insight into how our O2A process is working with a visual representation of status. We might recognize a high number of failures as some form of system outage, or problem that needs to be investigated.<p>",
         "operationalize": "<p>This search gives us a timeline for our activations and a visual representation of successful vs failed activations.  With this information, we can determine if there is a service delivery issue within our O2A processes, or if there are issues with a particular network or component.",
         "howToImplement": "<p>For this search, our data source for the transactions needs have a transaction status that indicates either a success, or a failure. We then chart these over time.",
         "domain": "Application",
@@ -286,8 +287,7 @@
         "dashboard_type": "XML Panels with Screenshot",
         "released": "1.0.0",
         "journey": "Stage_3",
-        "icon": "Core_Use_Case.png",
-        "name": "O2A End-To-End Transactional Status Overtime",
+        "icon": "Core_Use_Case.png", 
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Easy",
         "datasource": "Application Logs",
@@ -330,7 +330,8 @@
 
     "showcase_prepaid_mobile_search0006": {
         "id": "02A By Process Errors over Time",
-        "description": "Order to Activation Errors by Process.<p>",
+        "name": "Business Process Errors Over Time within our O2A Workflow.",
+        "description": "Order to Activation Errors by Process within our Business Workflow.<p>",
         "relevance": "<p>This example gives us a By-Process Error Count of orders as they flow through our Order to Activation Processes over time. This is important because most Telco's and Service Providers have a large number of processes in their O2A workflows, and very few have the ability to monitor transactions as they flow through the various systems typically due to large numbers of custom and homegrown applications in use. Having this insight allows a business to very quickly trouble shoot where a problem is occuring. For example, understanding if the problem comes from a Service Activation System, or a Inventory Fullfilment System, is extremely beneficial to maintain good service and happy customers.<p>",
         "operationalize": "<p>This search gives us a trellis timeline and count for our activations by a per process chart.  With this information, we can determine if there is an issue within a specific O2A process and fix this with minimal impact.",
         "howToImplement": "<p>For this search, our data source for the transactions needs have a transaction status that indicates either a success, or a failure by process. This example has 4 business processes included as an example ( Billing Systems, Inventory and Fullfilment, Service Activation, and CRM.) In reality there will be many more then 4 processes, but this search can easily be expand by including the data sources for the extra processes into the search.",
@@ -347,7 +348,6 @@
         "released": "1.0.0",
         "journey": "Stage_2",
         "icon": "Core_Use_Case.png",
-        "name": "02A By Process Errors over Time",
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Intermediate",
         "datasource": "Application Logs",
@@ -400,7 +400,8 @@
 
     "showcase_prepaid_mobile_search0007": {
         "id": "Provisioning and Activation Errors by Type",
-        "description": "Provisioning and Activation Errors by Type within the Service Activation Process.<p>",
+        "name": "Provisioning and Activation Errors with Enriched Details.",
+        "description": "Provisioning and Activation Errors by Type within the Service Activation Process and with Enriched Error Messages.<p>",
         "relevance": "<p>This example gives us a Service Activation Process view of errors over time with a more human readable description of the error. With this information, we have the capability to understand where within the Service Activation process we are encountering problems, and what teams to work with in order to resolve these.<p>",
         "operationalize": "<p> This search gives us a easy view of what errors we are having within the Service Activation Process.  With this information, we can determine how to quickly troubleshoot and resolve technology specific problems within the Process (in this example the Service Activation Process.)",
         "howToImplement": "<p>For this search, our data source for the transactions needs have a transaction failure status within the Process (in this case Service Activation.) Additionally, there should be a error code to human friendly description mapping that is used to enrich the source data for the final view.",
@@ -417,7 +418,6 @@
         "released": "1.0.0",
         "journey": "Stage_2",
         "icon": "Core_Use_Case.png",
-        "name": "Provisioning and Activation Errors by Type",
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Intermediate",
         "datasource": "Application Logs",
@@ -453,6 +453,69 @@
                 "charting.chart" : "column",
                 "charting.drilldown" : "none",
                 "charting.chart.stackMode" : "stacked",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+     "showcase_prepaid_mobile_search0008": {
+        "id": "02A Provisioning Errors by Customer ID",
+        "name": "Order and Provisioning Errors with Customer ID",
+        "description": "Order To Activation Order and Provision Errors with Customer ID and Additional Information.<p>",
+        "relevance": "<p>This search provides a report of Order and Provisioning Errors that have occured. In this, we have additional details such as the location of the failed transaction, Customer Identifier, Error Code and Error Context, and associated Order Numbers / Transaction IDs.",
+        "operationalize": "<p>This search gives us insight to what errors our activations / services are failing with. Operationally this is important for us to understand what impact these errors have to our customers, or if these are expected errors. E.g., If TopUp/Refills are failing, then there is revenue lost or if we have a customer trying to by more SIMs then regulations allow.",
+        "howToImplement": "<p>This search will require O2A log data from billing, activations, and CMS data. In this example, we have failed transactions, locations of the failed transactions, and error code and a lookup to map this error code to a human understandable message, along with some additional information around the User and the Trasnsaction IDs / Order IDs that failed.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Prepaid Mobile",
+        "hasSearch": "Yes",
+        "category": "Prepaid Mobile",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=02A Provisioning Errors by Customer ID",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_4",
+        "icon": "Core_Use_Case.png",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | search p3Status=\"FAIL\" | fields _time p3* customer* order* | lookup prepaid_mobile_errors pMessage AS p3Message | stats count values(pDetails) AS \"Error Details\" values(customerIdNumber) AS \"Customer ID Number\" values(orderTracking) AS \"Order Tracking\" by customerID | sort - count | rename count AS Count customerID AS \"Customer ID\" | fields \"Customer ID\" \"Customer ID Number\" \"Error Details\" \"Order Tracking\" Count",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "02A Provisioning Errors by Customer ID",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "prepaid_mobile_search0008.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/prepaid_mobile_search0008.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "02A Provisioning Errors by Customer ID",
+                "search": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | search p3Status=\"FAIL\" | fields _time p3* customer* order* | lookup prepaid_mobile_errors pMessage AS p3Message | stats count values(pDetails) AS \"Error Details\" values(customerIdNumber) AS \"Customer ID Number\" values(orderTracking) AS \"Order Tracking\" by customerID | sort - count | rename count AS Count customerID AS \"Customer ID\" | fields \"Customer ID\" \"Customer ID Number\" \"Error Details\" \"Order Tracking\" Count",
+                "vizParameters": {
+                "drilldown": "none",
+                "count" : "5",
+                "dataOverlayMode" : "none",
+                "drilldown" : "none",
+                "rowNumbers" : "true",
+                "wrap" : "false",
                 "refresh.display": "progressbar"
                 }
             }
@@ -1623,6 +1686,147 @@
                 "count": "10",
                     "drilldown": "none",
                     "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_physical_search0006": {
+        "id": "Rack Sensor Max Temperature Over Time",
+        "description": "Aggregated Maximum Temperature of Rack Sensors, by Time, per Server Rack.<p>",
+        "relevance": "<p>This example uses data from temperature sensors on the outlet side of a server rack. We use this data to determine the Maximum temperature range across the sensors in one of our racks and display a single value element with thresholds and colors applied to have an understanding of what our temperatures in the rack are working at.<p>",
+        "operationalize": "<p> This example uses data from temperature sensors that are installed on the racks in our data center. In this case we have three sensors per rack, on the outflow / backside of the rack. ",
+        "howToImplement": "<p>For this search, our data source for the transactions needs have a transaction failure status within the Process (in this case Service Activation.) Additionally, there should be a error code to human friendly description mapping that is used to enrich the source data for the final view.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Physical Monitoring",
+        "hasSearch": "Yes",
+        "category": "Physical Monitoring",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Rack Sensor Max Temperature Over Time",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_1",
+        "icon": "Core_Use_Case.png",
+        "name": "Rack Sensor Max Temperature Over Time",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Device Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup physical_environmental | eval _time=strptime(dateTime, \"%Y/%m/%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | eval tempF=sensorValue  | timechart fixedrange=false max(tempF) as maxTempF",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",  
+        "examples": [
+            {
+                "name": "Rack Sensor Max Temperature Over Time",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "physical_search0006.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/physical_search0006.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "SingleElement",
+                "title": "Rack Sensor Max Temperature Over Time",
+                "search": "| inputlookup physical_environmental | eval _time=strptime(dateTime, \"%Y/%m/%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | eval tempF=sensorValue  | timechart fixedrange=false max(tempF) as maxTempF",
+                "vizParameters": {
+                "drilldown": "none",
+                "colorBy" : "value",
+                "colorMode" : "block",
+                "drilldown" : "none",
+                "numberPrecision" : "0.0",
+                "rangeColors" : "[\"0x53a051\",\"0xf8be34\",\"0xdc4e41\"]",
+                "rangeValues" : "[0,95]",
+                "refresh.display" : "progressbar",
+                "showSparkline" : "1",
+                "showTrendIndicator" : "0",
+                "trendColorInterpretation" : "inverse",
+                "trendDisplayMode" : "absolute",
+                "trendInterval" : "-45m",
+                "underLabel" : "Sensor Temperature Trend",
+                "unit" : "F",
+                "unitPosition" : "after",
+                "useColors" : "1",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_physical_search0007": {
+        "id": "Rack Sensor Temperature Trending by Rack Sensors",
+        "name": "Rack Sensors Temperature Trending by Sensor",
+        "description": "Temperature monitoring in a rack with multiple temperature sensors, tracked over time.<p>",
+        "relevance": "<p>This example uses data from temperature sensors on the outflow / backside of a server rack. We use temperature data collected from three (3) temperature sensors and determine the average temperature, by sensor, and display a single value element trellis per sensor with thresholds and colors applied to have a easy visual understanding of the what and where our temperatures in the different areas of the rack are.  This also enables us to quickly determine if they are within or outside of safe operational ranges.<p>",
+        "operationalize": "<p> This example uses data from temperature sensors that are installed on the racks in our data center. In this case we have three (3) sensors per rack, on the outflow / backside of the rack, located at the top, middle, and bottom of the rack. These will give us a general understanding of cooling capacity in our rack. When the temperature is above operational thresholds we can alert on this and proactively address the issue. This can safe time and money from outages related to thermal damage and other related issues that may can occur in hot zones. ",
+        "howToImplement": "<p> In this search, our data source comes from our temperature sensors which should contain a temperature value collected at regular enough intervals to create a timechart and average over the searched timerange. Additrionally the data should contain information for where the sensor is, both room and rack.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Physical Monitoring",
+        "hasSearch": "Yes",
+        "category": "Physical Monitoring",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Rack Sensor Temperature Trending by Rack Sensors",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_1",
+        "icon": "Core_Use_Case.png",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Device Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup physical_environmental | eval _time=strptime(dateTime, \"%Y/%m/%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | rex field=sensorLocation \"(Room(?<Room>[^\\-]+)-Row(?<Row>[^-]+)-Rack(?<Rack>[^-]+)-(?<Sensor>[^-]+))\" | eval Location=Room.\"-\".Row.\":\".Rack.\"-\".Sensor, tempF=sensorValue | fields _time Sensor tempF Row Rack | search Sensor=* OR Rack=* | eval Sensor=Row.Rack.\"-\".Sensor | timechart span=1m fixedrange=false avg(tempF) AS AverageTempF by Sensor",        
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",  
+        "examples": [
+            {
+                "name": "Rack Sensor Temperature Trending by Rack Sensors",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "physical_search0007.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/physical_search0007.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "SingleElement",
+                "title": "Rack Sensor Temperature Trending by Rack Sensors",
+                "search": "| inputlookup physical_environmental | eval _time=strptime(dateTime, \"%Y/%m/%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | rex field=sensorLocation \"(Room(?<Room>[^\\-]+)-Row(?<Row>[^-]+)-Rack(?<Rack>[^-]+)-(?<Sensor>[^-]+))\" | eval Location=Room.\"-\".Row.\":\".Rack.\"-\".Sensor, tempF=sensorValue | fields _time Sensor tempF Row Rack | search Sensor=* OR Rack=* | eval Sensor=Row.Rack.\"-\".Sensor | timechart span=1m fixedrange=false avg(tempF) AS AverageTempF by Sensor",
+                "vizParameters": {
+                "colorMode" : "block",
+                "drilldown" : "none",
+                "numberPrecision" : "0.00",
+                "rangeColors" : "[\"0x53a051\",\"0xf8be34\",\"0xdc4e41\"]",
+                "rangeValues" : "[94,102]",
+                "trellis.enabled" : "1",
+                "trellis.size" : "medium",
+                "trellis.splitBy" : "Sensor",
+                "trendInterval" : "-1h",
+                "unit" : "F",
+                "useColors" : "1"
                 }
             }
         ]
@@ -2866,244 +3070,13 @@
                 }
             }
         ]
-    },
-
-    "showcase_dlt_example_1": {
-        "id": "Splunk Internal - Top Sourcetypes",
-        "domain": "Application",
-        "help": "Lets look at top Splunk Sourcetypes",
-        "app": "Splunk_Essentials_For_Telco",
-        "usecase": "Distributed Ledger Technology",
-        "howToImplement": "<p>Subscriber services.....",
-        "hasSearch": "Yes",
-        "category": "Distributed Ledger Technology",
-        "knownFP": "unused",
-        "operationalize": "Words around how to operationalize things...",
-        "relevance": "This looks at top sourcetypes in Splunk's internal logs....",
-        "includeSSE": "Yes",
-        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Splunk Internal Top Sourcetypes - Demo",
-        "dashboard_type": "XML Panels with Screenshot",
-        "description": "You use splunk, but do you know Splunk?",
-        "released": "1.0.0",
-        "journey": "Stage_1",
-        "icon": "Core_Use_Case.png",
-        "name": "Splunk Internal Top Sourcetypes",
-        "displayapp": "Splunk_Essentials_For_Telco",
-        "SPLEase": "Easy",
-        "datasource": "Application Logs",
-        "highlight": "Yes",
-        "alertvolume": "unused",
-        "sampleSPL": "index=_internal earlist=-1week latest=now | top 5 sourcetype",
-        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
-        "examples": [
-            {
-                "name": "Splunk Internal Top Sourcetypes - Demo",
-                "label": "Demo Data"
-            }
-        ],
-        "images": [
-            {
-                "name": "Wire_Transfer_Fraud_NewAccount.png",
-                "label": "",
-                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/Wire_Transfer_Fraud_NewAccount.png"
-            }
-        ],
-        "hideSPLMode": false,
-        "autoOpen": "supportingImages_table",
-        "visualizations": [
-            {
-                "panel": "row1cell1",
-                "type": "viz",
-                "vizType": "TableElement",
-                "title": "Top Internal Sourcetypes over the last 24 hours",
-                "search": "index=_internal earliest=-1d@d | top 10 sourcetype",
-                "vizParameters": {
-                "count": "15",
-                    "drilldown": "none",
-                    "refresh.display": "progressbar"
-                }
-            }
-        ]
-    },
-
-    "showcase_subscriber_services_example_1": {
-        "id": "Splunk Internal - Top Sourcetypes",
-        "domain": "Application",
-        "help": "Lets look at top Splunk Sourcetypes",
-        "app": "Splunk_Essentials_For_Telco",
-        "usecase": "Subscriber Services",
-        "howToImplement": "<p>Subscriber services.....",
-        "hasSearch": "Yes",
-        "category": "Subscriber Services",
-        "knownFP": "unused",
-        "operationalize": "Words around how to operationalize things...",
-        "relevance": "This looks at top sourcetypes in Splunk's internal logs....",
-        "includeSSE": "Yes",
-        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Splunk Internal Top Sourcetypes - Demo",
-        "dashboard_type": "XML Panels with Screenshot",
-        "description": "You use splunk, but do you know Splunk?",
-        "released": "1.0.0",
-        "journey": "Stage_1",
-        "icon": "Core_Use_Case.png",
-        "name": "Splunk Internal Top Sourcetypes",
-        "displayapp": "Splunk_Essentials_For_Telco",
-        "SPLEase": "Easy",
-        "datasource": "Application Logs",
-        "highlight": "Yes",
-        "alertvolume": "unused",
-        "sampleSPL": "index=_internal earlist=-1week latest=now | top 5 sourcetype",
-        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
-        "examples": [
-            {
-                "name": "Splunk Internal Top Sourcetypes - Demo",
-                "label": "Demo Data"
-            }
-        ],
-        "images": [
-            {
-                "name": "Wire_Transfer_Fraud_NewAccount.png",
-                "label": "",
-                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/Wire_Transfer_Fraud_NewAccount.png"
-            }
-        ],
-        "hideSPLMode": false,
-        "autoOpen": "supportingImages_table",
-        "visualizations": [
-            {
-                "panel": "row1cell1",
-                "type": "viz",
-                "vizType": "TableElement",
-                "title": "Top Internal Sourcetypes over the last 24 hours",
-                "search": "index=_internal earliest=-1d@d | top 10 sourcetype",
-                "vizParameters": {
-                "count": "15",
-                    "drilldown": "none",
-                    "refresh.display": "progressbar"
-                }
-            }
-        ]
-    },
-
-    "showcase_Splunk_Internal_Top_Sourcetypes": {
-        "id": "Splunk Internal - Top Sourcetypes",
-        "domain": "Application",
-        "help": "Lets look at top Splunk Sourcetypes",
-        "app": "Splunk_Essentials_For_Telco",
-        "usecase": "Subscriber Services",
-        "howToImplement": "<p>Subscriber services.....",
-        "hasSearch": "Yes",
-        "category": "Subscriber Services",
-        "knownFP": "unused",
-        "operationalize": "Words around how to operationalize things...",
-        "relevance": "This looks at top sourcetypes in Splunk's internal logs....",
-        "includeSSE": "Yes",
-        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Splunk Internal Top Sourcetypes - Demo",
-        "dashboard_type": "XML Panels with Screenshot",
-        "description": "You use splunk, but do you know Splunk?",
-        "released": "1.0.0",
-        "journey": "Stage_1",
-        "icon": "Core_Use_Case.png",
-        "name": "Splunk Internal Top Sourcetypes",
-        "displayapp": "Splunk_Essentials_For_Telco",
-        "SPLEase": "Easy",
-        "datasource": "Application Logs",
-        "highlight": "Yes",
-        "alertvolume": "unused",
-        "sampleSPL": "index=_internal earlist=-1week latest=now | top 5 sourcetype",
-        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
-        "examples": [
-            {
-                "name": "Splunk Internal Top Sourcetypes - Demo",
-                "label": "Demo Data"
-            }
-        ],
-        "images": [
-            {
-                "name": "Wire_Transfer_Fraud_NewAccount.png",
-                "label": "",
-                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/Wire_Transfer_Fraud_NewAccount.png"
-            }
-        ],
-        "hideSPLMode": false,
-        "autoOpen": "supportingImages_table",
-        "visualizations": [
-            {
-                "panel": "row1cell1",
-                "type": "viz",
-                "vizType": "TableElement",
-                "title": "Top Internal Sourcetypes over the last 24 hours",
-                "search": "index=_internal earliest=-1d@d | top 10 sourcetype",
-                "vizParameters": {
-                "count": "15",
-                    "drilldown": "none",
-                    "refresh.display": "progressbar"
-                }
-            }
-        ]
-    },
-
-    "showcase_Splunk_Search_Scheduler_Usage": {
-        "id": "Splunk Internal - Search Scheduler Activity",
-        "domain": "Application",
-        "help": "Lets look at Splunk Job Scheduler",
-        "app": "Splunk_Essentials_For_Telco",
-        "usecase": "Distributed Ledger Technology",
-        "howToImplement": "<p>Check internal logs..",
-        "hasSearch": "Yes",
-        "category": "Distributed Ledger Technology",
-        "knownFP": "unused",
-        "operationalize": "Words around how to operationalize things...",
-        "relevance": "This looks at job scheduling in Splunk's internal logs....",
-        "includeSSE": "Yes",
-        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Splunk Internal Search Scheduler - Demo",
-        "dashboard_type": "XML Panels with Screenshot",
-        "description": "You use splunk, but do you know Splunk?",
-        "released": "1.0.0",
-        "journey": "Stage_3",
-        "icon": "Core_Use_Case.png",
-        "name": "Splunk Job Scheduler Status",
-        "displayapp": "Splunk_Essentials_For_Telco",
-        "SPLEase": "Medium",
-        "datasource": "Application Logs",
-        "highlight": "Yes",
-        "alertvolume": "unused",
-        "sampleSPL": "index=_internal earliest=-1y@y host=* sourcetype=scheduler (status=\"completed\" OR status=\"skipped\" OR status=\"deferred\") | eval alert_actions = if(isnull(alert_actions) OR alert_actions == \"\", \"none\", alert_actions) | stats count by status | sort - count | eventstats sum(count) AS total | eval percent = round(count / total * 100, 2).\" %\" | fields - total | rename status as Status, app as App, user as User, savedsearch_name as \"Report Name\", alert_actions as \"Alert Actions\", count as Count, percent as \"Percent of Total\"",
-        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
-        "examples": [
-            {
-                "name": "Splunk Internal Search Scheduler - Demo",
-                "label": "Demo Data"
-            }
-        ],
-        "images": [
-            {
-                "name": "Wire_Transfer_Fraud_NewAccount.png",
-                "label": "",
-                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/Wire_Transfer_Fraud_NewAccount.png"
-            }
-        ],
-        "hideSPLMode": false,
-        "autoOpen": "supportingImages_table",
-        "visualizations": [
-            {
-                "panel": "row1cell1",
-                "type": "viz",
-                "vizType": "TableElement",
-                "title": "Scheduler Status over all Time",
-                "search": "index=_internal earliest=-1y@y host=* sourcetype=scheduler (status=\"completed\" OR status=\"skipped\" OR status=\"deferred\") | eval alert_actions = if(isnull(alert_actions) OR alert_actions == \"\", \"none\", alert_actions) | stats count by status | sort - count | eventstats sum(count) AS total | eval percent = round(count / total * 100, 2).\" %\" | fields - total | rename status as Status, app as App, user as User, savedsearch_name as \"Report Name\", alert_actions as \"Alert Actions\", count as Count, percent as \"Percent of Total\"",
-                "vizParameters": {
-                "count": "15",
-                    "drilldown": "none",
-                    "refresh.display": "progressbar"
-                }
-            }
-        ]
     }
+
 }, 
  "roles":
  { 
    "default": { 
-      "summaries":[
+    "summaries":[
     "showcase_prepaid_mobile_search0001",
     "showcase_prepaid_mobile_search0002",
     "showcase_prepaid_mobile_search0003",
@@ -3111,6 +3084,7 @@
     "showcase_prepaid_mobile_search0005",
     "showcase_prepaid_mobile_search0006",
     "showcase_prepaid_mobile_search0007",
+    "showcase_prepaid_mobile_search0008",
     "showcase_sa_search0001",
     "showcase_sa_search0002",
     "showcase_sa_search0003",
@@ -3133,8 +3107,8 @@
     "showcase_physical_search0003",
     "showcase_physical_search0004",
     "showcase_physical_search0005",
-    "showcase_subscriber_services_example_1",
-    "showcase_dlt_example_1",
+    "showcase_physical_search0006",
+    "showcase_physical_search0007",
     "showcase_cdn_search0001",
     "showcase_cdn_search0002",
     "showcase_cdn_search0003",

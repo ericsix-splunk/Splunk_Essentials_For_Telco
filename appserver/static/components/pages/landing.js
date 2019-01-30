@@ -28,13 +28,13 @@ var Icons = new Object;
 //Icons["Cloud Monitoring"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FSIAppModerization.png"
 
 //Telco App Core use Cases
-Icons["Subscriber Services"] =  "/static/app/Splunk_Essentials_For_Telco/images/general_images/FixOrder.png"
-Icons["Service Availability"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FixOrder.png"
-Icons["Content Delivery"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FixOrder.png"
+Icons["Subscriber Services"] =  "/static/app/Splunk_Essentials_For_Telco/images/general_images/subscriber_services.png"
+Icons["Service Availability"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/service_availability.png"
+Icons["Content Delivery"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/cdn.png"
 Icons["Distributed Ledger Technology"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/PaymentResponse.png"
 Icons["CDR"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FixOrder.png"
-Icons["Prepaid Mobile"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FixOrder.png"
-Icons["Physical Monitoring"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FSIAppModerization.png"
+Icons["Prepaid Mobile"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/prepaid_mobile.png"
+Icons["Physical Monitoring"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/physical_monitoring.png"
 
 
 

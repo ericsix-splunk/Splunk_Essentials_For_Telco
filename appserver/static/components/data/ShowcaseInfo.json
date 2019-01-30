@@ -1895,24 +1895,24 @@
 
     "showcase_subscriber_search0001": {
         "id": "General Call Disposition Metrics",
+        "name": "General Call Disposition Metrics",
+        "description": "This example gives us a view of our Call Flow, or Call Metrics, over a designated time period.<p>",
+        "howToImplement": "<p>This search will go through the CDR logs and use a lookup to enrich a disposition / error code to a human readable message. We then run the results through stats and humanize the results for easily readable report.",
+        "relevance": "This example show ours a high-level Operational Overview of our Call Metrics, or Call Flow. With this we have the capability to understand how our VOIP system is functioning in regards to call routing.",
+        "operationalize": "This example gives us a snapshot view of our current VOIP system and gives us insight to where we may be have potential technical concerns. This search utilizes CDR logs and a lookup that maps error codes to a human readable message for easier understanding.<p>",
         "domain": "Application",
         "help": "Lets look at top Splunk Sourcetypes",
         "app": "Splunk_Essentials_For_Telco",
         "usecase": "Subscriber Services",
-        "howToImplement": "<p>Subscriber services.....",
         "hasSearch": "Yes",
-        "category": "Subscriber Services",
+        "category": "Alerting, Capacity Planning",
         "knownFP": "unused",
-        "operationalize": "Words around how to operationalize things...",
-        "relevance": "This looks at top sourcetypes in Splunk's internal logs....",
         "includeSSE": "Yes",
         "dashboard": "showcase_simple_search?ml_toolkit.dataset=General Call Disposition Metrics",
         "dashboard_type": "XML Panels with Screenshot",
-        "description": "You use splunk, but do you know Splunk?",
         "released": "1.0.0",
         "journey": "Stage_1",
         "icon": "Core_Use_Case.png",
-        "name": "General Call Disposition Metrics",
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Easy",
         "datasource": "Application Logs",
@@ -1928,7 +1928,7 @@
         ],
         "images": [
             {
-                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "name": "subscriber_search0001.png",
                 "label": "",
                 "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0001.png"
             }
@@ -1954,31 +1954,31 @@
 
     "showcase_subscriber_search0002": {
         "id": "Failed Call Metrics - Simple",
+        "name": "General Call Failure Metrics for CDR Analysis",
+        "description": "This search shows us all the general failures for our Customers Calls on our network.<p>",
+        "relevance": "This search gives us a count, by type of our failed calls.<p>",
+        "howToImplement": "<p>This search requires CDR logs with a disposition / error field, and then a lookup with a mapping of the disposition codes to a human friendly message. From there, we calculate the number of occurences of these by the disposition and display this. This can then easily be operationalized as an alert or action.",
+        "operationalize": "This search is important because it provides us with insight to the failures our network is experiencing. We can operationalize in the form of alerts or actions.", 
         "domain": "Application",
         "help": "Lets look at top Splunk Sourcetypes",
         "app": "Splunk_Essentials_For_Telco",
         "usecase": "Subscriber Services",
-        "howToImplement": "<p>Subscriber services.....",
         "hasSearch": "Yes",
-        "category": "Subscriber Services",
+        "category": "Alerting, Monitoring",
         "knownFP": "unused",
-        "operationalize": "Words around how to operationalize things...",
-        "relevance": "This looks at top sourcetypes in Splunk's internal logs....",
         "includeSSE": "Yes",
         "dashboard": "showcase_simple_search?ml_toolkit.dataset=Failed Call Metrics - Simple",
         "dashboard_type": "XML Panels with Screenshot",
-        "description": "You use splunk, but do you know Splunk?",
         "released": "1.0.0",
         "journey": "Stage_1",
         "icon": "Core_Use_Case.png",
-        "name": "Failed Call Metrics - Simple",
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Easy",
         "datasource": "Application Logs",
         "highlight": "Yes",
         "alertvolume": "unused",
         "sampleSPL": "| inputlookup cdr_logs | lookup cdr_disposition_mapping disposition | search disposition=\"FAILED\" OR disposition=\"CONGESTED\" | stats count values(description) AS Description by disposition | rename disposition AS Disposition count AS Count | table Description Disposition Count | eval Description=if(match(Disposition,\"CONGESTED\"),\"Route Error\",Description) | sort - Count",
-            "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
         "examples": [
             {
                 "name": "Failed Call Metrics - Simple",
@@ -1987,7 +1987,7 @@
         ],
         "images": [
             {
-                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "name": "subscriber_search0002.png",
                 "label": "",
                 "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0002.png"
             }
@@ -2013,24 +2013,24 @@
 
     "showcase_subscriber_search0003": {
         "id": "Failed Call Metrics - Advanced",
+        "name": "Failed Call Metrics with Enriched Details.",
+        "description": "This search look at Failed Call Metrics and provides more insight into why these calls failed.<p>",
+        "operationalize": "<p>This search analyzes Call Detail Records for Failed Calls, and then enriches the logs with more contextual error information for more simplistic understanding of what the errors mean and how they effect both the Voice System and potential revenue. This enables us to more effectively troubleshoot and resolve issues that are occuring, in near real-time.",
+        "relevance": "This search looks at Failed Call Metrics and provides more insight into why these calls failed based on enriched error information.",
+        "howToImplement": "<p>This search utilizes CDR logs to look for failed calls. The failed call data is then enriched for the disposition / error messages, and a lookup for the country is performed. After this, we put the data in a report form and use this.",
         "domain": "Application",
         "help": "Lets look at top Splunk Sourcetypes",
         "app": "Splunk_Essentials_For_Telco",
         "usecase": "Subscriber Services",
-        "howToImplement": "<p>Subscriber services.....",
         "hasSearch": "Yes",
         "category": "Subscriber Services",
         "knownFP": "unused",
-        "operationalize": "Words around how to operationalize things...",
-        "relevance": "This looks at top sourcetypes in Splunk's internal logs....",
         "includeSSE": "Yes",
         "dashboard": "showcase_simple_search?ml_toolkit.dataset=Failed Call Metrics - Advanced",
         "dashboard_type": "XML Panels with Screenshot",
-        "description": "You use splunk, but do you know Splunk?",
         "released": "1.0.0",
         "journey": "Stage_1",
         "icon": "Core_Use_Case.png",
-        "name": "Failed Call Metrics - Advanced",
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Easy",
         "datasource": "Application Logs",
@@ -2046,7 +2046,7 @@
         ],
         "images": [
             {
-                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "name": "subscriber_search0003.png",
                 "label": "",
                 "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0003.png"
             }
@@ -2072,30 +2072,30 @@
 
     "showcase_subscriber_search0004": {
         "id": "Failed Call Metrics - Geo Stats",
+        "name": "Failed Call Metrics by Geographic Location",
+        "description": "This search looks at Failed Call Metrics and provides a geographic mapping of errors during the designated time period.<p>",
+        "relevance": "This searches provides the failed calls that are then visualized on a Splunk Geomap.",
+        "operationalize": "This search and visualization gives us and easy to understand visualization of our where the failed calls are occuring.",
         "domain": "Application",
         "help": "Lets look at top Splunk Sourcetypes",
         "app": "Splunk_Essentials_For_Telco",
         "usecase": "Subscriber Services",
         "howToImplement": "<p>Subscriber services.....",
         "hasSearch": "Yes",
-        "category": "Subscriber Services",
+        "category": "Alerting",
         "knownFP": "unused",
-        "operationalize": "Words around how to operationalize things...",
-        "relevance": "This looks at top sourcetypes in Splunk's internal logs....",
         "includeSSE": "Yes",
         "dashboard": "showcase_simple_search?ml_toolkit.dataset=Failed Call Metrics - Geo Stats",
         "dashboard_type": "XML Panels with Screenshot",
-        "description": "You use splunk, but do you know Splunk?",
         "released": "1.0.0",
         "journey": "Stage_1",
         "icon": "Core_Use_Case.png",
-        "name": "Failed Call Metrics - Geo Stats",
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Intermediate",
         "datasource": "Application Logs",
         "highlight": "Yes",
         "alertvolume": "unused",
-        "sampleSPL": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=FAILED OR disposition=CONGESTED | eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | stats count by dstCountryName  | geom geo_countries allFeatures=true featureIdfield=dstCountryName",
+        "sampleSPL": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=FAILED OR disposition=CONGESTED | eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName | stats count by dstCountryName  | geom geo_countries allFeatures=true featureIdfield=dstCountryName",
         "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
         "examples": [
             {
@@ -2105,7 +2105,7 @@
         ],
         "images": [
             {
-                "name": "Wire_Transfer_Fraud_NewAccount.png",
+                "name": "subscriber_search0004.png",
                 "label": "",
                 "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0004.png"
             }
@@ -2119,7 +2119,7 @@
                 "type": "viz",
                 "vizType": "MapElement",
                 "title": "Failed Call Metrics - Geo Stats",
-                "search": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=FAILED OR disposition=CONGESTED | eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode | stats count by dstCountryName  | geom geo_countries allFeatures=true featureIdfield=dstCountryName", 
+                "search": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=FAILED OR disposition=CONGESTED | eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName  | stats count by dstCountryName  | geom geo_countries allFeatures=true featureIdfield=dstCountryName", 
                 "vizParameters": {
                 "count": "15",
                     "drilldown": "none",

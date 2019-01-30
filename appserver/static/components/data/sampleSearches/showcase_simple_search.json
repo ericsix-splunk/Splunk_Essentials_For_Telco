@@ -566,14 +566,12 @@
         ],
         "description": [
             "First we pull in our demo dataset.",
-            "",
-            "Enrich our data...",
-            "Enrich our data... ",
-            "Here we will search for a specific Employee Identifier.",
-            "Narrow our interesting fields down a bit..",
-            "",
-            "",
-            "Make this more Human Readable.."
+            "Enrich our disposition to get a human readable message.",
+            "Use stats to create a count of Descriptions by the Disposition.",
+            "Humanize our fields.. ",
+            "Format our table",
+            "Give a more contextual Description for the Congested value.",
+            "Sort the results by highest count."
         ],
         "value": "| inputlookup cdr_logs \n| lookup cdr_disposition_mapping disposition \n| stats count values(description) AS Description by disposition \n| rename disposition AS Disposition count AS Count \n| table Description Disposition Count \n| eval Description=if(match(Disposition,\"CONGESTED\"),\"Route Error\",Description) \n| sort - Count",
             "label": "General Call Disposition Metrics"
@@ -591,17 +589,16 @@
         ],
         "description": [
             "First we pull in our demo dataset.",
-            "",
-            "Enrich our data...",
-            "Enrich our data... ",
-            "Here we will search for a specific Employee Identifier.",
-            "Narrow our interesting fields down a bit..",
-            "",
-            "",
-            "Make this more Human Readable.."
+            "Enrich our disposition to get a human readable message.",
+            "Search for failed call logs.",
+            "Use stats to create a count of Descriptions by the Disposition.",
+            "Humanize our fields.. ",
+            "Format our table",
+            "Give a more contextual Description for the Congested value.",
+            "Sort the results by highest count."
         ],
-        "value": "| inputlookup physical_card_logs \n| lookup physical_card_error_codes errorCode OUTPUTNEW status \n| lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description \n| lookup physical_card_user_mapping cardId AS badgeId OUTPUTNEW firstName lastName emailAddress employeeId note officeId \n| search employeeId=\"25020002\" \n| fields - badgereaderId,envAlarm,errorCode,powerStatus \n| eval fullName = firstName+\" \"+lastName \n| fields _time badgeId employeeId fullName officeId description status note \n| rename badgeId AS \"Badge ID #\" employeeId AS \"Employee Number\" fullName AS \"Employee Name\" officeId AS \"Home Office\" description AS \"Card Reader Location\" status AS \"Read Status\" note AS \"Additional Notes..\"",
-                "label": "Failed Call Metrics - Simple"
+        "value": "| inputlookup cdr_logs \n| lookup cdr_disposition_mapping disposition \n| search disposition=\"FAILED\" OR disposition=\"CONGESTED\" \n| stats count values(description) AS Description by disposition \n| rename disposition AS Disposition count AS Count \n| table Description Disposition Count \n| eval Description=if(match(Disposition,\"CONGESTED\"),\"Route Error\",Description) \n| sort - Count",
+        "label": "Failed Call Metrics - Simple"
     },
 
     "Failed Call Metrics - Advanced": {
@@ -616,14 +613,15 @@
         ],
         "description": [
             "First we pull in our demo dataset.",
+            "Set our timestamp field from our lookup.",
+            "Enrich our data with a mapping of error codes to a message.",
+            "Search for our definition of failed calls..",
+            "Add a more descriptive Description for our Congested Disposition message.",
+            "Extract a field for our source country from the caller / source.",
+            "Extract a field for our destintation country from the callee / destination.",
+            "Add country code and country code and country name to our search results.",
             "",
-            "Enrich our data...",
-            "Enrich our data... ",
-            "Here we will search for a specific Employee Identifier.",
-            "Narrow our interesting fields down a bit..",
-            "",
-            "",
-            "Make this more Human Readable.."
+            "Make the fields a bit more human friendly for a report."
         ],
         "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=FAILED OR disposition=CONGESTED \n| eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| table _time src dst dstCountryCode Description disposition \n| rename _time AS Time src AS \"Source #\" dst AS \"Destination #\" disposition AS Disposition dstCountryCode AS \"Destination Country\"",
         "label": "Failed Call Metrics - Advanced"
@@ -641,16 +639,16 @@
         ],
         "description": [
             "First we pull in our demo dataset.",
-            "",
-            "Enrich our data...",
-            "Enrich our data... ",
-            "Here we will search for a specific Employee Identifier.",
-            "Narrow our interesting fields down a bit..",
-            "",
-            "",
-            "Make this more Human Readable.."
+            "Set our timestamp field..",
+            "Enrich our call disposition status codes with more understandable reason..",
+            "Search for failed calls ",
+            "Update the description field for a specific error, in this case Routing Error.",
+            "Extract a country code from the dialed number. We assume the country code preceeds a 10 digit local number.",
+            "Enrich the logs by adding a Country Name based on the dstCountry field we extracted.",
+            "Calculate the count by the dstCountryName",
+            "Use the geomap feature to map the count."
         ],
-        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=FAILED OR disposition=CONGESTED \n| eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| stats count by dstCountryName  \n| geom geo_countries allFeatures=true featureIdfield=dstCountryName",
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=FAILED OR disposition=CONGESTED \n| eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName \n| stats count by dstCountryName  \n| geom geo_countries allFeatures=true featureIdfield=dstCountryName",
         "label": "Failed Call Metrics - Geo Stats"
     },
 

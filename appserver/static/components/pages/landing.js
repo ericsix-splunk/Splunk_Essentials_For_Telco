@@ -14,10 +14,9 @@ var Descriptions = new Object;
 
 //Telco App Core Use Cases
 Descriptions["Subscriber Services"] = "Expedient and trouble free activation of High Speed Internet, Mobile Data, and Prepaid Mobile all require insight across many systems. These examples demonstrate how to track Activation across BSS/OSS, or similar stacks, along with CDR records and analytics examples."
-Descriptions["Service Availability"] = "Telco's have a various networks : customer private networks, out of band, voice, core. This use case explores monitoring various components of these and how to understand business impact to outages."
-Descriptions["Content Delivery"] = "Content Deliver Networks are now quite commong in the Telco Market. This use case explores various components within CDN."
-Descriptions["Distributed Ledger Technology"] = "DLT is gaining moomentum in many markets. These examples show how to monitor transactions and the underlying systems in a Distributed Ledger Network."
-//Descriptions["CDR"] = "Call Detail Records can provide insight into not only user activity, but also business analytics. These examples show how to derive insight from standard CDR logs."
+Descriptions["Service Availability"] = "CSPs have various networks : customer private networks, out of band, voice, core. This use case shows how to monitor various components of these networks and how to understand the business impact from outages."
+Descriptions["Content Delivery"] = "Content Delivery Networks (CDN) are now quite common in the Telco Marketplace. This use case explores various components within CDN."
+Descriptions["Distributed Ledger Technology"] = "DLT is gaining momentum in many markets. These examples show how to monitor transactions and the underlying systems in a Distributed Ledger Network."
 Descriptions["Prepaid Mobile"] = "Prepaid / Top-up services are quite common throughout the world. This usecase explores examples around service activations, compliance, and fraud."
 Descriptions["Physical Monitoring"] = "Examples around collecting Sensor/IOT data in Data Centers."
 
@@ -32,7 +31,6 @@ Icons["Subscriber Services"] =  "/static/app/Splunk_Essentials_For_Telco/images/
 Icons["Service Availability"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/service_availability.png"
 Icons["Content Delivery"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/cdn.png"
 Icons["Distributed Ledger Technology"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/dlt_blockchain.png"
-Icons["CDR"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FixOrder.png"
 Icons["Prepaid Mobile"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/prepaid_mobile.png"
 Icons["Physical Monitoring"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/physical_monitoring.png"
 

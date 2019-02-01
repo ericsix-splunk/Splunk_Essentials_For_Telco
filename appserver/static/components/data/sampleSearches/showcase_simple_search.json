@@ -1097,6 +1097,35 @@
         "label": "WIFI AP Networks Users Connect To"
     },
 
+    "WAP Potential Abnormal Connectivity": {
+        "prereqs": [
+            {
+                "test": "| inputlookup telco_wifi_mapping | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamp...",
+            "Convert time fields to epoch so we can do some math...",
+            "Convert time fields to epoch so we can do some math...",
+            "Calculate a duration.. ",
+            "Use only relevant fields..",
+            "Convert all our epoch times back to a human readable view",
+            "Calulate the values of our accessTime, disconnectTime and durations by userHash and time.",
+            "Look for count > 1, which indicates multiple WAP associations.",
+            "Make our fields more human readable.",
+            "Arrange our fields in a more friendly format.",
+            "Sort our results based on earliest time.",
+            "Remove ugly field(s)."
+                    ],
+        "value": "| inputlookup telco_wifi_mapping \n| eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(accessDisconnectTime) AS disconnectTime \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(accessTime) AS accessTime \n| eval duration = disconnectTime - accessTime \n| fields _time userHash apID accessTime disconnectTime duration \n| convert ctime(*Time) \n| stats count values(accessTime) as accessTime list(disconnectTime) AS disconnectTime list(duration) AS duration list(apID) as apID by userHash _time \n| search count > 1 \n| rename userHash AS User accessTime AS \"WAP Access Time\" disconnectTime AS \"Disconnect Time\" duration AS Duration apID AS \"WAP Name\" \n| fields User \"WAP Name\" \"WAP Access Time\" \"Disconnect Time\" Duration \n| sort _time \n| fields - _time",
+        "label": "WAP Potential Abnormal Connectivity"
+    },
+
     "WIFI AP Access Users Top Cities": {
         "prereqs": [
             {
@@ -1112,9 +1141,11 @@
             "Format our timestamp...",
             "Sort our time..",
             "We just want our known cities in this search. ",
-            "Find our top cities."
+            "Find our 10 top cities.",
+            "Sort by count to get our top cities",
+            "Return the top 10 results."
                     ],
-        "value": "| inputlookup telco_wifi_mapping \n| eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") \n| sort - _time \n| where userCity != \"UNKNOWN\" \n| top userCity",
+        "value": "| inputlookup telco_wifi_mapping \n| eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") \n| sort - _time \n| where userCity != \"UNKNOWN\" \n| stats count BY userCity \n| sort - count \n| head 10",
         "label": "WIFI AP Access Users Top Cities"
     }
 }

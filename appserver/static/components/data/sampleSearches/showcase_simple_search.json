@@ -50,6 +50,75 @@
         "label": "Rack Sensor Temperature Trending by Rack Sensors"
     },
     
+    "O2A - Estimated Daily Revenue": {
+        "prereqs": [
+            {
+                "test": "| inputlookup prepaid_o2a_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Append our historic revenue.",
+            "Rename fields we are going to return to the base search.",
+            "Fields we're going to return to the base search.",
+            "Fix our timestamp field.",
+            "Enrich our results by adding a price field based on the Product / SKU.",
+            "Use timechart to sum our total sold and trend it."
+                    ],
+        "value": "| inputlookup prepaid_o2a_logs \n| append [ inputlookup prepaid_previous_revenue \n| rename date AS timestamp totalRevenue AS price \n| fields timestamp price ] \n| eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") \n| lookup prepaid_o2a_products productSKU OUTPUT price \n| timechart fixedrange=false sum(price) AS totalSold",
+        "label": "O2A - Estimated Daily Revenue"
+    },
+
+    "O2A - Estimated Revenue by Location": {
+        "prereqs": [
+            {
+                "test": "| inputlookup prepaid_o2a_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",   
+            "Fix our timestamp field.",
+            "Enrich our results by adding a price field based on the Product / SKU.",
+            "Choose only our interesting fields.",
+            "Search for only successful transactions.",
+            "Enrich our results by adding location information.",
+            "Use timechart to sum our total sold by location."
+                    ],
+        "value": "| inputlookup prepaid_o2a_logs \n| eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") \n| lookup prepaid_o2a_products productSKU OUTPUT price \n| fields _time orderLocation transactionStatus price transactionStatus \n| search transactionStatus=\"SUCCESS\" \n| lookup prepaid_locations orderLocation \n| timechart fixedrange=false span=1h sum(price) by description",
+        "label": "O2A - Estimated Revenue by Location"
+    },
+
+    "O2A - Estimated Revenue Lost due to Sytem Problems": {
+        "prereqs": [
+            {
+                "test": "| inputlookup prepaid_o2a_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",   
+            "Fix our timestamp field.",
+            "Enrich our results by adding a price field based on the Product / SKU.",
+            "Choose only our interesting fields.",
+            "Search for only successful transactions.",
+            "Enrich our results by adding location information.",
+            "Use timechart to sum our total sold by location."
+                    ],
+        "value": "| inputlookup prepaid_o2a_logs \n| eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") \n| lookup prepaid_o2a_products productSKU OUTPUT price \n| fields _time orderLocation transactionStatus price transactionStatus \n| search transactionStatus=\"FAIL\" \n| lookup prepaid_locations orderLocation \n| timechart fixedrange=false span=1d sum(price)",
+        "label": "O2A - Estimated Revenue Lost due to Sytem Problems"
+    },
+
     "02A Compliance Reporting - Potential SIM Abuse": {
         "prereqs": [
             {
@@ -142,7 +211,6 @@
         "value": "| inputlookup prepaid_o2a_logs \n| fields iDCountry orderType \n| search orderType=\"NEW\" \n| eval iDCountry=upper(iDCountry) \n| top iDCountry",
         "label": "02A Top New Prepaid Purchasing Countries"
     },
-
     
     "O2A Timechart of Ordertypes": {
         "prereqs": [
@@ -165,7 +233,6 @@
         "value": "| inputlookup prepaid_o2a_logs \n| eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| fields _time orderType orderLocation IdType customerIdNumber \n| search orderType=\"*\" \n| timechart fixedrange=false span=30m count by orderType ",
         "label": "O2A Timechart of Ordertypes"
     },
-
 
     "O2A Top Selling Packages": {
         "prereqs": [
@@ -259,6 +326,40 @@
         "value": "| inputlookup prepaid_o2a_logs \n| eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| search p3Status=\"FAIL\" \n| fields _time p3* customer* \n| lookup prepaid_mobile_errors pMessage AS p3Message \n| stats count values(pDetails) AS \"FailureReason\" values(p3Message) AS \"ErrorMessage\" by _time \n| search count > 0 \n| stats sum(count) AS count by FailureReason ErrorMessage \n| xyseries   ErrorMessage FailureReason count",
         "label": "Provisioning and Activation Errors by Type"
     },
+    
+    "O2A - Retail Staffing Issues": {
+        "prereqs": [
+            {
+                "test": "| inputlookup prepaid_o2a_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamp properly.",
+            "Narrow our fields down to those of interest.",
+            "Enrich our event messages with location data.",
+            "Search for a specific retail locaton.",
+            "Sort our date by time.",
+            "Use streamstats with window=1 to add the previous time stamp to the current event.",
+            "Calculate the duration of the event.",
+            "Reformat the field.",
+            "Look for our transactions under 25 minutes.",
+            "Use stats to get values for our events based on description and _time",
+            "Search for durations over 5 minutes.",
+            "Humanize the fields.",
+            "Narrow our fields down.",
+            "Use timechart to create a table with a 1 hour span.",
+            "Humanize our time field.",
+            "Create a tabled format for a report view."
+                    ],
+        "value": "| inputlookup prepaid_o2a_logs \n| eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") \n| fields _time orderLocation orderType productSKU transactionStatus \n| lookup prepaid_locations orderLocation OUTPUT description \n| search description=\"Store1*\" \n| sort 0 _time \n| streamstats window=1 current=false last(_time) AS previousTime \n| eval transactionDuration = ( _time - previousTime ) / 60 \n| eval transactionDuration = round(transactionDuration,2) \n| where transactionDuration < 25 \n| stats values(transactionDuration) as transactionDur values(_time) AS startTime values(orderLocation) AS orderLocation values(orderType) AS orderType values(transactionStatus) AS transactionStatus by description _time \n| where transactionDur > 5 \n| rename description AS \"Location\" transactionDur AS \"Duration\" \n| fields Location Duration _time startTime \n| timechart fixedrange=false span=1h count list(Duration) AS Duration list(startTime) as Times list(Location) AS Location \n| convert ctime(Times) timeformat=\"%Y/%m/%d %H:%M:%S\" \n| table _time Location  Times Duration count",
+        "label": "O2A - Retail Staffing Issues"
+    },
+
 
     "CDN - User Behavior - Top Browsers": {
         "prereqs": [

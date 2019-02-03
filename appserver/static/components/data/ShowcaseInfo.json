@@ -583,6 +583,266 @@
         ]
     },
 
+    "showcase_prepaid_mobile_search0010": {
+        "id": "O2A - Estimated Daily Revenue",
+        "name": "Daily Revenue for Mobile Services.",
+        "description": "This example shows how to associate a monetary value to each transaction and gives us an estimated total daily revenue stream.<p>",
+        "relevance": "<p>This example shows how to associate a monetary value to each transaction and gives us an estimated total daily revenue stream.",
+        "operationalize": "<p>Understanding the costs associated with each transaction and the revenue generated daily provides us real-time insight into our business. Here we take this further by showing the revenue as a trend compared to the previous day.",
+        "howToImplement": "<p>This search will require O2A log data from billing, activations, and CMS data, in addition to this we also have a historic revenue record for the previous week and a per product price. In this example, we take the successful transactions, append the historic daily revenue for comparison, and add a unit price for the product/SKUs sold. We then summate this for the time range and use a trending single value display to visualise the results. ",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Prepaid Mobile",
+        "hasSearch": "Yes",
+        "category": "Prepaid Mobile, Marketing, BI",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=O2A - Estimated Daily Revenue",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_4",
+        "icon": "Core_Use_Case.png",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup prepaid_o2a_logs | append [ inputlookup prepaid_previous_revenue | rename date AS timestamp totalRevenue AS price | fields timestamp price ] | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | lookup prepaid_o2a_products productSKU OUTPUT price | timechart fixedrange=false sum(price) AS totalSold",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "O2A - Estimated Daily Revenue",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "prepaid_mobile_search0010.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/prepaid_mobile_search0010.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "SingleElement",
+                "title": "O2A - Estimated Daily Revenue",
+                "search": "| inputlookup prepaid_o2a_logs | append [ inputlookup prepaid_previous_revenue | rename date AS timestamp totalRevenue AS price | fields timestamp price ] | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | lookup prepaid_o2a_products productSKU OUTPUT price | timechart fixedrange=false sum(price) AS totalSold",
+               "vizParameters": {
+                "drilldown": "none",
+                "count" : "10",
+                "colorMode" : "block",
+                "drilldown" : "none",
+                "numberPrecision" : "0.00",
+                "rangeColors" : "[\"0x53a051\",\"0x53a051\"]",
+                "rangeValues" : "[0]",
+                "refresh.display" : "progressbar",
+                "trendDisplayMode" : "percent",
+                "trendInterval" : "-24h",
+                "underLabel" : "Revenue Generated compared to Previous Day",
+                "unit" : "$",
+                "unitPosition" : "before",
+                "useColors" : "1",
+                "dataOverlayMode" : "none",
+                "drilldown" : "none",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_prepaid_mobile_search0011": {
+        "id": "O2A - Estimated Revenue by Location",
+        "name": "Revenue for Mobile Services Sold by Location.",
+        "description": "This example gives us an hourly view into our sales at various locations, including storefronts and affiliate sales partners.<p>",
+        "relevance": "<p>This example gives us an hourly view into our sales at various locations, including storefronts and affiliate sales partners.",
+        "operationalize": "<p>This example shows us how our store front and affiliates are doing in regards to revenue thats being generated for our products. This gives real-time business insight into sales figures and enables informed decisions around lines of business such as location expansion and revenue forecasting.",
+        "howToImplement": "<p>This search will require O2A log data from billing, activations, and CMS data, in addition to this we also have location data that we enrich our results with. In this example, we take the successful transactions, add a unit price for the product/SKUs sold, and then enrich our location data. We then timechart this based on a one (1) hour span and the location.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Prepaid Mobile",
+        "hasSearch": "Yes",
+        "category": "Prepaid Mobile, Marketing, BI",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=O2A - Estimated Revenue by Location",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_4",
+        "icon": "Core_Use_Case.png",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | lookup prepaid_o2a_products productSKU OUTPUT price | fields _time orderLocation transactionStatus price transactionStatus | search transactionStatus=\"SUCCESS\" | lookup prepaid_locations orderLocation | timechart fixedrange=false span=1h sum(price) by description", 
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "O2A - Estimated Revenue by Location",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "prepaid_mobile_search0011.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/prepaid_mobile_search0011.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "ChartElement",
+                "title": "O2A - Estimated Revenue by Location",
+                "search": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | lookup prepaid_o2a_products productSKU OUTPUT price | fields _time orderLocation transactionStatus price transactionStatus | search transactionStatus=\"SUCCESS\" | lookup prepaid_locations orderLocation | timechart fixedrange=false span=1h sum(price) by description",
+                "vizParameters": {
+                "charting.axisTitleX.text" : "Time",
+                "charting.axisTitleY.text" : "SGD $",
+                "charting.axisY.abbreviation" : "none",
+                "charting.chart" : "area",
+                "charting.chart.nullValueMode" : "zero",
+                "charting.drilldown" : "none",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_prepaid_mobile_search0012": {
+        "id": "O2A - Estimated Revenue Lost due to Sytem Problems",
+        "name": "Daily Lost Revenue for Mobile Services.",
+        "description": "This example shows how to associate a monetary value to each transaction and gives us an estimated total daily loss in revenue.<p>",
+        "relevance": "<p>This example shows how to associate a monetary value to each transaction and gives us an estimated total daily loss in revenue.",
+        "operationalize": "<p>Understanding the costs associated with each transaction and the revenue lost daily provides us real-time insight into our business.",
+        "howToImplement": "<p>This search will require O2A log data from billing, activations, and CMS data. In this example, we take the failed transactions and add a unit price for the product/SKUs of the product. We then summate this for the time range and use a single value display to visualise the results.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Prepaid Mobile",
+        "hasSearch": "Yes",
+        "category": "Prepaid Mobile, Marketing, BI",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=O2A - Estimated Revenue Lost due to Sytem Problems",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_4",
+        "icon": "Core_Use_Case.png",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | lookup prepaid_o2a_products productSKU OUTPUT price | fields _time orderLocation transactionStatus price transactionStatus | search transactionStatus=\"FAIL\" | lookup prepaid_locations orderLocation | timechart fixedrange=false span=1d sum(price)",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "O2A - Estimated Revenue Lost due to Sytem Problems",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "prepaid_mobile_search0012.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/prepaid_mobile_search0012.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "SingleElement",
+                "title": "O2A - Estimated Revenue Lost due to Sytem Problems",
+                "search": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | lookup prepaid_o2a_products productSKU OUTPUT price | fields _time orderLocation transactionStatus price transactionStatus | search transactionStatus=\"FAIL\" | lookup prepaid_locations orderLocation | timechart fixedrange=false span=1d sum(price)",
+                "vizParameters": {
+                "colorMode" : "block",
+                "drilldown" : "none",
+                "numberPrecision" : "0.00",
+                "rangeColors" : "[\"0xdc4e41\",\"0xdc4e41\"]",
+                "rangeValues" : "[0]",
+                "showSparkline" : "0",
+                "showTrendIndicator" : "0",
+                "underLabel" : "Revenue Loss Over Time",
+                "unit" : "$",
+                "unitPosition" : "before",
+                "useColors" : "1",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_prepaid_mobile_search0013": {
+        "id": "O2A - Retail Staffing Issues",
+        "name": "Retail locations with potential staffing issues.",
+        "description": "This example shows how to identify where there maybe potential loss in revenue due to insufficient retail personnel.<p>",
+        "relevance": "<p>This example shows how to identify where there maybe potential loss in revenue due to insufficient retail personnel.",
+        "operationalize": "<p>Most retail outlets measure metrics related to how long a transaction takes to complete and how it relates to customer experience. When customers experience times that are above our average transaction times, we can expect that there will be a potential for loss of revenue. Understanding our transaction times at retail locations can help forecast when more manpower is needed. This gives us real-time insight into our business.",
+        "howToImplement": "<p>This search will require O2A log data from billing, activations, and CMS data. In this example, we take the transactions and add the location data to each event. We then calculate a transaction duration based on when a previous transaction is finished and when the current ends. We then filter based on our metrics, transactions that lasted more then 5 minutes, but less then 25. We then use timechart and reformat the results in a more human friendly view.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Prepaid Mobile",
+        "hasSearch": "Yes",
+        "category": "Prepaid Mobile, BI",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=O2A - Retail Staffing Issues",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_4",
+        "icon": "Core_Use_Case.png",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Advanced",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | fields _time orderLocation orderType productSKU transactionStatus | lookup prepaid_locations orderLocation OUTPUT description | search description=\"Store1*\" | sort 0 _time | streamstats window=1 current=false last(_time) AS previousTime | eval transactionDuration = ( _time - previousTime ) / 60 | eval transactionDuration = round(transactionDuration,2) | where transactionDuration < 25 | stats values(transactionDuration) as transactionDur values(_time) AS startTime values(orderLocation) AS orderLocation values(orderType) AS orderType values(transactionStatus) AS transactionStatus by description _time | where transactionDur > 5 | rename description AS \"Location\" transactionDur AS \"Duration\" | fields Location Duration _time startTime | timechart fixedrange=false span=1h count list(Duration) AS Duration list(startTime) as Times list(Location) AS Location | convert ctime(Times) timeformat=\"%Y/%m/%d %H:%M:%S\" | table _time Location  Times Duration count",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "O2A - Retail Staffing Issues",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "prepaid_mobile_search0013.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/prepaid_mobile_search0013.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "O2A - Retail Staffing Issues",
+                "search": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | fields _time orderLocation orderType productSKU transactionStatus | lookup prepaid_locations orderLocation OUTPUT description | search description=\"Store1*\" | sort 0 _time | streamstats window=1 current=false last(_time) AS previousTime | eval transactionDuration = ( _time - previousTime ) / 60 | eval transactionDuration = round(transactionDuration,2) | where transactionDuration < 25 | stats values(transactionDuration) as transactionDur values(_time) AS startTime values(orderLocation) AS orderLocation values(orderType) AS orderType values(transactionStatus) AS transactionStatus by description _time | where transactionDur > 5 | rename description AS \"Location\" transactionDur AS \"Duration\" | fields Location Duration _time startTime | timechart fixedrange=false span=1h count list(Duration) AS Duration list(startTime) as Times list(Location) AS Location | convert ctime(Times) timeformat=\"%Y/%m/%d %H:%M:%S\" | table _time Location  Times Duration count",
+                "vizParameters": {
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
 
     "showcase_cdn_search0001": {
         "id": "Cache Hit Ratio by Number of Requests",
@@ -3211,6 +3471,10 @@
     "showcase_prepaid_mobile_search0007",
     "showcase_prepaid_mobile_search0008",
     "showcase_prepaid_mobile_search0009",
+    "showcase_prepaid_mobile_search0010",
+    "showcase_prepaid_mobile_search0011",
+    "showcase_prepaid_mobile_search0012",
+    "showcase_prepaid_mobile_search0013",
     "showcase_sa_search0001",
     "showcase_sa_search0002",
     "showcase_sa_search0003",

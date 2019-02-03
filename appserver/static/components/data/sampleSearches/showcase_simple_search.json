@@ -360,7 +360,6 @@
         "label": "O2A - Retail Staffing Issues"
     },
 
-
     "CDN - User Behavior - Top Browsers": {
         "prereqs": [
             {
@@ -652,6 +651,35 @@
         ],
         "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| sort 0 _time \n| fields _time responseTime requestClientIp \n| iplocation requestClientIp \n| eval City=case(City==\"\",\"Unknown\",1=1,City) \n| eval Region=case(Region==\"\",\"Unknown\",1=1,Region) \n| eval HostingEdge = Region.\" - \".Country \n| stats avg(responseTime) AS avgResponseTime by HostingEdge \n| eval \"Average Response Time\"=round(avgResponseTime,3) \n| rename HostingEdge AS \"Edge Hosting Region\"\n| sort - \"Average Response Time\" \n| fields \"Edge Hosting Region\" \"Average Response Time\"",
         "label": "CDN High Latency Edge Networks"
+    },
+
+    "General Call Metrics - Daily Estimated Call Revenue": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdr_logs.csv | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Set our timestamp..",
+            "Enrich our events with the Call Disposition.",
+            "Search for Answered or Billable calls.",
+            "Use rex against the dst field to extract a dstCountry Code.",
+            "Lookup and enrich our country code. Add a country name, iso code, and billable rates.",
+            "Narrow our fields down.",
+            "Use the convert command to get a easier math friendly number for duration.",
+            "Calculate billables minutes based on our duration.",
+            "Round our minute value to the near whole number.",
+            "Calculate our total duration, minus one minute.",
+            "Calculate the total billable rate per call",
+            "Summate the total billable and display it as a Single Value."
+        ],
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=\"ANSWERED\" OR billable > 0 \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode rateFirstMinute rateMinute \n| fields _time accountcode src billable dstCountryCode rate* \n| convert dur2sec(billable) AS calculatedBillableS \n| eval billableMinutes = calculatedBillableS / 60 \n| eval billableMinutes = ceiling(billableMinutes) \n| eval billableMinusOne = billableMinutes - 1 \n| eval totalBillable = rateMinute + (billableMinusOne * rateMinute) \n| stats sum(totalBillable) as CallRevenue",
+        "label": "General Call Metrics - Daily Estimated Call Revenue"
     },
 
 

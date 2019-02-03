@@ -3002,6 +3002,83 @@
         ]
     },
 
+    "showcase_subscriber_search0014": {
+        "id": "General Call Metrics - Daily Estimated Call Revenue",
+        "name": "Estimated Call Revenue.",
+        "description": "This example shows how to associate a monetary value to each successful call and gives us an estimated total daily revenue stream.<p>",
+        "relevance": "<p>This example shows how to associate a monetary value to each successful call and gives us an estimated total daily revenue stream.",
+        "operationalize": "<p>Having a realtime understanding of Call generated revenue gives us real-time operational insight into our network and users. Having this information will enable informed decisions about capacity, billing rates, services, marketing campaigns and much more.",
+        "howToImplement": "<p>This search requires CDR / PBX logs that contain at the minimum the log of successful outbound calls. This data is then enriched based on the destination / callee, and current billable rates are added to the results. We then calulate the call duration and associated costs with that call to the destination. Once comopleted, we then summate the total cost and report that.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Subscriber Services",
+        "hasSearch": "Yes",
+        "category": "CDR, BI",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=General Call Metrics - Daily Estimated Call Revenue",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_4",
+        "icon": "Core_Use_Case.png",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Advanced",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=\"ANSWERED\" OR billable > 0 | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode rateFirstMinute rateMinute | fields _time accountcode src billable dstCountryCode rate* | convert dur2sec(billable) AS calculatedBillableS | eval billableMinutes = calculatedBillableS / 60 | eval billableMinutes = ceiling(billableMinutes) | eval billableMinusOne = billableMinutes - 1 | eval totalBillable = rateMinute + (billableMinusOne * rateMinute) | stats sum(totalBillable) as CallRevenue",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "General Call Metrics - Daily Estimated Call Revenue",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "subscriber_services_search0014.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/subscriber_search0014.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "SingleElement",
+                "title": "General Call Metrics - Daily Estimated Call Revenue",
+                "search": "| inputlookup cdr_logs | eval _time = start | lookup cdr_disposition_mapping disposition | search disposition=\"ANSWERED\" OR billable > 0 | rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" | lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode rateFirstMinute rateMinute | fields _time accountcode src billable dstCountryCode rate* | convert dur2sec(billable) AS calculatedBillableS | eval billableMinutes = calculatedBillableS / 60 | eval billableMinutes = ceiling(billableMinutes) | eval billableMinusOne = billableMinutes - 1 | eval totalBillable = rateMinute + (billableMinusOne * rateMinute) | stats sum(totalBillable) as CallRevenue",
+                "vizParameters": {
+                "colorBy" : "value",
+                "colorMode" : "block",
+                "drilldown" : "none",
+                "height" : "211",
+                "numberPrecision" : "0.00",
+                "rangeColors" : "[\"0x53a051\",\"0x53a051\"]",
+                "rangeValues" : "[0]",
+                "showSparkline" : "1",
+                "showTrendIndicator" : "1",
+                "trellis.enabled" : "0",
+                "trellis.scales.shared" : "1",
+                "trellis.size" : "medium",
+                "trendColorInterpretation" : "standard",
+                "trendDisplayMode" : "absolute",
+                "underLabel" : "Revenue",
+                "unit" : "$+",
+                "unitPosition" : "before",
+                "useColors" : "1",
+                "useThousandSeparators" : "1",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+
     "showcase_sa_search0001": {
         "id": "WIFI AP Association",
         "description": "WIFI AP Association - General Count of Valid AP Access<p>",
@@ -3493,6 +3570,7 @@
     "showcase_subscriber_search0010",
     "showcase_subscriber_search0011",
     "showcase_subscriber_search0012",
+    "showcase_subscriber_search0014",
     "showcase_physical_search0001",
     "showcase_physical_search0002",
     "showcase_physical_search0003",

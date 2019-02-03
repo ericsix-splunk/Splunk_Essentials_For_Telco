@@ -1,238 +1,238 @@
-countryName,ISO2,ISO3,GeoNameID,phoneCode,Continent,Capital,tzinCapital,Currency
-Afghanistan,AF,AFG,1149361,93,Asia,Kabul,Asia/Kabul,Afghani
-Albania,AL,ALB,783754,355,Europe,Tirana,Europe/Tirane,Lek
-Algeria,DZ,DZA,2589581,213,Africa,Algiers,Africa/Algiers,Dinar
-American Samoa,AS,ASM,5880801,1-684,Oceania,Pago Pago,Pacific/Pago_Pago,Dollar
-Andorra,AD,AND,3041565,376,Europe,Andorra la Vella,Europe/Andorra,Euro
-Angola,AO,AGO,3351879,244,Africa,Luanda,Africa/Luanda,Kwanza
-Anguilla,AI,AIA,3573511,1-264,North America,The Valley,America/Anguilla,Dollar
-Antarctica,AQ,ATA,6697173,672,Antarctica,,Antarctica/Troll,
-Antigua and Barbuda,AG,ATG,3576396,1-268,North America,St. John's,America/Antigua,Dollar
-Argentina,AR,ARG,3865483,54,South America,Buenos Aires,America/Argentina/Buenos_Aires,Peso
-Armenia,AM,ARM,174982,374,Asia,Yerevan,Asia/Yerevan,Dram
-Aruba,AW,ABW,3577279,297,North America,Oranjestad,America/Aruba,Guilder
-Australia,AU,AUS,2077456,61,Oceania,Canberra,Australia/Sydney,Dollar
-Austria,AT,AUT,2782113,43,Europe,Vienna,Europe/Vienna,Euro
-Azerbaijan,AZ,AZE,587116,994,Asia,Baku,Asia/Baku,Manat
-Bahamas,BS,BHS,3572887,1-242,North America,Nassau,America/Nassau,Dollar
-Bahrain,BH,BHR,290291,973,Asia,Manama,Asia/Bahrain,Dinar
-Bangladesh,BD,BGD,1210997,880,Asia,Dhaka,Asia/Dhaka,Taka
-Barbados,BB,BRB,3374084,1-246,North America,Bridgetown,America/Barbados,Dollar
-Belarus,BY,BLR,630336,375,Europe,Minsk,Europe/Minsk,Ruble
-Belgium,BE,BEL,2802361,32,Europe,Brussels,Europe/Brussels,Euro
-Belize,BZ,BLZ,3582678,501,North America,Belmopan,America/Belize,Dollar
-Benin,BJ,BEN,2395170,229,Africa,Porto-Novo,Africa/Porto-Novo,Franc
-Bermuda,BM,BMU,3573345,1-441,North America,Hamilton,Atlantic/Bermuda,Dollar
-Bhutan,BT,BTN,1252634,975,Asia,Thimphu,Asia/Thimphu,Ngultrum
-Bolivia,BO,BOL,3923057,591,South America,Sucre,America/La_Paz,Boliviano
-Bosnia and Herzegovina,BA,BIH,3277605,387,Europe,Sarajevo,Europe/Sarajevo,Marka
-Botswana,BW,BWA,933860,267,Africa,Gaborone,Africa/Gaborone,Pula
-Brazil,BR,BRA,3469034,55,South America,Brasilia,America/Sao_Paulo,Real
-British Indian Ocean Territory,IO,IOT,1282588,246,Asia,Diego Garcia,Indian/Chagos,Dollar
-British Virgin Islands,VG,VGB,3577718,1-284,North America,Road Town,America/Tortola,Dollar
-Brunei,BN,BRN,1820814,673,Asia,Bandar Seri Begawan,Asia/Brunei,Dollar
-Bulgaria,BG,BGR,732800,359,Europe,Sofia,Europe/Sofia,Lev
-Burkina Faso,BF,BFA,2361809,226,Africa,Ouagadougou,Africa/Ouagadougou,Franc
-Burundi,BI,BDI,433561,257,Africa,Bujumbura,Africa/Bujumbura,Franc
-Cambodia,KH,KHM,1831722,855,Asia,Phnom Penh,Asia/Phnom_Penh,Riels
-Cameroon,CM,CMR,2233387,237,Africa,Yaounde,Africa/Douala,Franc
-Cape Verde,CV,CPV,3374766,238,Africa,Praia,Atlantic/Cape_Verde,Escudo
-Cayman Islands,KY,CYM,3580718,1-345,North America,George Town,America/Cayman,Dollar
-Central African Republic,CF,CAF,239880,236,Africa,Bangui,Africa/Bangui,Franc
-Chad,TD,TCD,2434508,235,Africa,N'Djamena,Africa/Ndjamena,Franc
-Chile,CL,CHL,3895114,56,South America,Santiago,America/Santiago,Peso
-China,CN,CHN,1814991,86,Asia,Beijing,Asia/Shanghai,Yuan Renminbi
-Colombia,CO,COL,3686110,57,South America,Bogota,America/Bogota,Peso
-Comoros,KM,COM,921929,269,Africa,Moroni,Indian/Comoro,Franc
-Cook Islands,CK,COK,1899402,682,Oceania,Avarua,Pacific/Rarotonga,Dollar
-Costa Rica,CR,CRI,3624060,506,North America,San Jose,America/Costa_Rica,Colon
-Croatia,HR,HRV,3202326,385,Europe,Zagreb,Europe/Zagreb,Kuna
-Cuba,CU,CUB,3562981,53,North America,Havana,America/Havana,Peso
-Curacao,CW,CUW,7626836,599,North America,Willemstad,America/Curacao,Guilder
-Cyprus,CY,CYP,146669,357,Europe,Nicosia,Asia/Nicosia,Euro
-Czech Republic,CZ,CZE,3077311,420,Europe,Prague,Europe/Prague,Koruna
-Democratic Republic of the Congo,CD,COD,203312,243,Africa,Kinshasa,Africa/Kinshasa,Franc
-Denmark,DK,DNK,2623032,45,Europe,Copenhagen,Europe/Copenhagen,Krone
-Djibouti,DJ,DJI,223816,253,Africa,Djibouti,Africa/Djibouti,Franc
-Dominica,DM,DMA,3575830,1-767,North America,Roseau,America/Dominica,Dollar
-Dominican Republic,DO,DOM,3508796,"1-809, 1-829, 1-849",North America,Santo Domingo,America/Santo_Domingo,Peso
-East Timor,TL,TLS,1966436,670,Oceania,Dili,Asia/Dili,Dollar
-Ecuador,EC,ECU,3658394,593,South America,Quito,America/Guayaquil,Dollar
-Egypt,EG,EGY,357994,20,Africa,Cairo,Africa/Cairo,Pound
-El Salvador,SV,SLV,3585968,503,North America,San Salvador,America/El_Salvador,Dollar
-Equatorial Guinea,GQ,GNQ,2309096,240,Africa,Malabo,Africa/Malabo,Franc
-Eritrea,ER,ERI,338010,291,Africa,Asmara,Africa/Asmara,Nakfa
-Estonia,EE,EST,453733,372,Europe,Tallinn,Europe/Tallinn,Euro
-Ethiopia,ET,ETH,337996,251,Africa,Addis Ababa,Africa/Addis_Ababa,Birr
-Falkland Islands,FK,FLK,3474414,500,South America,Stanley,Atlantic/Stanley,Pound
-Faroe Islands,FO,FRO,2622320,298,Europe,Torshavn,Atlantic/Faroe,Krone
-Fiji,FJ,FJI,2205218,679,Oceania,Suva,Pacific/Fiji,Dollar
-Finland,FI,FIN,660013,358,Europe,Helsinki,Europe/Helsinki,Euro
-France,FR,FRA,3017382,33,Europe,Paris,Europe/Paris,Euro
-French Polynesia,PF,PYF,4030656,689,Oceania,Papeete,Pacific/Tahiti,Franc
-Gabon,GA,GAB,2400553,241,Africa,Libreville,Africa/Libreville,Franc
-Gambia,GM,GMB,2413451,220,Africa,Banjul,Africa/Banjul,Dalasi
-Georgia,GE,GEO,614540,995,Asia,Tbilisi,Asia/Tbilisi,Lari
-Germany,DE,DEU,2921044,49,Europe,Berlin,Europe/Berlin,Euro
-Ghana,GH,GHA,2300660,233,Africa,Accra,Africa/Accra,Cedi
-Gibraltar,GI,GIB,2411586,350,Europe,Gibraltar,Europe/Gibraltar,Pound
-Greece,GR,GRC,390903,30,Europe,Athens,Europe/Athens,Euro
-Greenland,GL,GRL,3425505,299,North America,Nuuk,America/Godthab,Krone
-Grenada,GD,GRD,3580239,1-473,North America,St. George's,America/Grenada,Dollar
-Guam,GU,GUM,4043988,1-671,Oceania,Hagatna,Pacific/Guam,Dollar
-Guatemala,GT,GTM,3595528,502,North America,Guatemala City,America/Guatemala,Quetzal
-Guernsey,GG,GGY,3042362,44-1481,Europe,St Peter Port,Europe/Guernsey,Pound
-Guinea,GN,GIN,2420477,224,Africa,Conakry,Africa/Conakry,Franc
-Guinea-Bissau,GW,GNB,2372248,245,Africa,Bissau,Africa/Bissau,Franc
-Guyana,GY,GUY,3378535,592,South America,Georgetown,America/Guyana,Dollar
-Haiti,HT,HTI,3723988,509,North America,Port-au-Prince,America/Port-au-Prince,Gourde
-Honduras,HN,HND,3608932,504,North America,Tegucigalpa,America/Tegucigalpa,Lempira
-Hong Kong,HK,HKG,1819730,852,Asia,Hong Kong,Asia/Hong_Kong,Dollar
-Hungary,HU,HUN,719819,36,Europe,Budapest,Europe/Budapest,Forint
-Iceland,IS,ISL,2629691,354,Europe,Reykjavik,Atlantic/Reykjavik,Krona
-India,IN,IND,1269750,91,Asia,New Delhi,Asia/Kolkata,Rupee
-Indonesia,ID,IDN,1643084,62,Asia,Jakarta,Asia/Jakarta,Rupiah
-Iran,IR,IRN,130758,98,Asia,Tehran,Asia/Tehran,Rial
-Iraq,IQ,IRQ,99237,964,Asia,Baghdad,Asia/Baghdad,Dinar
-Ireland,IE,IRL,2963597,353,Europe,Dublin,Europe/Dublin,Euro
-Isle of Man,IM,IMN,3042225,44-1624,Europe,"Douglas, Isle of Man",Europe/Isle_of_Man,Pound
-Israel,IL,ISR,294640,972,Asia,Jerusalem,Asia/Jerusalem,Shekel
-Italy,IT,ITA,3175395,39,Europe,Rome,Europe/Rome,Euro
-Ivory Coast,CI,CIV,2287781,225,Africa,Yamoussoukro,Africa/Abidjan,Franc
-Jamaica,JM,JAM,3489940,1-876,North America,Kingston,America/Jamaica,Dollar
-Japan,JP,JPN,1861060,81,Asia,Tokyo,Asia/Tokyo,Yen
-Jersey,JE,JEY,3042142,44-1534,Europe,Saint Helier,Europe/Jersey,Pound
-Jordan,JO,JOR,248816,962,Asia,Amman,Asia/Amman,Dinar
-Kazakhstan,KZ,KAZ,1522867,7,Asia,Astana,Asia/Almaty,Tenge
-Kenya,KE,KEN,192950,254,Africa,Nairobi,Africa/Nairobi,Shilling
-Kiribati,KI,KIR,4030945,686,Oceania,Tarawa,Pacific/Tarawa,Dollar
-Kosovo,XK,XKX,831053,383,Europe,Pristina,Europe/Podgorica,Euro
-Kuwait,KW,KWT,285570,965,Asia,Kuwait City,Asia/Kuwait,Dinar
-Kyrgyzstan,KG,KGZ,1527747,996,Asia,Bishkek,Asia/Bishkek,Som
-Laos,LA,LAO,1655842,856,Asia,Vientiane,Asia/Vientiane,Kip
-Latvia,LV,LVA,458258,371,Europe,Riga,Europe/Riga,Euro
-Lebanon,LB,LBN,272103,961,Asia,Beirut,Asia/Beirut,Pound
-Lesotho,LS,LSO,932692,266,Africa,Maseru,Africa/Maseru,Loti
-Liberia,LR,LBR,2275384,231,Africa,Monrovia,Africa/Monrovia,Dollar
-Libya,LY,LBY,2215636,218,Africa,Tripolis,Africa/Tripoli,Dinar
-Liechtenstein,LI,LIE,3042058,423,Europe,Vaduz,Europe/Vaduz,Franc
-Lithuania,LT,LTU,597427,370,Europe,Vilnius,Europe/Vilnius,Euro
-Luxembourg,LU,LUX,2960313,352,Europe,Luxembourg,Europe/Luxembourg,Euro
-Macau,MO,MAC,1821275,853,Asia,Macao,Asia/Macau,Pataca
-Macedonia,MK,MKD,718075,389,Europe,Skopje,Europe/Skopje,Denar
-Madagascar,MG,MDG,1062947,261,Africa,Antananarivo,Indian/Antananarivo,Ariary
-Malawi,MW,MWI,927384,265,Africa,Lilongwe,Africa/Blantyre,Kwacha
-Malaysia,MY,MYS,1733045,60,Asia,Kuala Lumpur,Asia/Kuala_Lumpur,Ringgit
-Maldives,MV,MDV,1282028,960,Asia,Male,Indian/Maldives,Rufiyaa
-Mali,ML,MLI,2453866,223,Africa,Bamako,Africa/Bamako,Franc
-Malta,MT,MLT,2562770,356,Europe,Valletta,Europe/Malta,Euro
-Marshall Islands,MH,MHL,2080185,692,Oceania,Majuro,Pacific/Majuro,Dollar
-Mauritania,MR,MRT,2378080,222,Africa,Nouakchott,Africa/Nouakchott,Ouguiya
-Mauritius,MU,MUS,934292,230,Africa,Port Louis,Indian/Mauritius,Rupee
-Mayotte,YT,MYT,1024031,262,Africa,Mamoudzou,Indian/Mayotte,Euro
-Mexico,MX,MEX,3996063,52,North America,Mexico City,America/Mexico_City,Peso
-Micronesia,FM,FSM,2081918,691,Oceania,Palikir,Pacific/Pohnpei,Dollar
-Moldova,MD,MDA,617790,373,Europe,Chisinau,Europe/Chisinau,Leu
-Monaco,MC,MCO,2993457,377,Europe,Monaco,Europe/Monaco,Euro
-Mongolia,MN,MNG,2029969,976,Asia,Ulan Bator,Asia/Ulaanbaatar,Tugrik
-Montenegro,ME,MNE,3194884,382,Europe,Podgorica,Europe/Podgorica,Euro
-Montserrat,MS,MSR,3578097,1-664,North America,Plymouth,America/Montserrat,Dollar
-Morocco,MA,MAR,2542007,212,Africa,Rabat,Africa/Casablanca,Dirham
-Mozambique,MZ,MOZ,1036973,258,Africa,Maputo,Africa/Maputo,Metical
-Myanmar,MM,MMR,1327865,95,Asia,Nay Pyi Taw,Asia/Rangoon,Kyat
-Namibia,NA,NAM,3355338,264,Africa,Windhoek,Africa/Windhoek,Dollar
-Nauru,NR,NRU,2110425,674,Oceania,Yaren,Pacific/Nauru,Dollar
-Nepal,NP,NPL,1282988,977,Asia,Kathmandu,Asia/Kathmandu,Rupee
-Netherlands,NL,NLD,2750405,31,Europe,Amsterdam,Europe/Amsterdam,Euro
-Netherlands Antilles,AN,ANT,,599,North America,Willemstad,America/Curacao,Guilder
-New Caledonia,NC,NCL,2139685,687,Oceania,Noumea,Pacific/Noumea,Franc
-New Zealand,NZ,NZL,2186224,64,Oceania,Wellington,Pacific/Auckland,Dollar
-Nicaragua,NI,NIC,3617476,505,North America,Managua,America/Managua,Cordoba
-Niger,NE,NER,2440476,227,Africa,Niamey,Africa/Niamey,Franc
-Nigeria,NG,NGA,2328926,234,Africa,Abuja,Africa/Lagos,Naira
-Niue,NU,NIU,4036232,683,Oceania,Alofi,Pacific/Niue,Dollar
-North Korea,KP,PRK,1873107,850,Asia,Pyongyang,Asia/Pyongyang,Won
-Northern Mariana Islands,MP,MNP,4041468,1-670,Oceania,Saipan,Pacific/Saipan,Dollar
-Norway,NO,NOR,3144096,47,Europe,Oslo,Europe/Oslo,Krone
-Oman,OM,OMN,286963,968,Asia,Muscat,Asia/Muscat,Rial
-Pakistan,PK,PAK,1168579,92,Asia,Islamabad,Asia/Karachi,Rupee
-Palau,PW,PLW,1559582,680,Oceania,Melekeok,Pacific/Palau,Dollar
-Palestine,PS,PSE,6254930,970,Asia,East Jerusalem,Asia/Hebron,Shekel
-Panama,PA,PAN,3703430,507,North America,Panama City,America/Panama,Balboa
-Papua New Guinea,PG,PNG,2088628,675,Oceania,Port Moresby,Pacific/Port_Moresby,Kina
-Paraguay,PY,PRY,3437598,595,South America,Asuncion,America/Asuncion,Guarani
-Peru,PE,PER,3932488,51,South America,Lima,America/Lima,Sol
-Philippines,PH,PHL,1694008,63,Asia,Manila,Asia/Manila,Peso
-Pitcairn,PN,PCN,4030699,64,Oceania,Adamstown,Pacific/Pitcairn,Dollar
-Poland,PL,POL,798544,48,Europe,Warsaw,Europe/Warsaw,Zloty
-Portugal,PT,PRT,2264397,351,Europe,Lisbon,Europe/Lisbon,Euro
-Puerto Rico,PR,PRI,4566966,"1-787, 1-939",North America,San Juan,America/Puerto_Rico,Dollar
-Qatar,QA,QAT,289688,974,Asia,Doha,Asia/Qatar,Rial
-Republic of the Congo,CG,COG,2260494,242,Africa,Brazzaville,Africa/Brazzaville,Franc
-Reunion,RE,REU,935317,262,Africa,Saint-Denis,Indian/Reunion,Euro
-Romania,RO,ROU,798549,40,Europe,Bucharest,Europe/Bucharest,Leu
-Russia,RU,RUS,2017370,7,Europe,Moscow,Europe/Moscow,Ruble
-Rwanda,RW,RWA,49518,250,Africa,Kigali,Africa/Kigali,Franc
-Saint Barthelemy,BL,BLM,3578476,590,North America,Gustavia,America/St_Barthelemy,Euro
-Saint Helena,SH,SHN,3370751,290,Africa,Jamestown,Atlantic/St_Helena,Pound
-Saint Kitts and Nevis,KN,KNA,3575174,1-869,North America,Basseterre,America/St_Kitts,Dollar
-Saint Lucia,LC,LCA,3576468,1-758,North America,Castries,America/St_Lucia,Dollar
-Saint Martin,MF,MAF,3578421,590,North America,Marigot,America/Marigot,Euro
-Saint Pierre and Miquelon,PM,SPM,3424932,508,North America,Saint-Pierre,America/Miquelon,Euro
-Saint Vincent and the Grenadines,VC,VCT,3577815,1-784,North America,Kingstown,America/St_Vincent,Dollar
-Samoa,WS,WSM,4034894,685,Oceania,Apia,Pacific/Apia,Tala
-San Marino,SM,SMR,3168068,378,Europe,San Marino,Europe/San_Marino,Euro
-Sao Tome and Principe,ST,STP,2410758,239,Africa,Sao Tome,Africa/Sao_Tome,Dobra
-Saudi Arabia,SA,SAU,102358,966,Asia,Riyadh,Asia/Riyadh,Rial
-Senegal,SN,SEN,2245662,221,Africa,Dakar,Africa/Dakar,Franc
-Serbia,RS,SRB,6290252,381,Europe,Belgrade,Europe/Belgrade,Dinar
-Seychelles,SC,SYC,241170,248,Africa,Victoria,Indian/Mahe,Rupee
-Sierra Leone,SL,SLE,2403846,232,Africa,Freetown,Africa/Freetown,Leone
-Singapore,SG,SGP,1880251,65,Asia,Singapore,Asia/Singapore,Dollar
-Sint Maarten,SX,SXM,7609695,1-721,North America,Philipsburg,America/Lower_Princes,Guilder
-Slovakia,SK,SVK,3057568,421,Europe,Bratislava,Europe/Bratislava,Euro
-Slovenia,SI,SVN,3190538,386,Europe,Ljubljana,Europe/Ljubljana,Euro
-Solomon Islands,SB,SLB,2103350,677,Oceania,Honiara,Pacific/Guadalcanal,Dollar
-Somalia,SO,SOM,51537,252,Africa,Mogadishu,Africa/Mogadishu,Shilling
-South Africa,ZA,ZAF,953987,27,Africa,Pretoria,Africa/Johannesburg,Rand
-South Korea,KR,KOR,1835841,82,Asia,Seoul,Asia/Seoul,Won
-South Sudan,SS,SSD,7909807,211,Africa,Juba,Africa/Juba,Pound
-Spain,ES,ESP,2510769,34,Europe,Madrid,Europe/Madrid,Euro
-Sri Lanka,LK,LKA,1227603,94,Asia,Colombo,Asia/Colombo,Rupee
-Sudan,SD,SDN,366755,249,Africa,Khartoum,Africa/Khartoum,Pound
-Suriname,SR,SUR,3382998,597,South America,Paramaribo,America/Paramaribo,Dollar
-Svalbard and Jan Mayen,SJ,SJM,607072,47,Europe,Longyearbyen,Arctic/Longyearbyen,Krone
-Swaziland,SZ,SWZ,934841,268,Africa,Mbabane,Africa/Mbabane,Lilangeni
-Sweden,SE,SWE,2661886,46,Europe,Stockholm,Europe/Stockholm,Krona
-Switzerland,CH,CHE,2658434,41,Europe,Berne,Europe/Zurich,Franc
-Syria,SY,SYR,163843,963,Asia,Damascus,Asia/Damascus,Pound
-Taiwan,TW,TWN,1668284,886,Asia,Taipei,Asia/Taipei,Dollar
-Tajikistan,TJ,TJK,1220409,992,Asia,Dushanbe,Asia/Dushanbe,Somoni
-Tanzania,TZ,TZA,149590,255,Africa,Dodoma,Africa/Dar_es_Salaam,Shilling
-Thailand,TH,THA,1605651,66,Asia,Bangkok,Asia/Bangkok,Baht
-Togo,TG,TGO,2363686,228,Africa,Lome,Africa/Lome,Franc
-Tokelau,TK,TKL,4031074,690,Oceania,,Pacific/Fakaofo,Dollar
-Tonga,TO,TON,4032283,676,Oceania,Nuku'alofa,Pacific/Tongatapu,Pa'anga
-Trinidad and Tobago,TT,TTO,3573591,1-868,North America,Port of Spain,America/Port_of_Spain,Dollar
-Tunisia,TN,TUN,2464461,216,Africa,Tunis,Africa/Tunis,Dinar
-Turkey,TR,TUR,298795,90,Asia,Ankara,Europe/Istanbul,Lira
-Turkmenistan,TM,TKM,1218197,993,Asia,Ashgabat,Asia/Ashgabat,Manat
-Turks and Caicos Islands,TC,TCA,3576916,1-649,North America,Cockburn Town,America/Grand_Turk,Dollar
-Tuvalu,TV,TUV,2110297,688,Oceania,Funafuti,Pacific/Funafuti,Dollar
-U.S. Virgin Islands,VI,VIR,4796775,1-340,North America,Charlotte Amalie,America/St_Thomas,Dollar
-Uganda,UG,UGA,226074,256,Africa,Kampala,Africa/Kampala,Shilling
-Ukraine,UA,UKR,690791,380,Europe,Kiev,Europe/Kiev,Hryvnia
-United Arab Emirates,AE,ARE,290557,971,Asia,Abu Dhabi,Asia/Dubai,Dirham
-United Kingdom,GB,GBR,2635167,44,Europe,London,Europe/London,Pound
-United States,US,USA,6252001,1,North America,Washington,America/New_York,Dollar
-Uruguay,UY,URY,3439705,598,South America,Montevideo,America/Montevideo,Peso
-Uzbekistan,UZ,UZB,1512440,998,Asia,Tashkent,Asia/Tashkent,Som
-Vanuatu,VU,VUT,2134431,678,Oceania,Port Vila,Pacific/Efate,Vatu
-Vatican,VA,VAT,3164670,379,Europe,Vatican City,Europe/Vatican,Euro
-Venezuela,VE,VEN,3625428,58,South America,Caracas,America/Caracas,Bolivar
-Vietnam,VN,VNM,1562822,84,Asia,Hanoi,Asia/Ho_Chi_Minh,Dong
-Wallis and Futuna,WF,WLF,4034749,681,Oceania,Mata Utu,Pacific/Wallis,Franc
-Western Sahara,EH,ESH,2461445,212,Africa,El-Aaiun,Africa/El_Aaiun,Dirham
-Yemen,YE,YEM,69543,967,Asia,Sanaa,Asia/Aden,Rial
-Zambia,ZM,ZMB,895949,260,Africa,Lusaka,Africa/Lusaka,Kwacha
-Zimbabwe,ZW,ZWE,878675,263,Africa,Harare,Africa/Harare,Dollar
+countryName,ISO2,ISO3,GeoNameID,phoneCode,Continent,Capital,tzinCapital,Currency,rateFirstMinute,rateMinute
+Afghanistan,AF,AFG,1149361,93,Asia,Kabul,Asia/Kabul,Afghani,0.24,0.15
+Albania,AL,ALB,783754,355,Europe,Tirana,Europe/Tirane,Lek,0.24,0.15
+Algeria,DZ,DZA,2589581,213,Africa,Algiers,Africa/Algiers,Dinar,0.24,0.15
+American Samoa,AS,ASM,5880801,1-684,Oceania,Pago Pago,Pacific/Pago_Pago,Dollar,0.24,0.15
+Andorra,AD,AND,3041565,376,Europe,Andorra la Vella,Europe/Andorra,Euro,0.24,0.15
+Angola,AO,AGO,3351879,244,Africa,Luanda,Africa/Luanda,Kwanza,0.24,0.15
+Anguilla,AI,AIA,3573511,1-264,North America,The Valley,America/Anguilla,Dollar,0.24,0.15
+Antarctica,AQ,ATA,6697173,672,Antarctica,,Antarctica/Troll,,0.24,0.15
+Antigua and Barbuda,AG,ATG,3576396,1-268,North America,St. John's,America/Antigua,Dollar,0.24,0.15
+Argentina,AR,ARG,3865483,54,South America,Buenos Aires,America/Argentina/Buenos_Aires,Peso,0.24,0.15
+Armenia,AM,ARM,174982,374,Asia,Yerevan,Asia/Yerevan,Dram,0.24,0.15
+Aruba,AW,ABW,3577279,297,North America,Oranjestad,America/Aruba,Guilder,0.24,0.15
+Australia,AU,AUS,2077456,61,Oceania,Canberra,Australia/Sydney,Dollar,0.24,0.15
+Austria,AT,AUT,2782113,43,Europe,Vienna,Europe/Vienna,Euro,0.24,0.15
+Azerbaijan,AZ,AZE,587116,994,Asia,Baku,Asia/Baku,Manat,0.24,0.15
+Bahamas,BS,BHS,3572887,1-242,North America,Nassau,America/Nassau,Dollar,0.24,0.15
+Bahrain,BH,BHR,290291,973,Asia,Manama,Asia/Bahrain,Dinar,0.24,0.15
+Bangladesh,BD,BGD,1210997,880,Asia,Dhaka,Asia/Dhaka,Taka,0.24,0.15
+Barbados,BB,BRB,3374084,1-246,North America,Bridgetown,America/Barbados,Dollar,0.24,0.15
+Belarus,BY,BLR,630336,375,Europe,Minsk,Europe/Minsk,Ruble,0.24,0.15
+Belgium,BE,BEL,2802361,32,Europe,Brussels,Europe/Brussels,Euro,0.24,0.15
+Belize,BZ,BLZ,3582678,501,North America,Belmopan,America/Belize,Dollar,0.24,0.15
+Benin,BJ,BEN,2395170,229,Africa,Porto-Novo,Africa/Porto-Novo,Franc,0.24,0.15
+Bermuda,BM,BMU,3573345,1-441,North America,Hamilton,Atlantic/Bermuda,Dollar,0.24,0.15
+Bhutan,BT,BTN,1252634,975,Asia,Thimphu,Asia/Thimphu,Ngultrum,0.24,0.15
+Bolivia,BO,BOL,3923057,591,South America,Sucre,America/La_Paz,Boliviano,0.24,0.15
+Bosnia and Herzegovina,BA,BIH,3277605,387,Europe,Sarajevo,Europe/Sarajevo,Marka,0.24,0.15
+Botswana,BW,BWA,933860,267,Africa,Gaborone,Africa/Gaborone,Pula,0.24,0.15
+Brazil,BR,BRA,3469034,55,South America,Brasilia,America/Sao_Paulo,Real,0.24,0.15
+British Indian Ocean Territory,IO,IOT,1282588,246,Asia,Diego Garcia,Indian/Chagos,Dollar,0.24,0.15
+British Virgin Islands,VG,VGB,3577718,1-284,North America,Road Town,America/Tortola,Dollar,0.24,0.15
+Brunei,BN,BRN,1820814,673,Asia,Bandar Seri Begawan,Asia/Brunei,Dollar,0.24,0.15
+Bulgaria,BG,BGR,732800,359,Europe,Sofia,Europe/Sofia,Lev,0.24,0.15
+Burkina Faso,BF,BFA,2361809,226,Africa,Ouagadougou,Africa/Ouagadougou,Franc,0.24,0.15
+Burundi,BI,BDI,433561,257,Africa,Bujumbura,Africa/Bujumbura,Franc,0.24,0.15
+Cambodia,KH,KHM,1831722,855,Asia,Phnom Penh,Asia/Phnom_Penh,Riels,0.24,0.15
+Cameroon,CM,CMR,2233387,237,Africa,Yaounde,Africa/Douala,Franc,0.24,0.15
+Cape Verde,CV,CPV,3374766,238,Africa,Praia,Atlantic/Cape_Verde,Escudo,0.24,0.15
+Cayman Islands,KY,CYM,3580718,1-345,North America,George Town,America/Cayman,Dollar,0.24,0.15
+Central African Republic,CF,CAF,239880,236,Africa,Bangui,Africa/Bangui,Franc,0.24,0.15
+Chad,TD,TCD,2434508,235,Africa,N'Djamena,Africa/Ndjamena,Franc,0.24,0.15
+Chile,CL,CHL,3895114,56,South America,Santiago,America/Santiago,Peso,0.24,0.15
+China,CN,CHN,1814991,86,Asia,Beijing,Asia/Shanghai,Yuan Renminbi,0.24,0.15
+Colombia,CO,COL,3686110,57,South America,Bogota,America/Bogota,Peso,0.24,0.15
+Comoros,KM,COM,921929,269,Africa,Moroni,Indian/Comoro,Franc,0.24,0.15
+Cook Islands,CK,COK,1899402,682,Oceania,Avarua,Pacific/Rarotonga,Dollar,0.24,0.15
+Costa Rica,CR,CRI,3624060,506,North America,San Jose,America/Costa_Rica,Colon,0.24,0.15
+Croatia,HR,HRV,3202326,385,Europe,Zagreb,Europe/Zagreb,Kuna,0.24,0.15
+Cuba,CU,CUB,3562981,53,North America,Havana,America/Havana,Peso,0.24,0.15
+Curacao,CW,CUW,7626836,599,North America,Willemstad,America/Curacao,Guilder,0.24,0.15
+Cyprus,CY,CYP,146669,357,Europe,Nicosia,Asia/Nicosia,Euro,0.24,0.15
+Czech Republic,CZ,CZE,3077311,420,Europe,Prague,Europe/Prague,Koruna,0.24,0.15
+Democratic Republic of the Congo,CD,COD,203312,243,Africa,Kinshasa,Africa/Kinshasa,Franc,0.24,0.15
+Denmark,DK,DNK,2623032,45,Europe,Copenhagen,Europe/Copenhagen,Krone,0.24,0.15
+Djibouti,DJ,DJI,223816,253,Africa,Djibouti,Africa/Djibouti,Franc,0.24,0.15
+Dominica,DM,DMA,3575830,1-767,North America,Roseau,America/Dominica,Dollar,0.24,0.15
+Dominican Republic,DO,DOM,3508796,"1-809, 1-829, 1-849",North America,Santo Domingo,America/Santo_Domingo,Peso,0.24,0.15
+East Timor,TL,TLS,1966436,670,Oceania,Dili,Asia/Dili,Dollar,0.24,0.15
+Ecuador,EC,ECU,3658394,593,South America,Quito,America/Guayaquil,Dollar,0.24,0.15
+Egypt,EG,EGY,357994,20,Africa,Cairo,Africa/Cairo,Pound,0.24,0.15
+El Salvador,SV,SLV,3585968,503,North America,San Salvador,America/El_Salvador,Dollar,0.24,0.15
+Equatorial Guinea,GQ,GNQ,2309096,240,Africa,Malabo,Africa/Malabo,Franc,0.24,0.15
+Eritrea,ER,ERI,338010,291,Africa,Asmara,Africa/Asmara,Nakfa,0.24,0.15
+Estonia,EE,EST,453733,372,Europe,Tallinn,Europe/Tallinn,Euro,0.24,0.15
+Ethiopia,ET,ETH,337996,251,Africa,Addis Ababa,Africa/Addis_Ababa,Birr,0.24,0.15
+Falkland Islands,FK,FLK,3474414,500,South America,Stanley,Atlantic/Stanley,Pound,0.24,0.15
+Faroe Islands,FO,FRO,2622320,298,Europe,Torshavn,Atlantic/Faroe,Krone,0.24,0.15
+Fiji,FJ,FJI,2205218,679,Oceania,Suva,Pacific/Fiji,Dollar,0.24,0.15
+Finland,FI,FIN,660013,358,Europe,Helsinki,Europe/Helsinki,Euro,0.24,0.15
+France,FR,FRA,3017382,33,Europe,Paris,Europe/Paris,Euro,0.24,0.15
+French Polynesia,PF,PYF,4030656,689,Oceania,Papeete,Pacific/Tahiti,Franc,0.24,0.15
+Gabon,GA,GAB,2400553,241,Africa,Libreville,Africa/Libreville,Franc,0.24,0.15
+Gambia,GM,GMB,2413451,220,Africa,Banjul,Africa/Banjul,Dalasi,0.24,0.15
+Georgia,GE,GEO,614540,995,Asia,Tbilisi,Asia/Tbilisi,Lari,0.24,0.15
+Germany,DE,DEU,2921044,49,Europe,Berlin,Europe/Berlin,Euro,0.24,0.15
+Ghana,GH,GHA,2300660,233,Africa,Accra,Africa/Accra,Cedi,0.24,0.15
+Gibraltar,GI,GIB,2411586,350,Europe,Gibraltar,Europe/Gibraltar,Pound,0.24,0.15
+Greece,GR,GRC,390903,30,Europe,Athens,Europe/Athens,Euro,0.24,0.15
+Greenland,GL,GRL,3425505,299,North America,Nuuk,America/Godthab,Krone,0.24,0.15
+Grenada,GD,GRD,3580239,1-473,North America,St. George's,America/Grenada,Dollar,0.24,0.15
+Guam,GU,GUM,4043988,1-671,Oceania,Hagatna,Pacific/Guam,Dollar,0.24,0.15
+Guatemala,GT,GTM,3595528,502,North America,Guatemala City,America/Guatemala,Quetzal,0.24,0.15
+Guernsey,GG,GGY,3042362,44-1481,Europe,St Peter Port,Europe/Guernsey,Pound,0.24,0.15
+Guinea,GN,GIN,2420477,224,Africa,Conakry,Africa/Conakry,Franc,0.24,0.15
+Guinea-Bissau,GW,GNB,2372248,245,Africa,Bissau,Africa/Bissau,Franc,0.24,0.15
+Guyana,GY,GUY,3378535,592,South America,Georgetown,America/Guyana,Dollar,0.24,0.15
+Haiti,HT,HTI,3723988,509,North America,Port-au-Prince,America/Port-au-Prince,Gourde,0.24,0.15
+Honduras,HN,HND,3608932,504,North America,Tegucigalpa,America/Tegucigalpa,Lempira,0.24,0.15
+Hong Kong,HK,HKG,1819730,852,Asia,Hong Kong,Asia/Hong_Kong,Dollar,0.24,0.15
+Hungary,HU,HUN,719819,36,Europe,Budapest,Europe/Budapest,Forint,0.24,0.15
+Iceland,IS,ISL,2629691,354,Europe,Reykjavik,Atlantic/Reykjavik,Krona,0.24,0.15
+India,IN,IND,1269750,91,Asia,New Delhi,Asia/Kolkata,Rupee,0.24,0.15
+Indonesia,ID,IDN,1643084,62,Asia,Jakarta,Asia/Jakarta,Rupiah,0.24,0.15
+Iran,IR,IRN,130758,98,Asia,Tehran,Asia/Tehran,Rial,0.24,0.15
+Iraq,IQ,IRQ,99237,964,Asia,Baghdad,Asia/Baghdad,Dinar,0.24,0.15
+Ireland,IE,IRL,2963597,353,Europe,Dublin,Europe/Dublin,Euro,0.24,0.15
+Isle of Man,IM,IMN,3042225,44-1624,Europe,"Douglas, Isle of Man",Europe/Isle_of_Man,Pound,0.24,0.15
+Israel,IL,ISR,294640,972,Asia,Jerusalem,Asia/Jerusalem,Shekel,0.24,0.15
+Italy,IT,ITA,3175395,39,Europe,Rome,Europe/Rome,Euro,0.24,0.15
+Ivory Coast,CI,CIV,2287781,225,Africa,Yamoussoukro,Africa/Abidjan,Franc,0.24,0.15
+Jamaica,JM,JAM,3489940,1-876,North America,Kingston,America/Jamaica,Dollar,0.24,0.15
+Japan,JP,JPN,1861060,81,Asia,Tokyo,Asia/Tokyo,Yen,0.4,0.15
+Jersey,JE,JEY,3042142,44-1534,Europe,Saint Helier,Europe/Jersey,Pound,0.24,0.15
+Jordan,JO,JOR,248816,962,Asia,Amman,Asia/Amman,Dinar,0.24,0.15
+Kazakhstan,KZ,KAZ,1522867,7,Asia,Astana,Asia/Almaty,Tenge,0.24,0.15
+Kenya,KE,KEN,192950,254,Africa,Nairobi,Africa/Nairobi,Shilling,0.24,0.15
+Kiribati,KI,KIR,4030945,686,Oceania,Tarawa,Pacific/Tarawa,Dollar,0.24,0.15
+Kosovo,XK,XKX,831053,383,Europe,Pristina,Europe/Podgorica,Euro,0.24,0.15
+Kuwait,KW,KWT,285570,965,Asia,Kuwait City,Asia/Kuwait,Dinar,0.24,0.15
+Kyrgyzstan,KG,KGZ,1527747,996,Asia,Bishkek,Asia/Bishkek,Som,0.24,0.15
+Laos,LA,LAO,1655842,856,Asia,Vientiane,Asia/Vientiane,Kip,0.24,0.15
+Latvia,LV,LVA,458258,371,Europe,Riga,Europe/Riga,Euro,0.24,0.15
+Lebanon,LB,LBN,272103,961,Asia,Beirut,Asia/Beirut,Pound,0.24,0.15
+Lesotho,LS,LSO,932692,266,Africa,Maseru,Africa/Maseru,Loti,0.24,0.15
+Liberia,LR,LBR,2275384,231,Africa,Monrovia,Africa/Monrovia,Dollar,0.24,0.15
+Libya,LY,LBY,2215636,218,Africa,Tripolis,Africa/Tripoli,Dinar,0.24,0.15
+Liechtenstein,LI,LIE,3042058,423,Europe,Vaduz,Europe/Vaduz,Franc,0.24,0.15
+Lithuania,LT,LTU,597427,370,Europe,Vilnius,Europe/Vilnius,Euro,0.24,0.15
+Luxembourg,LU,LUX,2960313,352,Europe,Luxembourg,Europe/Luxembourg,Euro,0.24,0.15
+Macau,MO,MAC,1821275,853,Asia,Macao,Asia/Macau,Pataca,0.24,0.15
+Macedonia,MK,MKD,718075,389,Europe,Skopje,Europe/Skopje,Denar,0.24,0.15
+Madagascar,MG,MDG,1062947,261,Africa,Antananarivo,Indian/Antananarivo,Ariary,0.24,0.15
+Malawi,MW,MWI,927384,265,Africa,Lilongwe,Africa/Blantyre,Kwacha,0.24,0.15
+Malaysia,MY,MYS,1733045,60,Asia,Kuala Lumpur,Asia/Kuala_Lumpur,Ringgit,0.24,0.15
+Maldives,MV,MDV,1282028,960,Asia,Male,Indian/Maldives,Rufiyaa,0.24,0.15
+Mali,ML,MLI,2453866,223,Africa,Bamako,Africa/Bamako,Franc,0.24,0.15
+Malta,MT,MLT,2562770,356,Europe,Valletta,Europe/Malta,Euro,0.24,0.15
+Marshall Islands,MH,MHL,2080185,692,Oceania,Majuro,Pacific/Majuro,Dollar,0.24,0.15
+Mauritania,MR,MRT,2378080,222,Africa,Nouakchott,Africa/Nouakchott,Ouguiya,0.24,0.15
+Mauritius,MU,MUS,934292,230,Africa,Port Louis,Indian/Mauritius,Rupee,0.24,0.15
+Mayotte,YT,MYT,1024031,262,Africa,Mamoudzou,Indian/Mayotte,Euro,0.24,0.15
+Mexico,MX,MEX,3996063,52,North America,Mexico City,America/Mexico_City,Peso,0.24,0.15
+Micronesia,FM,FSM,2081918,691,Oceania,Palikir,Pacific/Pohnpei,Dollar,0.24,0.15
+Moldova,MD,MDA,617790,373,Europe,Chisinau,Europe/Chisinau,Leu,0.24,0.15
+Monaco,MC,MCO,2993457,377,Europe,Monaco,Europe/Monaco,Euro,0.24,0.15
+Mongolia,MN,MNG,2029969,976,Asia,Ulan Bator,Asia/Ulaanbaatar,Tugrik,0.24,0.15
+Montenegro,ME,MNE,3194884,382,Europe,Podgorica,Europe/Podgorica,Euro,0.24,0.15
+Montserrat,MS,MSR,3578097,1-664,North America,Plymouth,America/Montserrat,Dollar,0.24,0.15
+Morocco,MA,MAR,2542007,212,Africa,Rabat,Africa/Casablanca,Dirham,0.24,0.15
+Mozambique,MZ,MOZ,1036973,258,Africa,Maputo,Africa/Maputo,Metical,0.24,0.15
+Myanmar,MM,MMR,1327865,95,Asia,Nay Pyi Taw,Asia/Rangoon,Kyat,0.24,0.15
+Namibia,NA,NAM,3355338,264,Africa,Windhoek,Africa/Windhoek,Dollar,0.24,0.15
+Nauru,NR,NRU,2110425,674,Oceania,Yaren,Pacific/Nauru,Dollar,0.24,0.15
+Nepal,NP,NPL,1282988,977,Asia,Kathmandu,Asia/Kathmandu,Rupee,0.24,0.15
+Netherlands,NL,NLD,2750405,31,Europe,Amsterdam,Europe/Amsterdam,Euro,0.24,0.15
+Netherlands Antilles,AN,ANT,,599,North America,Willemstad,America/Curacao,Guilder,0.24,0.15
+New Caledonia,NC,NCL,2139685,687,Oceania,Noumea,Pacific/Noumea,Franc,0.24,0.15
+New Zealand,NZ,NZL,2186224,64,Oceania,Wellington,Pacific/Auckland,Dollar,0.24,0.15
+Nicaragua,NI,NIC,3617476,505,North America,Managua,America/Managua,Cordoba,0.24,0.15
+Niger,NE,NER,2440476,227,Africa,Niamey,Africa/Niamey,Franc,0.24,0.15
+Nigeria,NG,NGA,2328926,234,Africa,Abuja,Africa/Lagos,Naira,0.19,0.15
+Niue,NU,NIU,4036232,683,Oceania,Alofi,Pacific/Niue,Dollar,0.24,0.15
+North Korea,KP,PRK,1873107,850,Asia,Pyongyang,Asia/Pyongyang,Won,0.24,0.15
+Northern Mariana Islands,MP,MNP,4041468,1-670,Oceania,Saipan,Pacific/Saipan,Dollar,0.24,0.15
+Norway,NO,NOR,3144096,47,Europe,Oslo,Europe/Oslo,Krone,0.24,0.15
+Oman,OM,OMN,286963,968,Asia,Muscat,Asia/Muscat,Rial,0.24,0.15
+Pakistan,PK,PAK,1168579,92,Asia,Islamabad,Asia/Karachi,Rupee,0.24,0.15
+Palau,PW,PLW,1559582,680,Oceania,Melekeok,Pacific/Palau,Dollar,0.24,0.15
+Palestine,PS,PSE,6254930,970,Asia,East Jerusalem,Asia/Hebron,Shekel,0.24,0.15
+Panama,PA,PAN,3703430,507,North America,Panama City,America/Panama,Balboa,0.24,0.15
+Papua New Guinea,PG,PNG,2088628,675,Oceania,Port Moresby,Pacific/Port_Moresby,Kina,0.24,0.15
+Paraguay,PY,PRY,3437598,595,South America,Asuncion,America/Asuncion,Guarani,0.24,0.15
+Peru,PE,PER,3932488,51,South America,Lima,America/Lima,Sol,0.24,0.15
+Philippines,PH,PHL,1694008,63,Asia,Manila,Asia/Manila,Peso,0.24,0.15
+Pitcairn,PN,PCN,4030699,64,Oceania,Adamstown,Pacific/Pitcairn,Dollar,0.24,0.15
+Poland,PL,POL,798544,48,Europe,Warsaw,Europe/Warsaw,Zloty,0.24,0.15
+Portugal,PT,PRT,2264397,351,Europe,Lisbon,Europe/Lisbon,Euro,0.24,0.15
+Puerto Rico,PR,PRI,4566966,"1-787, 1-939",North America,San Juan,America/Puerto_Rico,Dollar,0.24,0.15
+Qatar,QA,QAT,289688,974,Asia,Doha,Asia/Qatar,Rial,0.24,0.15
+Republic of the Congo,CG,COG,2260494,242,Africa,Brazzaville,Africa/Brazzaville,Franc,0.24,0.15
+Reunion,RE,REU,935317,262,Africa,Saint-Denis,Indian/Reunion,Euro,0.24,0.15
+Romania,RO,ROU,798549,40,Europe,Bucharest,Europe/Bucharest,Leu,0.24,0.15
+Russia,RU,RUS,2017370,7,Europe,Moscow,Europe/Moscow,Ruble,0.24,0.15
+Rwanda,RW,RWA,49518,250,Africa,Kigali,Africa/Kigali,Franc,0.24,0.15
+Saint Barthelemy,BL,BLM,3578476,590,North America,Gustavia,America/St_Barthelemy,Euro,0.24,0.15
+Saint Helena,SH,SHN,3370751,290,Africa,Jamestown,Atlantic/St_Helena,Pound,0.24,0.15
+Saint Kitts and Nevis,KN,KNA,3575174,1-869,North America,Basseterre,America/St_Kitts,Dollar,0.24,0.15
+Saint Lucia,LC,LCA,3576468,1-758,North America,Castries,America/St_Lucia,Dollar,0.24,0.15
+Saint Martin,MF,MAF,3578421,590,North America,Marigot,America/Marigot,Euro,0.24,0.15
+Saint Pierre and Miquelon,PM,SPM,3424932,508,North America,Saint-Pierre,America/Miquelon,Euro,0.24,0.15
+Saint Vincent and the Grenadines,VC,VCT,3577815,1-784,North America,Kingstown,America/St_Vincent,Dollar,0.24,0.15
+Samoa,WS,WSM,4034894,685,Oceania,Apia,Pacific/Apia,Tala,0.24,0.15
+San Marino,SM,SMR,3168068,378,Europe,San Marino,Europe/San_Marino,Euro,0.24,0.15
+Sao Tome and Principe,ST,STP,2410758,239,Africa,Sao Tome,Africa/Sao_Tome,Dobra,0.24,0.15
+Saudi Arabia,SA,SAU,102358,966,Asia,Riyadh,Asia/Riyadh,Rial,0.24,0.15
+Senegal,SN,SEN,2245662,221,Africa,Dakar,Africa/Dakar,Franc,0.24,0.15
+Serbia,RS,SRB,6290252,381,Europe,Belgrade,Europe/Belgrade,Dinar,0.24,0.15
+Seychelles,SC,SYC,241170,248,Africa,Victoria,Indian/Mahe,Rupee,0.24,0.15
+Sierra Leone,SL,SLE,2403846,232,Africa,Freetown,Africa/Freetown,Leone,0.24,0.15
+Singapore,SG,SGP,1880251,65,Asia,Singapore,Asia/Singapore,Dollar,0.24,0.15
+Sint Maarten,SX,SXM,7609695,1-721,North America,Philipsburg,America/Lower_Princes,Guilder,0.24,0.15
+Slovakia,SK,SVK,3057568,421,Europe,Bratislava,Europe/Bratislava,Euro,0.24,0.15
+Slovenia,SI,SVN,3190538,386,Europe,Ljubljana,Europe/Ljubljana,Euro,0.24,0.15
+Solomon Islands,SB,SLB,2103350,677,Oceania,Honiara,Pacific/Guadalcanal,Dollar,0.24,0.15
+Somalia,SO,SOM,51537,252,Africa,Mogadishu,Africa/Mogadishu,Shilling,0.24,0.15
+South Africa,ZA,ZAF,953987,27,Africa,Pretoria,Africa/Johannesburg,Rand,0.24,0.15
+South Korea,KR,KOR,1835841,82,Asia,Seoul,Asia/Seoul,Won,0.24,0.15
+South Sudan,SS,SSD,7909807,211,Africa,Juba,Africa/Juba,Pound,0.24,0.15
+Spain,ES,ESP,2510769,34,Europe,Madrid,Europe/Madrid,Euro,0.24,0.15
+Sri Lanka,LK,LKA,1227603,94,Asia,Colombo,Asia/Colombo,Rupee,0.24,0.15
+Sudan,SD,SDN,366755,249,Africa,Khartoum,Africa/Khartoum,Pound,0.24,0.15
+Suriname,SR,SUR,3382998,597,South America,Paramaribo,America/Paramaribo,Dollar,0.24,0.15
+Svalbard and Jan Mayen,SJ,SJM,607072,47,Europe,Longyearbyen,Arctic/Longyearbyen,Krone,0.24,0.15
+Swaziland,SZ,SWZ,934841,268,Africa,Mbabane,Africa/Mbabane,Lilangeni,0.24,0.15
+Sweden,SE,SWE,2661886,46,Europe,Stockholm,Europe/Stockholm,Krona,0.24,0.15
+Switzerland,CH,CHE,2658434,41,Europe,Berne,Europe/Zurich,Franc,0.24,0.15
+Syria,SY,SYR,163843,963,Asia,Damascus,Asia/Damascus,Pound,0.24,0.15
+Taiwan,TW,TWN,1668284,886,Asia,Taipei,Asia/Taipei,Dollar,0.24,0.15
+Tajikistan,TJ,TJK,1220409,992,Asia,Dushanbe,Asia/Dushanbe,Somoni,0.24,0.15
+Tanzania,TZ,TZA,149590,255,Africa,Dodoma,Africa/Dar_es_Salaam,Shilling,0.24,0.15
+Thailand,TH,THA,1605651,66,Asia,Bangkok,Asia/Bangkok,Baht,0.24,0.15
+Togo,TG,TGO,2363686,228,Africa,Lome,Africa/Lome,Franc,0.24,0.15
+Tokelau,TK,TKL,4031074,690,Oceania,,Pacific/Fakaofo,Dollar,0.24,0.15
+Tonga,TO,TON,4032283,676,Oceania,Nuku'alofa,Pacific/Tongatapu,Pa'anga,0.24,0.15
+Trinidad and Tobago,TT,TTO,3573591,1-868,North America,Port of Spain,America/Port_of_Spain,Dollar,0.24,0.15
+Tunisia,TN,TUN,2464461,216,Africa,Tunis,Africa/Tunis,Dinar,0.24,0.15
+Turkey,TR,TUR,298795,90,Asia,Ankara,Europe/Istanbul,Lira,0.24,0.15
+Turkmenistan,TM,TKM,1218197,993,Asia,Ashgabat,Asia/Ashgabat,Manat,0.24,0.15
+Turks and Caicos Islands,TC,TCA,3576916,1-649,North America,Cockburn Town,America/Grand_Turk,Dollar,0.24,0.15
+Tuvalu,TV,TUV,2110297,688,Oceania,Funafuti,Pacific/Funafuti,Dollar,0.24,0.15
+U.S. Virgin Islands,VI,VIR,4796775,1-340,North America,Charlotte Amalie,America/St_Thomas,Dollar,0.24,0.15
+Uganda,UG,UGA,226074,256,Africa,Kampala,Africa/Kampala,Shilling,0.24,0.15
+Ukraine,UA,UKR,690791,380,Europe,Kiev,Europe/Kiev,Hryvnia,0.24,0.15
+United Arab Emirates,AE,ARE,290557,971,Asia,Abu Dhabi,Asia/Dubai,Dirham,0.24,0.15
+United Kingdom,GB,GBR,2635167,44,Europe,London,Europe/London,Pound,0.24,0.15
+United States,US,USA,6252001,1,North America,Washington,America/New_York,Dollar,0.24,0.15
+Uruguay,UY,URY,3439705,598,South America,Montevideo,America/Montevideo,Peso,0.24,0.15
+Uzbekistan,UZ,UZB,1512440,998,Asia,Tashkent,Asia/Tashkent,Som,0.24,0.15
+Vanuatu,VU,VUT,2134431,678,Oceania,Port Vila,Pacific/Efate,Vatu,0.24,0.15
+Vatican,VA,VAT,3164670,379,Europe,Vatican City,Europe/Vatican,Euro,0.24,0.15
+Venezuela,VE,VEN,3625428,58,South America,Caracas,America/Caracas,Bolivar,0.24,0.15
+Vietnam,VN,VNM,1562822,84,Asia,Hanoi,Asia/Ho_Chi_Minh,Dong,0.24,0.15
+Wallis and Futuna,WF,WLF,4034749,681,Oceania,Mata Utu,Pacific/Wallis,Franc,0.24,0.15
+Western Sahara,EH,ESH,2461445,212,Africa,El-Aaiun,Africa/El_Aaiun,Dirham,0.24,0.15
+Yemen,YE,YEM,69543,967,Asia,Sanaa,Asia/Aden,Rial,0.24,0.15
+Zambia,ZM,ZMB,895949,260,Africa,Lusaka,Africa/Lusaka,Kwacha,0.24,0.15
+Zimbabwe,ZW,ZWE,878675,263,Africa,Harare,Africa/Harare,Dollar,0.24,0.15

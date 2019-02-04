@@ -1723,6 +1723,313 @@
         ]
     },
 
+    "showcase_cdn_search0012": {
+        "id": "CDN - Top 5 Delivered Content Customers by Requests",
+        "name": "Highest and Lowest Volume Content Customers by Requests.",
+        "description": "These examples show how to determine the most highest and lowest volume active customers on the CDNs that are currently being served.<p>",
+        "relevance": "<p>These examples show how to determine the most highest and lowest volume active customers on the CDNs that are currently being served.",
+        "operationalize": "<p>Having a realtime understanding of the amount of content being delivered for our customers is extremely beneficial, even more if we identify which are the highest and lowest volume customers. Having this information will enable informed decisions about capacity, billing rates, services, marketing campaigns and much more.",
+        "howToImplement": "<p>This search requires CDN logs that contain the requests and an identifier for the customer. This data is then enriched based on the customer identifier. We then calculate the number of requests against the CDN. We use the same search to generate both the top five customers and bottom five customers.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "hasSearch": "Yes",
+        "category": "CDN, BI",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN - Top 5 Delivered Content Customers by Requests",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_4",
+        "icon": "Core_Use_Case.png",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Easy",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | fields cp | lookup cdn_contentproviders contentProviderCode AS cp | stats count by contentProviderDescription | sort - count | head 5",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "CDN - Top 5 Delivered Content Customers by Requests",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "subscriber_services_search0012.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0012.png"
+            }
+        ],
+        "hideSPLMode": true,
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "ChartElement",
+                "title": "CDN - Top 5 Delivered Content Customers by Requests",
+                "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | fields cp | lookup cdn_contentproviders contentProviderCode AS cp | stats count by contentProviderDescription | sort - count | head 5",
+                "vizParameters": 
+                {
+                    "charting.axisLabelsX.majorLabelStyle.overflowMode" : "ellipsisNone",
+                    "charting.axisLabelsX.majorLabelStyle.rotation" : "0",
+                    "charting.axisTitleX.visibility" : "visible",
+                    "charting.axisTitleY.visibility" : "visible",
+                    "charting.axisTitleY2.visibility" : "visible",
+                    "charting.axisX.abbreviation" : "none",
+                    "charting.axisX.scale" : "linear",
+                    "charting.axisY.abbreviation" : "none",
+                    "charting.axisY.scale" : "linear",
+                    "charting.axisY2.abbreviation" : "none",
+                    "charting.axisY2.enabled" : "0",
+                    "charting.axisY2.scale" : "inherit",
+                    "charting.chart" : "pie",
+                    "charting.chart.bubbleMaximumSize" : "50",
+                    "charting.chart.bubbleMinimumSize" : "10",
+                    "charting.chart.bubbleSizeBy" : "area",
+                    "charting.chart.nullValueMode" : "gaps",
+                    "charting.chart.showDataLabels" : "none",
+                    "charting.chart.sliceCollapsingThreshold" : "0.01",
+                    "charting.chart.stackMode" : "default",
+                    "charting.chart.style" : "minimal",
+                    "charting.drilldown" : "none",
+                    "charting.layout.splitSeries" : "1",
+                    "charting.layout.splitSeries.allowIndependentYRanges" : "0",
+                    "charting.legend.labelStyle.overflowMode" : "ellipsisEnd",
+                    "charting.legend.mode" : "standard",
+                    "charting.legend.placement" : "right",
+                    "charting.lineWidth" : "2",
+                    "refresh.display": "progressbar"
+                } 
+            },
+
+            {
+                "panel": "row1cell2",
+                "type": "viz",
+                "vizType": "ChartElement",
+                "title": "CDN - Lowest Delivered Content Customers by Requests",
+                "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | fields cp | lookup cdn_contentproviders contentProviderCode AS cp | stats count by contentProviderDescription | sort count | head 5",
+                    "vizParameters": 
+                    {
+                    "charting.axisLabelsX.majorLabelStyle.overflowMode" : "ellipsisNone",
+                    "charting.axisLabelsX.majorLabelStyle.rotation" : "0",
+                    "charting.axisTitleX.visibility" : "visible",
+                    "charting.axisTitleY.visibility" : "visible",
+                    "charting.axisTitleY2.visibility" : "visible",
+                    "charting.axisX.abbreviation" : "none",
+                    "charting.axisX.scale" : "linear",
+                    "charting.axisY.abbreviation" : "none",
+                    "charting.axisY.scale" : "linear",
+                    "charting.axisY2.abbreviation" : "none",
+                    "charting.axisY2.enabled" : "0",
+                    "charting.axisY2.scale" : "inherit",
+                    "charting.chart" : "pie",
+                    "charting.chart.bubbleMaximumSize" : "50",
+                    "charting.chart.bubbleMinimumSize" : "10",
+                    "charting.chart.bubbleSizeBy" : "area",
+                    "charting.chart.nullValueMode" : "gaps",
+                    "charting.chart.showDataLabels" : "none",
+                    "charting.chart.sliceCollapsingThreshold" : "0.01",
+                    "charting.chart.stackMode" : "default",
+                    "charting.chart.style" : "minimal",
+                    "charting.drilldown" : "none",
+                    "charting.layout.splitSeries" : "1",
+                    "charting.layout.splitSeries.allowIndependentYRanges" : "0",
+                    "charting.legend.labelStyle.overflowMode" : "ellipsisEnd",
+                    "charting.legend.mode" : "standard",
+                    "charting.legend.placement" : "right",
+                    "charting.lineWidth" : "2",    
+                    "charting.axisTitleY.visibility": "visible"
+                    }
+            } 
+        ]
+    },
+
+    "showcase_cdn_search0013": {
+        "id": "CDN - Revenue Generated by Requests",
+        "name": "Revenue being generated from Requests and Data Transfers across the CDN.",
+        "description": "These examples show generated revenue from Requests and Data Transfers across the CDNs.<p>",
+        "relevance": "<p>These examples show generated revenue from Requests and Data Transfers across the CDNs.",
+        "operationalize": "<p>Having a realtime understanding of the amount of content being delivered for our customers is very beneficial, even more if we identify where content is being delivered. With different costs across the world for requests against the CDN and data transferred, being able to aggregate and show this in a central location gives us near real-time operational insight to revenue being generated.",
+        "howToImplement": "<p>These searches require CDN logs that contain the requests, ip address of the client, total bytes transferred, and an identifier for the customer. This data is then enriched based on the customer identifier and IP location data. Once we have these regions, the cost for requests and data transfers for the region is added to the event. We then calculate the costs for both the Requests and the Data Transferred.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "hasSearch": "Yes",
+        "category": "CDN, BI",
+        "knownFP": "unused",
+        "includeSSE": "No",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN - Revenue Generated by Requests",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_4",
+        "icon": "Core_Use_Case.png",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time | sort 0 _time | fields _time cp requestClientIp status | lookup cdn_contentproviders contentProviderCode AS cp OUTPUT contentProviderName | iplocation requestClientIp allfields=true | fields _time cp Continent contentProviderName status | lookup cdn_content_costs billableRegion AS Continent OUTPUT costPerRequest | timechart fixedrange=false span=1h sum(costPerRequest) AS billableRequests",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "CDN - Revenue Generated by Requests",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "subscriber_services_search0013.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0013.png"
+            }
+        ],
+        "hideSPLMode": true,
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "SingleElement",
+                "title": "CDN - Revenue Generated by Requests",
+                "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time | sort 0 _time | fields _time cp requestClientIp status | lookup cdn_contentproviders contentProviderCode AS cp OUTPUT contentProviderName | iplocation requestClientIp allfields=true | fields _time cp Continent contentProviderName status | lookup cdn_content_costs billableRegion AS Continent OUTPUT costPerRequest | timechart fixedrange=false span=1h sum(costPerRequest) AS billableRequests",
+                "vizParameters": 
+                {
+                    "colorBy" : "value",
+                    "colorMode" : "block",
+                    "drilldown" : "none",
+                    "height" : "162",
+                    "numberPrecision" : "0.00",
+                    "rangeColors" : "[\"0x53a051\",\"0x53a051\"]",
+                    "rangeValues" : "[0]",
+                    "showSparkline" : "1",
+                    "showTrendIndicator" : "1",
+                    "trellis.enabled" : "0",
+                    "trellis.scales.shared" : "0",
+                    "trellis.size" : "medium",
+                    "trendColorInterpretation" : "standard",
+                    "trendDisplayMode" : "absolute",
+                    "trendInterval" : "-1h",
+                    "underLabel" : "Request Generated Revenue",
+                    "unit" : "USD$",
+                    "unitPosition" : "before",
+                    "useColors" : "1",
+                    "useThousandSeparators" : "1",
+                    "refresh.display": "progressbar"
+                } 
+            },
+
+            {
+                "panel": "row1cell2",
+                "type": "viz",
+                "vizType": "SingleElement",
+                "title": "CDN - Revenue Generated by Data Transfers",
+                "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time | sort 0 _time | fields _time cp requestClientIp status messageBytes | lookup cdn_contentproviders contentProviderCode AS cp OUTPUT contentProviderName | iplocation requestClientIp allfields=true | fields _time cp Continent contentProviderName status messageBytes | eval megabytesTransferred=((messageBytes/pow(1024,2))) | lookup cdn_content_costs billableRegion AS Continent OUTPUT costPerMBTransferred | eval revenue = costPerMBTransferred * megabytesTransferred | timechart fixedrange=false span=1h sum(revenue) AS revenue",
+                    "vizParameters": 
+                    {
+                    "colorBy" : "trend",
+                    "colorMode" : "block",
+                    "drilldown" : "none",
+                    "height" : "161",
+                    "numberPrecision" : "0.00",
+                    "rangeColors" : "[\"0x53a051\",\"0x53a051\"]",
+                    "rangeValues" : "[0]",
+                    "showSparkline" : "1",
+                    "showTrendIndicator" : "1",
+                    "trellis.enabled" : "0",
+                    "trellis.scales.shared" : "1",
+                    "trellis.size" : "medium",
+                    "trendColorInterpretation" : "standard",
+                    "trendDisplayMode" : "absolute",
+                    "trendInterval" : "-1h",
+                    "underLabel" : "Traffic Generated Revenue",
+                    "unit" : "USD$",
+                    "unitPosition" : "before",
+                    "useColors" : "1",
+                    "useThousandSeparators" : "1",    
+                    "charting.axisTitleY.visibility": "visible"
+                    }
+            } 
+        ]
+    },
+
+    "showcase_cdn_search0014": {
+        "id": "CDN - Total Revenue Generated",
+        "name": "Total Revenue Generated across the CDN.",
+        "description": "This example shows how to calculate the total revenue being generated across the CDN from all customers.<p>",
+        "relevance": "<p>This example shows how to calculate the total revenue being generated across the CDN from all customers.",
+        "operationalize": "<p>Having near real-time insight to revenue being generated across our services is real operational insight.",
+        "howToImplement": "<p>This search requires CDN logs that contain the requests, ip address of the client, total bytes transferred, and an identifier for the customer. This data is then enriched based on the customer identifier and IP location data. Once we have these regions, the cost for requests and data transfers for the region is added to the event. We then calculate the costs for both the Requests and the Data Transferred and summate these to a single value.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "hasSearch": "Yes",
+        "category": "CDN, BI",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN - Total Revenue Generated",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_4",
+        "icon": "Core_Use_Case.png",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time | sort 0 _time | fields _time cp requestClientIp status messageBytes | lookup cdn_contentproviders contentProviderCode AS cp OUTPUT contentProviderName | iplocation requestClientIp allfields=true | fields _time cp Continent contentProviderName status messageBytes | eval megabytesTransferred=((messageBytes/pow(1024,2) )) | lookup cdn_content_costs billableRegion AS Continent OUTPUT costPerMBTransferred costPerRequest | eval xferRevenue = costPerMBTransferred * megabytesTransferred | timechart fixedrange=false span=1h eval(sum(xferRevenue) + sum(costPerRequest)) AS totalRevenue",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "CDN - Total Revenue Generated",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "subscriber_services_search0014.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0014.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "supportingImages_table",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "SingleElement",
+                "title": "CDN - Total Revenue Generated",
+                "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time | sort 0 _time | fields _time cp requestClientIp status messageBytes | lookup cdn_contentproviders contentProviderCode AS cp OUTPUT contentProviderName | iplocation requestClientIp allfields=true | fields _time cp Continent contentProviderName status messageBytes | eval megabytesTransferred=((messageBytes/pow(1024,2) )) | lookup cdn_content_costs billableRegion AS Continent OUTPUT costPerMBTransferred costPerRequest | eval xferRevenue = costPerMBTransferred * megabytesTransferred | timechart fixedrange=false span=1h eval(sum(xferRevenue) + sum(costPerRequest)) AS totalRevenue",
+                "vizParameters": 
+                {
+                    "colorBy" : "trend",
+                    "colorMode" : "none",
+                    "drilldown" : "none",
+                    "height" : "286",
+                    "numberPrecision" : "0.00",
+                    "rangeColors" : "[\"0x53a051\",\"0x53a051\"]",
+                    "rangeValues" : "[0]",
+                    "trendDisplayMode" : "absolute",
+                    "trendInterval" : "-1h",
+                    "underLabel" : "Total Revenue Generated",
+                    "unit" : "$",
+                    "unitPosition" : "before",
+                    "useColors" : "1",
+                    "refresh.display": "progressbar"
+                } 
+            }
+        ]
+    },
+
     "showcase_physical_search0001": {
         "id": "Security Auditing - Badge Monitoring",
         "domain": "Application",
@@ -3588,7 +3895,10 @@
     "showcase_cdn_search0008",
     "showcase_cdn_search0009",
     "showcase_cdn_search0010",
-    "showcase_cdn_search0011"
+    "showcase_cdn_search0011",
+    "showcase_cdn_search0012",
+    "showcase_cdn_search0013",
+    "showcase_cdn_search0014"
     ]
       }
      }

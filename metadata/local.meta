@@ -162,3 +162,17 @@ export = none
 owner = w0rdp4ss!
 version = 7.2.1
 modtime = 1549122874.819389000
+
+[transforms/cdn_contentproviders]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1549251711.103072000
+
+[transforms/cdn_content_costs]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1549254677.655917000

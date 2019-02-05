@@ -13,14 +13,9 @@
             "First we pull in our demo dataset.",
             "Format our timestamp properly.",
             "Convert our timestamp to a true timestamp format.",
-            "Searching in our Service Activation Process for failures.",
-            "Only use the field(s) we want..",
-            "Enrich our error messages with more Human Readable data.",
-            "Get values for our individual error messages and details by time.",
-            "Search for where we have a count > 0",
-            "Run this through stats again to get a count by Error Message.",
-            "Use xyseries here to create a chartable view of our Error Details by Error Message."
-                    ],
+            "Assign our temperature field as temperature in F (Sorry rest of the world ;)",
+            "Chart our maximum temperatures over time.."
+             ],
         "value": "| inputlookup physical_environmental \n| eval _time=strptime(dateTime, \"%Y/%m/%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| eval tempF=sensorValue  \n| timechart fixedrange=false max(tempF) as maxTempF",
         "label": "Rack Sensor Max Temperature Over Time"
     },
@@ -246,11 +241,10 @@
         ],
         "description": [
             "First we pull in our demo dataset.",
-            "Format our timestamp properly.",
-            "Convert our timestamp to a true timestamp format.",
             "Only use the field(s) we want..",
-            "Search for all Order Types (New and TopUp).",
-            "Timechart these with a stacked visualization. Also use fixedrange=false since this is a lookup table.."
+            "Search for our successful transactions.",
+            "Enrich these results with the human friendly description of the Product/SKU",
+            "Get our top products."
         ],
         "value": "| inputlookup prepaid_o2a_logs \n| fields _time productSKU transactionStatus \n| search transactionStatus=\"SUCCESS\" \n| lookup prepaid_o2a_products productSKU \n| top description",
         "label": "O2A Top Selling Packages"
@@ -422,11 +416,10 @@
         "description": [
             "First we pull in our demo dataset.",
             "Format our timestamps..",
-            "Pull our fields of interest from the sourcetype(s)",
-            "Start calculating our hit ratio with our messageBytes by time and contentprovider",
-            "Calculate total hits and total bytes transferred from our cache",
-            "Summate our total requests and cached content values",
-            "Calculate a hit ratio of cached content and format it..",
+            "Pull our fields of interest from the sourcetype",
+            "Start calculating our total bytes and cached bytes content.",
+            "Calculate a hit ratio against the cache.",
+            "Display our cache hit ratio.",
             ""
         ],
         "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") \n| fields _time messageBytes cached \n| stats sum(messageBytes) as \"totalBytes\", sum(eval(messageBytes * if(cached==\"true\",1,0))) as \"cachedBytes\" \n| eval cacheTrafficHitRatio=round(cachedBytes/totalBytes*100,2) \n| fields cacheTrafficHitRatio",
@@ -447,11 +440,7 @@
         "description": [
             "First we pull in our demo dataset.",
             "Format our timestamps..",
-            "Pull our fields of interest from the sourcetype(s)",
-            "Start calculating our hit ratio with our messageBytes by time and contentprovider",
-            "Calculate total hits and total bytes transferred from our cache",
-            "Summate our total requests and cached content values",
-            "Calculate a hit ratio of cached content and format it..",
+            "Use stats to count the total number of events.",
             ""
         ],
         "value": "| inputlookup cdn_general_operations \n| eval _time=strptime(_time, \"%Y-%m-%d %H:%M:%S\") \n| stats count",
@@ -471,11 +460,10 @@
         "description": [
             "First we pull in our demo dataset.",
             "Format our timestamps..",
-            "Pull our fields of interest from the sourcetype(s)",
-            "Start calculating our hit ratio with our messageBytes by time and contentprovider",
-            "Calculate total hits and total bytes transferred from our cache",
-            "Summate our total requests and cached content values",
-            "Calculate a hit ratio of cached content and format it..",
+            "Pull our fields of interest from the dataset.",
+            "Start summating our messagebytes.",
+            "Calculate our total traffic in gigabytes.",
+            "Display our field with the value.",
             ""
         ],
         "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") \n| fields _time messageBytes \n| stats sum(messageBytes) as totalTrafficBytes \n| eval totalTrafficGBytes=totalTrafficBytes/pow(10,9) \n| fields totalTrafficGBytes",
@@ -496,14 +484,15 @@
         "description": [
             "First we pull in our demo dataset.",
             "Format our timestamps..",
-            "Pull our fields of interest from the sourcetype(s)",
-            "Start calculating our hit ratio with our messageBytes by time and contentprovider",
-            "Calculate total hits and total bytes transferred from our cache",
-            "Summate our total requests and cached content values",
-            "Calculate a hit ratio of cached content and format it..",
+            "Convert our timestamp to this format.",
+            "Sort on time and include all results (large lookup.)",
+            "Pull our fields of interest..",
+            "Anything with a status > 400, we consider failed. Set these to value of 1 / true.",
+            "Search for our failed events.",
+            "Chart our failed events over time.",
             ""
         ],
-        "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") \n| convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time \n| sort 0 _time \n| fields _time messageBytes cached cp status \n| eval statusFailed=if(status >= 400, 1, 0) \n| search statusFailed=\"1\" \n| timechart fixedrange=false span=1m sum(statusFailed) AS \"Error Events\"",    
+        "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") \n| convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time \n| sort 0 _time \n| fields _time status \n| eval statusFailed=if(status >= 400, 1, 0) \n| search statusFailed=\"1\" \n| timechart fixedrange=false span=1m sum(statusFailed) AS \"Error Events\"",    
         "label": "CDN Total Number of Errors Over Time"
     },
 
@@ -525,9 +514,9 @@
             "",
             "These are the only fields we are interested in for this search.",
             "Calculate Mbps from the given rate.",
-            "Use timechart here with a 15second bucket span and fixedrange false because this is coming from a lookup file."
+            "Use timechart here with a one minute bucket span and fixedrange false because this is coming from a lookup file."
         ],
-        "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") \n| convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time \n| sort 0 _time \n| fields _time messageBytes \n| eval trafficMbs=messageBytes/pow(1024,2) \n| timechart span=15s fixedrange=false sum(trafficMbs) as trafficMbs", 
+        "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") \n| convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time \n| sort 0 _time \n| fields _time messageBytes \n| eval trafficMbs=messageBytes/pow(1024,2) \n| timechart span=1m fixedrange=false sum(trafficMbs) as trafficMbs", 
         "label": "CDN Total Amount of Traffic Transferred Over Time"
     },
 
@@ -545,7 +534,7 @@
             "First we pull in our demo dataset.",
             "Format our timestamps..",
             "This will make sure our timestamp is in true timestamp format and not text.",
-            "",
+            "Sort on time and include all results (large lookups)",
             "These are the only fields we are interested in for this search.",
             "Timechart the average response time, with a 1m span and fixedrange because this is coming from a lookup file.",
             "Format our time for a bit more human readable format."
@@ -615,7 +604,7 @@
             "Format our timestamps..",
             "This will make sure our timestamp is in true timestamp format and not text.",
             "These are the only fields we are interested in for this search.",
-            "",
+            "Sort our results based on time and include all results (large lookups.)",
             "Calculate the bandwidth used and convert it to MBps.",
             "Chart our average bandwidth, in 1 minute buckets, over time. We used fixedrange=false since this is data from a lookup."
         ],
@@ -1162,16 +1151,20 @@
         ],
         "description": [
             "First we pull in our demo dataset.",
-            "Enrich our data...",
-            "Enrich our data... ",
-            "Perform some statistical analysis on the Room, Status of the Reader, and the Badge.",
-            "For this example, we mask Internal Employees Id's and Customer's Badges.",
-            "Figure out the direction of the badge read based on the actual card reader.",
-            "Match our room and give it a more human friendly name.",
-            "Select our fields for reporting.",
-            "Bit more of clean up..",
-            "",
-            "Can you read epoch? Convert this to readable form."
+            "Enrich our data with reader status codes..",
+            "Enrich our data with reader locations and status... ",
+            "Enrich our data with card / user information.",
+            "Make the first and name a single field.",
+            "Select only fields of relevance for us.",
+            "Search for denied OR successful reads.",
+            "Use streamstats here to keep track of the previous events, and change on status change. This will track our reader.",
+            "Search where our count > 1",
+            "Set our span to five minutes.",
+            "Get our aggregates for the badges, location, and name by time.",
+            "Search where our count > 1",
+            "Humanize fields.",
+            "Can you read epoch? I can't.. humanize our timestamp.",
+            "Format for reporting."
         ],
         "value": "| inputlookup physical_card_logs \n| lookup physical_card_error_codes errorCode OUTPUTNEW status \n| lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description active \n| lookup physical_card_user_mapping cardId AS badgeId \n| eval fullName=firstName+\" \"+lastName \n| fields _time badgeId description fullName status \n| search status=\"ACCESS-DENIED\" OR status=\"READ-SUCCESS\" \n| streamstats count reset_on_change=true window=2 by description \n| search (count > 1) AND status=\"ACCESS-DENIED\" \n| bin span=5m _time \n| stats count list(badgeId) AS Badge list(description) AS Location list(fullName) as Name by _time \n| where count > 1 \n| rename _time AS Time \n| convert ctime(Time) \n| table Time Location Badge Name",
         "label": "Security Auditing - Abnormal Failures"

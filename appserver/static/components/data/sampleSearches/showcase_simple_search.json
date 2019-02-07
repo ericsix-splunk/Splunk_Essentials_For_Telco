@@ -1252,12 +1252,13 @@
         "description": [
             "First we pull in our demo dataset.",
             "Format our timestamp...",
-            " ",
+            "Sort on time. ",
             "Convert our timestamps to EPOCH times, which makes numeric operations easier.",
+            "Calculate our duration.",
             "Calculate our Average / Maximum / Minimum connection durations.",
-            "Convert to minutes",
-            "Convert to minutes",
-            "In most cases this is 0, or few seconds, but show in minutes.",
+            "Humanize our fields a bit..",
+            "Humanize our fields a bit..",
+            "Humanize our fields a bit..",
             "Make this more report friendly for the humans."
                     ],
         "value": "| inputlookup telco_wifi_mapping \n| eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") \n| sort _time \n| convert timeformat=\"%Y-%m-%d %T\" mktime(accessTime) AS accessTime mktime(accessDisconnectTime) AS accessDisconnectTime \n| eval accessDuration = accessDisconnectTime-accessTime \n| stats avg(accessDuration) as avgAccessDur max(accessDuration) as maxAccessdur min(accessDuration) as minAccessdur by apID \n| eval avgAccessDur=round(avgAccessDur/60,2) \n| eval maxAccessdur=round(maxAccessdur/60,2) \n| eval minAccessdur=round(minAccessdur/60,2) \n| rename apID AS \"WIFI AP Name\" avgAccessDur AS \"Average Duration (Minutes)\" maxAccessdur AS \"Maximum Duration (Minutes)\" minAccessdur AS \"Minimum Duration (Minutes)\"",

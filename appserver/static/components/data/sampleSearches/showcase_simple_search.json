@@ -848,13 +848,12 @@
             "Set our timestamp field..",
             "Enrich our call disposition status codes with more understandable reason..",
             "Search for failed calls ",
-            "Update the description field for a specific error, in this case Routing Error.",
             "Extract a country code from the dialed number. We assume the country code preceeds a 10 digit local number.",
             "Enrich the logs by adding a Country Name based on the dstCountry field we extracted.",
             "Calculate the count by the dstCountryName",
-            "Use the geomap feature to map the count."
+            "Use the geomap feature to map the count, using the geo_countries built in map and using the dstCountryName field as the Feature ID."
         ],
-        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=FAILED OR disposition=CONGESTED \n| eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName \n| stats count by dstCountryName  \n| geom geo_countries allFeatures=true featureIdfield=dstCountryName",
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=FAILED OR disposition=CONGESTED \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName \n| stats count by dstCountryName  \n| geom geo_countries allFeatures=true featureIdfield=dstCountryName",
         "label": "Failed Call Metrics - Geo Stats"
     },
 
@@ -870,16 +869,18 @@
         ],
         "description": [
             "First we pull in our demo dataset.",
-            "",
-            "Enrich our data...",
-            "Enrich our data... ",
-            "Here we will search for a specific Employee Identifier.",
-            "Narrow our interesting fields down a bit..",
-            "",
-            "",
-            "Make this more Human Readable.."
+            "Set our timestamp to the start field.",
+            "Enrich our events with the enriched call dispositions.",
+            "Search for calls that fall within the failed status.",
+            "Enrich our Description field with a bit more information in regards to what Congested means.",
+            "Extract the source (src) country code.",
+            "Extract the destination (dst) country code.",
+            "Enrich our events with country and destination country codes.",
+            "Perform analytics on the destination, disposition, descrition and time by Destination and Network",
+            "Rename our fields to a more human friend name.",
+            "Format our table for reporting."
         ],
-        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=FAILED OR disposition=CONGESTED \n| eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| table src dst dstCountryCode partyBiD disposition Description _time \n| stats count values(dst) AS Destination values(disposition) AS Disposition values(Description) AS Description values(_time) as Time by partyBiD dst \n| rename partyBiD AS \"Routed Path\" \n| table Time Destination Description \"Routed Path\" count",
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=FAILED OR disposition=CONGESTED \n| eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| stats count values(dst) AS Destination values(disposition) AS Disposition values(Description) AS Description values(_time) as Time by partyBiD dst \n| rename partyBiD AS \"Routed Path\" \n| table Time Destination Description \"Routed Path\" count",
         "label": "Failed Call Metrics - By Destination and Gateway"
     },
 
@@ -895,16 +896,15 @@
         ],
         "description": [
             "First we pull in our demo dataset.",
-            "",
-            "Enrich our data...",
-            "Enrich our data... ",
-            "Here we will search for a specific Employee Identifier.",
-            "Narrow our interesting fields down a bit..",
-            "",
-            "",
-            "Make this more Human Readable.."
+            "Define our timestamp field.",
+            "Enrich our events with the enriched call dispositions.",
+            "Search for calls that fall within the successful status.",
+            "Extract the destination (dst) country code.",
+            "Enrich our events with country and destination country codes.",
+            "Perform analytics on the destination country name.",
+            "Use geom feature to map the count, using the geo_countries built in map and using the dstCountryName as the FeatureID."
         ],
-        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=\"ANSWERED\" OR disposition=\"BUSY\" \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| stats count by dstCountryName \n| geom geo_countries allFeatures=true featureIdfield=dstCountryName",
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=\"ANSWERED\" OR disposition=\"BUSY\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| stats count by dstCountryName \n| geom geo_countries allFeatures=true featureIdfield=dstCountryName",
         "label": "General Call Metrics - Geo Stats"
     },
 
@@ -920,16 +920,14 @@
         ],
         "description": [
             "First we pull in our demo dataset.",
-            "",
-            "Enrich our data...",
-            "Enrich our data... ",
-            "Here we will search for a specific Employee Identifier.",
-            "Narrow our interesting fields down a bit..",
-            "",
-            "",
-            "Make this more Human Readable.."
+            "Define our timestamp field.",
+            "Extract the destination (dst) country code.",
+            "Enrich our events with the enriched call dispositions.",
+            "Perform analytics on the destination country name.",
+            "Reverse sort on our count.",           
+            "Limit our results to 10 results."
         ],
-        "value": "| inputlookup cdr_logs \n| eval _time = start \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName \n| top limit=10 dstCountryName",   
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName \n| stats count by dstCountryName \n| sort - count \n| head 10",
         "label": "General Call Metrics - Top Destination Countries"
     },
 
@@ -945,16 +943,13 @@
         ],
         "description": [
             "First we pull in our demo dataset.",
-            "",
-            "Enrich our data...",
-            "Enrich our data... ",
-            "Here we will search for a specific Employee Identifier.",
-            "Narrow our interesting fields down a bit..",
-            "",
-            "",
-            "Make this more Human Readable.."
+            "Define our timestamp field.",
+            "Enrich our events with the enriched call dispositions.",
+            "Extract the destination (dst) country code.",
+            "Enrich our events with country and destination country codes.",
+            "Perform analytics on the destination country name. Here we use rare, but you can also use stats and sorted results."
         ],
-        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| rare limit=10 dstCountryName",
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| rare limit=10 dstCountryName",
         "label": "General Call Metrics - Least Called Countries"
     },
 
@@ -970,16 +965,16 @@
         ],
         "description": [
             "First we pull in our demo dataset.",
-            "",
-            "Enrich our data...",
-            "Enrich our data... ",
-            "Here we will search for a specific Employee Identifier.",
-            "Narrow our interesting fields down a bit..",
-            "",
-            "",
-            "Make this more Human Readable.."
+            "Define our timestamp field.",
+            "Find our destination country code.",
+            "Enrich our events with country and destination country codes.",
+            "Perform some analytics to get a count of dialed countries by source and destination. We also get a count per country.",
+            "Perform analytics on the reduced event set. Summate our total count by source, list our dialed destinations and counts also by source.",
+            "Reverse sort on our count.",
+            "Format our report",
+            "Humanize the report to make it more understandable."
         ],
-        "value": "| inputlookup cdr_logs \n| eval _time = start | rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| top dstCountryName by src \n| rename src AS \"Caller\" dstCountryName AS \"Destinaton Country\" count as Count",
+        "value": "| inputlookup cdr_logs \n| eval _time = start \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| stats count count(dstCountryName) as dcount values(dstCountryName) as CountryName by src dstCountryName \n| stats sum(count) as count list(dcount) as dcount values(CountryName) as dstCountryName by src \n| sort - count \n| table src dstCountryName dcount count \n| rename src AS \"Subscriber\" count AS \"Total Call Count\" dcount AS \"Destination Calls\" dstCountryName AS \"Dialed Countries\"",
         "label": "General Call Metrics - Top Outbound Callers"
     },
 
@@ -995,14 +990,16 @@
         ],
         "description": [
             "First we pull in our demo dataset.",
-            "",
-            "Enrich our data...",
-            "Enrich our data... ",
-            "Here we will search for a specific Employee Identifier.",
-            "Narrow our interesting fields down a bit..",
-            "",
-            "",
-            "Make this more Human Readable.."
+            "Define our timestamp field.",
+            "Enrich our events with the enriched call dispositions.",
+            "Search for calls that fall within the successful status.",
+            "Extract our source (src) country code.",
+            "Extract the destination (dst) country code.",
+            "Enrich our events with country and destination country codes.",
+            "Reduce our results to only the fields of interest.",
+            "Perform analytics on the destination and destination country by duration and source.",
+            "Rename our fields to be more human friendly..",
+            "Sort on the call duration."
         ],
         "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=\"ANSWERED\" OR disposition=\"BUSY\" \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| fields src dst dstCountryName duration \n| stats count list(dst) AS dst list(dstCountryName) as dstCountryName by duration src \n| rename duration AS \"Call Duration\" src AS \"Caller\" dst AS \"Called Number\" dstCountryName AS \"Destination Country\" \n| sort - \"Call Duration\"",
         "label": "General Call Metrics - Top Call Durations by Destination"
@@ -1020,14 +1017,16 @@
         ],
         "description": [
             "First we pull in our demo dataset.",
-            "",
-            "Enrich our data...",
-            "Enrich our data... ",
-            "Here we will search for a specific Employee Identifier.",
-            "Narrow our interesting fields down a bit..",
-            "",
-            "",
-            "Make this more Human Readable.."
+            "Set our timestamp to the start field.",
+            "Enrich our events with the enriched call dispositions.",
+            "Search for calls that fall within the successful status.",
+            "Extract the source (src) country code.",
+            "Extract the destination (dst) country code.",
+            "Enrich our events with country and destination country codes.",
+            "Narrow down our fields to those of interest.",
+            "Perform analytics on the destination, disposition, descrition and time by Duration and Source.",
+            "Rename our fields to a more human friend name.",
+            "Sort by duration."
         ],
         "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=\"ANSWERED\" OR disposition=\"BUSY\" \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| fields src dst dstCountryName duration \n| stats count list(dst) AS dst list(dstCountryName) as dstCountryName by duration src \n| rename duration AS \"Call Duration\" src AS \"Caller\" dst AS \"Called Number\" dstCountryName AS \"Destination Country\" \n| sort \"Call Duration\"",
         "label": "General Call Metrics - Shortest Call Durations by Destination"
@@ -1277,10 +1276,7 @@
         ],
         "description": [
             "First we pull in our demo dataset.",
-            "Format our timestamp...",
-            " ",
-            "Chart the count of Access PointIDs over 15 minute buckets.",
-            "Formatting with a lookup, remove for real data source."
+            "Use geostats to plot out our results. Define our lat and long fields in the data, and set our binspan for more accurate mapping."
                     ],
         "value": "| inputlookup telco_wifi_mapping \n| geostats latfield=apLat longfield=apLong binspanlat=20 binspanlong=20 count by accessTime",
         "label": "WIFI AP Geostats Access by Time"

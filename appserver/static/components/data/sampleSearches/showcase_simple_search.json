@@ -1282,8 +1282,8 @@
             "Chart the count of Access PointIDs over 15 minute buckets.",
             "Formatting with a lookup, remove for real data source."
                     ],
-        "value": "| inputlookup telco_wifi_mapping \n| eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") \n| sort - _time \n| timechart count fixedrange=false span=15m by apID",
-       "label": "WIFI AP Geostats Access by Time"
+        "value": "| inputlookup telco_wifi_mapping \n| geostats latfield=apLat longfield=apLong binspanlat=20 binspanlong=20 count by accessTime",
+        "label": "WIFI AP Geostats Access by Time"
     },
 
     "WIFI AP Networks Users Connect To": {

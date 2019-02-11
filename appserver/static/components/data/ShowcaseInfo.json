@@ -844,6 +844,124 @@
         ]
     },
 
+    "showcase_prepaid_mobile_search0014": {
+        "id": "02A By Process Errors over Time Alertable",
+        "name": "Business Process Errors Over Time within the Order-to-Activation Workflow",
+        "description": "Order to Activation Errors by Process within the Business Workflow with an Alertable Search.<p>",
+        "relevance": "<p>This example gives us a By-Process Error Count of orders as they flow through our Order to Activation Processes over time. This is important because most Telco's and Service Providers have a large number of processes in their O2A workflows, and very few have the ability to monitor transactions as they flow through the various systems typically due to large numbers of custom and homegrown applications in use. Having this insight allows a business to very quickly trouble shoot where a problem is occuring. For example, understanding if the problem comes from a Service Activation System, or a Inventory Fullfilment System, is extremely beneficial to maintain good service and happy customers.<p>",
+        "operationalize": "<p>This alertable search gives us a 10 minute search window to find errors across our Order to Actvation workflow and alert on the errors, by process.  With this information, we can determine if there is an issue within a specific O2A process and fix this with minimal impact.",
+        "howToImplement": "<p>For this search, our data source for the transactions needs have a transaction status that indicates either a success, or a failure by process. This example has 4 business processes included as an example ( Billing Systems, Inventory and Fullfilment, Service Activation, and CRM.) In reality there will be many more then 4 processes, but this search can easily be expand by including the data sources for the extra processes into the search.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Prepaid Mobile",
+        "hasSearch": "Yes",
+        "category": "Alerting, Monitoring",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=02A By Process Errors over Time Alertable",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_1",
+        "icon": "Core_Use_Case.png",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | fields _time p1* p2* p3* p4* | eval p1=case(p1Status==\"OK\",0,1=1,\"1\"), p2=case(p2Status==\"OK\",0,1=1,\"1\"), p3=case(p3Status==\"OK\",0,1=1,\"1\"),p4=case(p4Status==\"OK\",0,1=1,\"1\") | eventstats sum(p1) AS p1cnt sum(p2) AS p2cnt sum(p3) AS p3cnt sum(p4) AS p4cnt by _time | timechart fixedrange=false span=10m sum(p1cnt) AS \"Billing\" sum(p2cnt) as \"Fullfilment\" sum(p3cnt) AS \"ServiceActivation\" sum(p4cnt) AS \"CRM\" | search  (\"Billing\" > 0) OR (\"Fullfilment\" > 0) OR ( \"ServiceActivation\" > 0 ) OR ( \"CRM\" > 0)",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",  
+        "examples": [
+            {
+                "name": "02A By Process Errors over Time Alertable",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "prepaid_mobile_search0014.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/prepaid_mobile_search0014.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "none",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "02A By Process Errors over Time Alertable",
+                "search": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | fields _time p1* p2* p3* p4* | eval p1=case(p1Status==\"OK\",0,1=1,\"1\"), p2=case(p2Status==\"OK\",0,1=1,\"1\"), p3=case(p3Status==\"OK\",0,1=1,\"1\"),p4=case(p4Status==\"OK\",0,1=1,\"1\") | eventstats sum(p1) AS p1cnt sum(p2) AS p2cnt sum(p3) AS p3cnt sum(p4) AS p4cnt by _time | timechart fixedrange=false span=10m sum(p1cnt) AS \"Billing\" sum(p2cnt) as \"Fullfilment\" sum(p3cnt) AS \"ServiceActivation\" sum(p4cnt) AS \"CRM\" | search  (\"Billing\" > 0) OR (\"Fullfilment\" > 0) OR ( \"ServiceActivation\" > 0 ) OR ( \"CRM\" > 0)",
+                "vizParameters": {
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_prepaid_mobile_search0015": {
+        "id": "Provisioning and Activation Errors by Type Alertable",
+        "name": "Provisioning and Activation Errors with Detailed Messages",
+        "description": "Provisioning and Activation Errors by Type within the Service Activation Process and with Enriched Error Messages and Alertable Results.<p>",
+        "relevance": "<p>This example gives us a Service Activation Process view of errors over time with a more human readable description of the error. With this information, we have the capability to understand where within the Service Activation process we are encountering problems, and what teams to work with in order to resolve these.<p>",
+        "operationalize": "<p> This search gives us a simple view of what errors are occuring within the Service Activation Process.  With this information, we can determine how to quickly troubleshoot and resolve technology specific problems within the Process (in this example the Service Activation Process.)",
+        "howToImplement": "<p>For this search, our data source for the transactions needs have a transaction failure status within the Process (in this case Service Activation.) Additionally, there should be a error code to human friendly description mapping that is used to enrich the source data for the final view.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Prepaid Mobile",
+        "hasSearch": "Yes",
+        "category": "Alerting, Monitoring",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Provisioning and Activation Errors by Type Alertable",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_1",
+        "icon": "Core_Use_Case.png",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | search p3Status=\"FAIL\" | fields _time p3* customer* | lookup prepaid_mobile_errors pMessage AS p3Message | stats count values(pDetails) AS \"FailureReason\" values(p3Message) AS \"ErrorMessage\" by _time | search count > 0 | stats sum(count) AS count by FailureReason ErrorMessage | where count > 0",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",  
+        "examples": [
+            {
+                "name": "Provisioning and Activation Errors by Type Alertable",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "prepaid_mobile_search0015.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/prepaid_mobile_search0015.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "none",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "Provisioning and Activation Errors by Type Alertable",
+                "search": "| inputlookup prepaid_o2a_logs | eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | search p3Status=\"FAIL\" | fields _time p3* customer* | lookup prepaid_mobile_errors pMessage AS p3Message | stats count values(pDetails) AS \"FailureReason\" values(p3Message) AS \"ErrorMessage\" by _time | search count > 0 | stats sum(count) AS count by FailureReason ErrorMessage | where count > 0",
+                "vizParameters": {
+                "drilldown": "none",
+                "charting.chart" : "column",
+                "charting.drilldown" : "none",
+                "charting.chart.stackMode" : "stacked",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
     "showcase_cdn_search0001": {
         "id": "Cache Hit Ratio by Number of Requests",
         "name": "Cache Hit Ratio by Total Requests",
@@ -2026,6 +2144,120 @@
                     "useColors" : "1",
                     "refresh.display": "progressbar"
                 } 
+            }
+        ]
+    },
+
+    "showcase_cdn_search0015": {
+        "id": "CDN Total Amount of Traffic Transferred Over Time Alertable",
+        "name": "Total Traffic Transferred Over Time with Thresholds",
+        "description": "The total amount of traffic transferred over the CDN by all customers with alertable thresholds.<p>",
+        "relevance": "<p>This example shows us the total amount of traffic our CDN is using and how to alert based on static thresholds for maximum or minimum traffic loads.",
+        "operationalize": "This search gives us an understanding of the total amount of traffic within the CDN. Where these values are high gives us insight to where we may need to increase capacity, or perhaps increase content delivery pricing. Being able to identify these quickly, and resolve the problems is great for business.<p>",
+        "howToImplement": "This search requires that you have CDN applications logs that have time series data and total bytes of data transferred. <p>",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "hasSearch": "Yes",
+        "category": "Alerting, Reporting",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN Total Amount of Traffic Transferred Over Time Alertable",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_1",
+        "icon": "Core_Use_Case.png",        
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time | sort 0 _time | fields _time messageBytes | eval trafficMbs=messageBytes/pow(1024,2) | timechart span=15m fixedrange=false sum(trafficMbs) as trafficMbs | eval alertLowLevel = 1800.0, alertHighLevel = 4350.0 | where ( trafficMbs < alertLowLevel ) OR ( trafficMbs > alertHighLevel ) | table _time trafficMbs",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "CDN Total Amount of Traffic Transferred Over Time Alertable",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "cdn_search0015.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0015.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "none",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "CDN Total Amount of Traffic Transferred Over Time Alertable",
+                "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") | convert timeformat=\"%Y-%m-%d %T\" mktime(_time) AS _time | sort 0 _time | fields _time messageBytes | eval trafficMbs=messageBytes/pow(1024,2) | timechart span=15m fixedrange=false sum(trafficMbs) as trafficMbs | eval alertLowLevel = 1800.0, alertHighLevel = 4350.0 | where ( trafficMbs < alertLowLevel ) OR ( trafficMbs > alertHighLevel ) | table _time trafficMbs",
+                "vizParameters": {
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },    
+
+    "showcase_cdn_search0016": {
+        "id": "CDN Average Last Mile Round Trip Time Alertable",
+        "name": "High Last Mile Round Trip Times for Content Services",
+        "description": "This example provides an alertable search for the round trip times for the \"last mile\" of the CDNsN the exceed a defined threshold.<p>",
+        "relevance": "<p>This example provides an alertable search for the round trip times for the \"last mile\" of the CDN the exceed a defined threshold.",
+        "operationalize": "Understanding latency from the core / backhaul network to the \"last mile\", or Edge Services / CPE, enables informed decisions about capacity management and planning. When these times are high, it indicates that there is high load on the network and that capacity should potentially be increased.<p>",
+        "howToImplement": "This search requires that you have CDN applications logs that have time series data for the round trip time of what's defined as the Last Mile equipment. Typically this kind of data doesn't come from application logs, but from network monitoring tools or custom alerting solutions.<p>",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "hasSearch": "Yes",
+        "category": "Alerting, Reporting",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN Average Last Mile Round Trip Time Alertable",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_1",
+        "icon": "Core_Use_Case.png",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Simple",
+        "datasource": "Device Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | sort 0 _time | fields _time netPerflastMileRTT cp | stats avg(netPerflastMileRTT) AS avgLastMileRTT values(cp) as CPE by _time cp | eval avgLastMileRTT=round(avgLastMileRTT,3), LastMileHigh = 49.95| where avgLastMileRTT > LastMileHigh | table _time cp avgLastMileRTT",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "CDN Average Last Mile Round Trip Time Alertable",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "cdn_search0016.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0016.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "none",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "CDN Average Last Mile Round Trip Time Alertable",
+                "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | sort 0 _time | fields _time netPerflastMileRTT cp | stats avg(netPerflastMileRTT) AS avgLastMileRTT values(cp) as CPE by _time cp | eval avgLastMileRTT=round(avgLastMileRTT,3), LastMileHigh = 49.95| where avgLastMileRTT > LastMileHigh | table _time cp avgLastMileRTT",
+                "vizParameters": {
+                "refresh.display": "progressbar"
+                }
             }
         ]
     },
@@ -3829,6 +4061,8 @@
     "showcase_prepaid_mobile_search0011",
     "showcase_prepaid_mobile_search0012",
     "showcase_prepaid_mobile_search0013",
+    "showcase_prepaid_mobile_search0014",
+    "showcase_prepaid_mobile_search0015",
     "showcase_sa_search0001",
     "showcase_sa_search0002",
     "showcase_sa_search0003",
@@ -3868,7 +4102,9 @@
     "showcase_cdn_search0011",
     "showcase_cdn_search0012",
     "showcase_cdn_search0013",
-    "showcase_cdn_search0014"
+    "showcase_cdn_search0014",
+    "showcase_cdn_search0015",
+    "showcase_cdn_search0016"
     ]
       }
      }

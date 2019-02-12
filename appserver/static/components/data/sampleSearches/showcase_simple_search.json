@@ -246,7 +246,7 @@
             "Enrich these results with the human friendly description of the Product/SKU",
             "Get our top products."
         ],
-        "value": "| inputlookup prepaid_o2a_logs \n| fields _time productSKU transactionStatus \n| search transactionStatus=\"SUCCESS\" \n| lookup prepaid_o2a_products productSKU \n| top description",
+        "value": "| inputlookup prepaid_o2a_logs \n| fields _time productSKU transactionStatus \n| search transactionStatus=\"SUCCESS\" \n| lookup prepaid_o2a_products productSKU \n| stats count by description \n| sort - count",
         "label": "O2A Top Selling Packages"
     },
     
@@ -457,6 +457,34 @@
         "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:S\") \n| fields _time messageBytes cached cp \n| stats count values(messageBytes) AS totalBytes by _time cp cached \n| stats sum(count) AS totalRequests sum(totalBytes) as totalBytes by cached  \n| stats sum(totalRequests) as totalRequested sum(eval(totalRequests*if(cached==\"true\",1,0))) as \"cached\" \n| eval cacheRequestedHitRatio=round(cached/totalRequested * 100, 2) \n| fields cacheRequestedHitRatio",
         "label": "Cache Hit Ratio by Number of Requests"
     },
+    
+    "Cache Hit Ratio by Number of Requests Alertable": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdn_general_operations | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamps..",
+            "Pull our fields of interest from the sourcetype(s)",
+            "Start calculating our hit ratio with our messageBytes by time cachestatus contentprovider",
+            "Calculate total hits and total bytes transferred from our cache by cachestatus and time",
+            "Summate our total requests and cached content values",
+            "Calculate a hit ratio of cached content and format it..",
+            "Use timechart chart with 5 minute span to determine the average hit ratio.",
+            "Set our threshold for low cache hit alerts. Here we say 50 percent, but realistically this might lower. Also round out our ratio to.",
+            "Find where our ratio is below the threshold",
+            "Format the table for alert friendliness."
+        ],
+        "value": "| inputlookup cdn_general_operations \n| eval _time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") \n| fields _time messageBytes cached cp \n| stats count values(messageBytes) AS totalBytes by _time cp cached \n| stats sum(count) AS totalRequests sum(totalBytes) as totalBytes by cached _time \n| stats sum(totalRequests) as totalRequested sum(eval(totalRequests*if(cached==\"true\",1,0))) as \"cached\" by _time \n| eval cacheRequestedHitRatio=round(cached/totalRequested * 100, 2) \n| timechart span=5min fixedrange=false avg(cacheRequestedHitRatio) AS avgCacheRequestedHitRatio \n| eval lowCacheHitThreshold = 50.0, avgCacheRequestedHitRatio=round(avgCacheRequestedHitRatio,2) \n| where avgCacheRequestedHitRatio < lowCacheHitThreshold \n| table _time avgCacheRequestedHitRatio",
+        "label": "Cache Hit Ratio by Number of Requests Alertable"
+    },
+
 
     "Cache Hit Ratio by Amount of Traffic": {
         "prereqs": [
@@ -481,6 +509,30 @@
         "label": "Cache Hit Ratio by Amount of Traffic"
     },
 
+    "Cache Hit Ratio by Amount of Traffic Alertable": {
+        "prereqs": [
+            {
+                "test": "| inputlookup cdn_general_operations | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamps..",
+            "Pull our fields of interest from the sourcetype(s)",
+            "Start calculating our hit ratio with our messageBytes by time cachestatus contentprovider.",
+            "Calculate a sum of our messages/request and calculate the sum of our cached content accessed.",
+            "Calculate a hit ratio of cached traffic and format it. Also set a threshold for our alert.",
+            "Use timechart chart with 5 minute span to determine the average hit ratio.",
+            "Find where our ratio is below the threshold",
+            "Format the table for alert friendliness."
+        ],
+        "value": "| inputlookup cdn_general_operations \n| eval _time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") \n| fields _time messageBytes cached \n| timechart span=5m fixedrange=false sum(messageBytes) as \"totalBytes\" sum(eval(messageBytes * if(cached==\"true\", 1, 0))) as \"cachedBytes\" \n| eval cacheTrafficHitRatio= round(cachedBytes/totalBytes * 100, 2), lowHitRatio = 48 \n| where cacheTrafficHitRatio < lowHitRatio \n| table _time cacheTrafficHitRatio",
+        "label": "Cache Hit Ratio by Amount of Traffic Alertable"
+    },
     
     "CDN Total Number of Requests": {
         "prereqs": [
@@ -1344,6 +1396,35 @@
                     ],
         "value": "| inputlookup telco_wifi_mapping \n| eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") \n| sort - _time \n| timechart count fixedrange=false span=15m by apID",
        "label": "WIFI AP Association"
+    },
+
+    "WIFI AP Association Alertable": {
+        "prereqs": [
+            {
+                "test": "| inputlookup telco_wifi_mapping | stats count  ",
+                "field": "count",
+                "greaterorequalto": 1,
+                "resolution": "Verify that lookups installed with Splunk Essentials for Telco is present",
+                "name": "track_application_usage lookup file"
+            }
+        ],
+        "description": [
+            "First we pull in our demo dataset.",
+            "Format our timestamp...",
+            "Take our relevant fields..",
+            "Here we define our End of Business time, or the point at which we expect no connections to our WAPs.",
+            "Here we define our Start of Business time, or the point at which we expect to start having connections to our WAPs.",
+            "Set our current hour and minute from our _time. This will be used to compare against our defined hours.",
+            "Find connections that are outside the defined business hours, as in not between 00:30 and 05:30.",
+            "Set our bucket span for 15minutes, to align with both the event times and our alert.",
+            "Get a count by WAP and time.",
+            "Get a list of counts per WAP and time.",
+            "Convert our epoch time to human readable.",
+            "Humanize our fields.",
+            "Return results when this is less then 1, meaning no-one is connecting to a WAP during business hours."
+                    ],
+        "value": "| inputlookup telco_wifi_mapping \n| eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") \n| fields _time apID \n| eval EndofBusinessHour=strftime(_time,\"00:30\") \n| eval StartofBusinessHour=strftime(_time,\"05:30\") \n| eval CurrentTime=strftime(_time,\"%H:%M\") \n| where CurrentTime > EndofBusinessHour OR CurrentTime > StartofBusinessHour \n| bin span=15minutes _time \n| stats count by apID _time \n| stats values(count) AS \"Connections\" by apID _time \n| convert ctime(_time) \n| rename apID AS \"WAP Name\" _time AS \"Connection Time\" \n| where Connections < 1",
+        "label": "WIFI AP Association Alertable"
     },
 
     "WIFI AP Access Duration Stats": {

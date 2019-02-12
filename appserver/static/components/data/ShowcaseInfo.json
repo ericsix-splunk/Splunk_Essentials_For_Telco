@@ -235,7 +235,7 @@
         "datasource": "Application Logs",
         "highlight": "Yes",
         "alertvolume": "unused",
-        "sampleSPL": "| inputlookup prepaid_o2a_logs | fields _time productSKU transactionStatus | search transactionStatus=\"SUCCESS\" | lookup prepaid_o2a_products productSKU | top description",
+        "sampleSPL": "| inputlookup prepaid_o2a_logs | fields _time productSKU transactionStatus | search transactionStatus=\"SUCCESS\" | lookup prepaid_o2a_products productSKU | stats count by description | sort - count",
         "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",  
         "examples": [
             {
@@ -257,11 +257,12 @@
             {
                 "panel": "row1cell1",
                 "type": "viz",
-                "vizType": "GraphElement",
+                "vizType": "ChartElement",
                 "title": "O2A Top Selling Packages",
-                "search": "| inputlookup prepaid_o2a_logs | fields _time productSKU transactionStatus | search transactionStatus=\"SUCCESS\" | lookup prepaid_o2a_products productSKU | top description",
+                "search": "| inputlookup prepaid_o2a_logs | fields _time productSKU transactionStatus | search transactionStatus=\"SUCCESS\" | lookup prepaid_o2a_products productSKU | stats count by description | sort - count",
                 "vizParameters": {
                 "drilldown": "none",
+                "charting.chart" : "pie",
                 "refresh.display": "progressbar"
                 }
             }
@@ -330,7 +331,7 @@
 
     "showcase_prepaid_mobile_search0006": {
         "id": "02A By Process Errors over Time",
-        "name": "Business Process Errors Over Time within the Order-to-Activation Workflow",
+        "name": "Errors within the Order-to-Activation Workflow",
         "description": "Order to Activation Errors by Process within the Business Workflow.<p>",
         "relevance": "<p>This example gives us a By-Process Error Count of orders as they flow through our Order to Activation Processes over time. This is important because most Telco's and Service Providers have a large number of processes in their O2A workflows, and very few have the ability to monitor transactions as they flow through the various systems typically due to large numbers of custom and homegrown applications in use. Having this insight allows a business to very quickly trouble shoot where a problem is occuring. For example, understanding if the problem comes from a Service Activation System, or a Inventory Fullfilment System, is extremely beneficial to maintain good service and happy customers.<p>",
         "operationalize": "<p>This search gives us a trellis timeline and count for our activations by a per process chart.  With this information, we can determine if there is an issue within a specific O2A process and fix this with minimal impact.",
@@ -462,9 +463,9 @@
     "showcase_prepaid_mobile_search0008": {
         "id": "02A Provisioning Errors by Customer ID",
         "name": "Order and Provisioning Errors with Customer ID",
-        "description": "Order To Activation Order and Provision Errors with Customer ID and Additional Information.<p>",
-        "relevance": "<p>This search provides a report of Order and Provisioning Errors that have occured. In this, we have additional details such as the location of the failed transaction, Customer Identifier, Error Code and Error Context, and associated Order Numbers / Transaction IDs.",
-        "operationalize": "<p>This search gives us insight to what errors our activations / services are failing with. Operationally this is important for us to understand what impact these errors have to our customers, or if these are expected errors. E.g., If TopUp/Refills are failing, then there is revenue lost or if we have a customer trying to by more SIMs then regulations allow.",
+        "description": "This search shows Order and Provisioning Errors with Customer ID and Additional Information.<p>",
+        "relevance": "<p>This search shows Order and Provisioning Errors with Customer ID and Additional Information.",
+        "operationalize": "<p>This search gives us insight to the what and why : errors our activations / services are failing with. Operationally this is important for us to understand what impact these errors have to our customers, or if these are expected errors. E.g., If TopUp/Refills are failing, then there is revenue lost or if we have a customer trying to by more SIMs then regulations allow.",
         "howToImplement": "<p>This search will require O2A log data from billing, activations, and CMS data. In this example, we have failed transactions, locations of the failed transactions, and error code and a lookup to map this error code to a human understandable message, along with some additional information around the User and the Trasnsaction IDs / Order IDs that failed.",
         "domain": "Application",
         "help": "Lets look at top Splunk Sourcetypes",
@@ -477,7 +478,7 @@
         "dashboard": "showcase_simple_search?ml_toolkit.dataset=02A Provisioning Errors by Customer ID",
         "dashboard_type": "XML Panels with Screenshot",
         "released": "1.0.0",
-        "journey": "Stage_4",
+        "journey": "Stage_3",
         "icon": "Core_Use_Case.png",
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Simple",
@@ -846,11 +847,11 @@
 
     "showcase_prepaid_mobile_search0014": {
         "id": "02A By Process Errors over Time Alertable",
-        "name": "Business Process Errors Over Time within the Order-to-Activation Workflow",
-        "description": "Order to Activation Errors by Process within the Business Workflow with an Alertable Search.<p>",
-        "relevance": "<p>This example gives us a By-Process Error Count of orders as they flow through our Order to Activation Processes over time. This is important because most Telco's and Service Providers have a large number of processes in their O2A workflows, and very few have the ability to monitor transactions as they flow through the various systems typically due to large numbers of custom and homegrown applications in use. Having this insight allows a business to very quickly trouble shoot where a problem is occuring. For example, understanding if the problem comes from a Service Activation System, or a Inventory Fullfilment System, is extremely beneficial to maintain good service and happy customers.<p>",
-        "operationalize": "<p>This alertable search gives us a 10 minute search window to find errors across our Order to Actvation workflow and alert on the errors, by process.  With this information, we can determine if there is an issue within a specific O2A process and fix this with minimal impact.",
-        "howToImplement": "<p>For this search, our data source for the transactions needs have a transaction status that indicates either a success, or a failure by process. This example has 4 business processes included as an example ( Billing Systems, Inventory and Fullfilment, Service Activation, and CRM.) In reality there will be many more then 4 processes, but this search can easily be expand by including the data sources for the extra processes into the search.",
+        "name": "Business Process Alerts for Errors within the Order-to-Activation Workflow",
+        "description": "This alertable search looks at a 10 minute window to find errors across our Order-to-Actvation workflows, by process.<p>",
+        "relevance": "<p>This alertable search looks at a 10 minute window to find errors across our Order-to-Actvation workflows, by process.",
+        "operationalize": "<p>This example gives us a By-Process Error Count of orders as they flow through our Order to Activation Processes over time in an easy format to generate alerts. This is important because most Telco's and Service Providers have a large number of processes in their O2A workflows, and very few have the ability to monitor transactions as they flow through the various systems typically due to large numbers of custom and homegrown applications in use. Having this insight allows a business to very quickly trouble shoot where a problem is occuring. For example, understanding if the problem comes from a Service Activation System, or a Inventory Fullfilment System, is extremely beneficial to maintain good service and happy customers.",
+        "howToImplement": "<p>For this search, our data source for the transactions needs have a transaction status that indicates either a success, or a failure by process. This example has four (4) business processes included as an example ( Billing Systems, Inventory and Fullfilment, Service Activation, and CRM.) In reality there will be many more then four processes, but this search can easily be expand by including the data sources for the extra processes into the search.",
         "domain": "Application",
         "help": "Lets look at top Splunk Sourcetypes",
         "app": "Splunk_Essentials_For_Telco",
@@ -1267,9 +1268,9 @@
 
     "showcase_cdn_search0005": {
         "id": "CDN Total Number of Errors Over Time",
-        "name": "Total Number of Errors Over Time",
-        "description": "The total number of Errors Over Time for the CDN.<p>",
-        "relevance": "<p>This example shows us the total number of errors over time for the CDN.",
+        "name": "Total Number of HTTP Request Errors Over Time",
+        "description": "This search returns the total number of HTTP Errors Over Time for the CDN.<p>",
+        "relevance": "<p>This search returns the total number of HTTP Errors Over Time for the CDN.",
         "operationalize": "This search gives us an understanding of the total number of HTTP errors to our CDN. Where these values are high gives us insight to where we maybe having hardware, software, or general content delivery issues. Being able to identify these quickly, and resolve the problems is great for business.<p>",
         "howToImplement": "This search requires that you have CDN applications logs that have time series data for a http response code. At a minimum you need http response codes 400+.<p>",
         "domain": "Application",
@@ -1283,7 +1284,7 @@
         "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN Total Number of Errors Over Time",
         "dashboard_type": "XML Panels with Screenshot",
         "released": "1.0.0",
-        "journey": "Stage_1",
+        "journey": "Stage_2",
         "icon": "Core_Use_Case.png",
         "displayapp": "Splunk_Essentials_For_Telco",
         "SPLEase": "Simple",
@@ -2208,16 +2209,16 @@
     "showcase_cdn_search0016": {
         "id": "CDN Average Last Mile Round Trip Time Alertable",
         "name": "High Last Mile Round Trip Times for Content Services",
-        "description": "This example provides an alertable search for the round trip times for the \"last mile\" of the CDNsN the exceed a defined threshold.<p>",
-        "relevance": "<p>This example provides an alertable search for the round trip times for the \"last mile\" of the CDN the exceed a defined threshold.",
+        "description": "This example provides an alertable search for the round trip times for the \"last mile\" of the CDNs that exceed a defined threshold.<p>",
+        "relevance": "<p>This example provides an alertable search for the round trip times for the \"last mile\" of the CDN that exceed a defined threshold.",
         "operationalize": "Understanding latency from the core / backhaul network to the \"last mile\", or Edge Services / CPE, enables informed decisions about capacity management and planning. When these times are high, it indicates that there is high load on the network and that capacity should potentially be increased.<p>",
-        "howToImplement": "This search requires that you have CDN applications logs that have time series data for the round trip time of what's defined as the Last Mile equipment. Typically this kind of data doesn't come from application logs, but from network monitoring tools or custom alerting solutions.<p>",
+        "howToImplement": "This search requires that you have CDN applications logs that have time series data for the round trip time of what's defined as the Last Mile equipment. Typically this kind of data doesn't come from application logs, but from network monitoring tools or custom alerting solutions, but for this example we are saying its included in the application logs. Additionally, there is an alerting threshold value defined in the search, in this case 49.95%. This should be adjusted to reflect operation requirements of the service.<p>",
         "domain": "Application",
         "help": "Lets look at top Splunk Sourcetypes",
         "app": "Splunk_Essentials_For_Telco",
         "usecase": "Content Delivery",
         "hasSearch": "Yes",
-        "category": "Alerting, Reporting",
+        "category": "Alerting",
         "knownFP": "unused",
         "includeSSE": "Yes",
         "dashboard": "showcase_simple_search?ml_toolkit.dataset=CDN Average Last Mile Round Trip Time Alertable",
@@ -2255,6 +2256,120 @@
                 "vizType": "TableElement",
                 "title": "CDN Average Last Mile Round Trip Time Alertable",
                 "search": "| inputlookup cdn_general_operations | eval time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") | convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time | sort 0 _time | fields _time netPerflastMileRTT cp | stats avg(netPerflastMileRTT) AS avgLastMileRTT values(cp) as CPE by _time cp | eval avgLastMileRTT=round(avgLastMileRTT,3), LastMileHigh = 49.95| where avgLastMileRTT > LastMileHigh | table _time cp avgLastMileRTT",
+                "vizParameters": {
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_cdn_search0017": {
+        "id": "Cache Hit Ratio by Number of Requests Alertable",
+        "name": "Cache Hit Ratio with Threshold Alerts",
+        "description": "This example shows the Ratio of Requests that are accessing Cached Content and alerts based on a defined threshold. <p>",
+        "relevance": "<p>This example shows the Ratio of Requests that are accessing Cached Content and alerts based on a defined threshold.",
+        "operationalize": "Having an understanding of how much content is being delivered by CDN Caches allows us to understand how to better operationalize our networks for Content Delivery. Having alerts for when our cache hit ratios drop lower then a defined threshold will help provide better customer experience and potentially reduce costs associated with transfers.",
+        "howToImplement": "This search requires that you have CDN applications logs that have time series data for a total message size transferred per request, the content provider / identifier, and the status of the content. E,g., if the requested content is cached, or not. Additionally, a defined threshold for the alert is required and set in the search itself, in this case 50%. This should be adjusted to reflect operation requirements of the service.<p>",
+        "domain": "Content Delivery",
+        "help": "Cache Hit Ratio by Number of Requests",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "hasSearch": "Yes",
+        "category": "Alerting",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Cache Hit Ratio by Number of Requests Alertable",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_1",
+        "icon": "Core_Use_Case.png",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval _time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") | fields _time messageBytes cached cp | stats count values(messageBytes) AS totalBytes by _time cp cached | stats sum(count) AS totalRequests sum(totalBytes) as totalBytes by cached _time | stats sum(totalRequests) as totalRequested sum(eval(totalRequests*if(cached==\"true\",1,0))) as \"cached\" by _time | eval cacheRequestedHitRatio=round(cached/totalRequested * 100, 2) | timechart span=5min fixedrange=false avg(cacheRequestedHitRatio) AS avgCacheRequestedHitRatio | eval lowCacheHitThreshold = 50.0, avgCacheRequestedHitRatio=round(avgCacheRequestedHitRatio,2) | where avgCacheRequestedHitRatio < lowCacheHitThreshold | table _time avgCacheRequestedHitRatio",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "Cache Hit Ratio by Number of Requests Alertable",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "cdn_search0017.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0017.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        "autoOpen": "none",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "Cache Hit Ratio by Number of Requests Alertable",
+                "search": "| inputlookup cdn_general_operations | eval _time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") | fields _time messageBytes cached cp | stats count values(messageBytes) AS totalBytes by _time cp cached | stats sum(count) AS totalRequests sum(totalBytes) as totalBytes by cached _time | stats sum(totalRequests) as totalRequested sum(eval(totalRequests*if(cached==\"true\",1,0))) as \"cached\" by _time | eval cacheRequestedHitRatio=round(cached/totalRequested * 100, 2) | timechart span=5min fixedrange=false avg(cacheRequestedHitRatio) AS avgCacheRequestedHitRatio | eval lowCacheHitThreshold = 50.0, avgCacheRequestedHitRatio=round(avgCacheRequestedHitRatio,2) | where avgCacheRequestedHitRatio < lowCacheHitThreshold | table _time avgCacheRequestedHitRatio",
+                "vizParameters": {
+                "count": "15",
+                "refresh.display": "progressbar"
+                }
+            }
+        ]
+    },
+
+    "showcase_cdn_search0018": {
+        "id": "Cache Hit Ratio by Amount of Traffic Alertable",
+        "name": "Total Cache Hit Ratio of Traffic with Thresholds",
+        "description": "This example shows Ratio of Traffic that is accessing the CDN Cache within a defined threshold for alerting.<p>",
+        "relevance": "<p>This example shows Ratio of Traffic that is accessing the CDN Cache within a defined threshold for alerting.",
+        "operationalize": "This search gives us insight to what ratio of the traffic for our Content is coming from our Caches. Based on the value of this, the business can make informed decisions about where to increase, or decrease, caching capabilities.<p>",
+        "howToImplement": "This search requires that you have CDN applications logs that have time series data for a total message size transferred per request, and the status of the content. E,g., if the requested content is cached, or not. A threshold is then defined within the search for what our alert ratio is, in this case 48%. This should be adjusted to reflect operation requirements of the service.<p>",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Content Delivery",
+        "hasSearch": "Yes",
+        "category": "Alerting",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=Cache Hit Ratio by Amount of Traffic Alertable",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_1",
+        "icon": "Core_Use_Case.png",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Intermediate",
+        "datasource": "Application Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup cdn_general_operations | eval _time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") | fields _time messageBytes cached | timechart span=5m fixedrange=false sum(messageBytes) as \"totalBytes\" sum(eval(messageBytes * if(cached==\"true\", 1, 0))) as \"cachedBytes\" | eval cacheTrafficHitRatio= round(cachedBytes/totalBytes * 100, 2), lowHitRatio = 48 | where cacheTrafficHitRatio < lowHitRatio | table _time cacheTrafficHitRatio",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "Cache Hit Ratio by Amount of Traffic Alertable",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "cdn_search0018.png",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/cdn_search0018.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "none",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "TableElement",
+                "title": "Cache Hit Ratio by Amount of Traffic Alertable",
+                "search": "| inputlookup cdn_general_operations | eval _time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") | fields _time messageBytes cached | timechart span=5m fixedrange=false sum(messageBytes) as \"totalBytes\" sum(eval(messageBytes * if(cached==\"true\", 1, 0))) as \"cachedBytes\" | eval cacheTrafficHitRatio= round(cachedBytes/totalBytes * 100, 2), lowHitRatio = 48 | where cacheTrafficHitRatio < lowHitRatio | table _time cacheTrafficHitRatio",
                 "vizParameters": {
                 "refresh.display": "progressbar"
                 }
@@ -2554,8 +2669,8 @@
     "showcase_physical_search0006": {
         "id": "Rack Sensor Maximum Temperatures Over Time",
         "name": "Rack Sensor Maximum Temperatures Over Time",
-        "description": "Aggregated Maximum Temperature of Rack Sensors, by Time, per Server Rack.<p>",
-        "relevance": "<p>This example uses data from temperature sensors on the outlet side of a server rack. We use this data to determine the Maximum temperature range across the sensors in one of our racks and display a single value element with thresholds and colors applied to have an understanding of what our temperatures in the rack are working at.<p>",
+        "description": "This search returns a Maximum Temperature of Rack Sensors in a Data Center.<p>",
+        "relevance": "<p>This search returns Maximum Temperature of Rack Sensors in a Data Center.<p>",
         "operationalize": "<p> This example uses data from temperature sensors that are installed on the racks in our data center. In this case we have three sensors per rack, on the outflow / backside of the rack. We can monitor and trend the temperatures and alert when temperatures are above average.",
         "howToImplement": "<p>For this search, our data source for the transactions needs have a transaction failure status within the Process (in this case Service Activation.) Additionally, there should be a error code to human friendly description mapping that is used to enrich the source data for the final view.",
         "domain": "Application",
@@ -2572,7 +2687,7 @@
         "journey": "Stage_1",
         "icon": "Core_Use_Case.png",
         "displayapp": "Splunk_Essentials_For_Telco",
-        "SPLEase": "Intermediate",
+        "SPLEase": "Simple",
         "datasource": "Device Logs",
         "highlight": "Yes",
         "alertvolume": "unused",
@@ -2695,8 +2810,8 @@
     "showcase_subscriber_search0001": {
         "id": "General Call Disposition Metrics",
         "name": "General Call Disposition Details and Information",
-        "description": "This example gives us insight to our Calls and an understanding of our call dispositions.<p>",
-        "relevance": "This example gives us insight to our Calls and an understanding of our call dispositions.",
+        "description": "This example gives us insight to our Calls and an understanding of our Call Dispositions.<p>",
+        "relevance": "This example gives us insight to our Calls and an understanding of our Call Dispositions.",
         "howToImplement": "<p>This search will go through the CDR logs and use a lookup to enrich a disposition / error code to a human readable message. We then run the results through stats and humanize the results for easily readable report.",
         "operationalize": "This example gives us a snapshot view of our current VOIP system and gives us insight to where there may be potential technical issues. This search utilizes CDR logs and a lookup that maps error codes to a human readable message for easier understanding.<p>",
         "domain": "Application",
@@ -2704,7 +2819,7 @@
         "app": "Splunk_Essentials_For_Telco",
         "usecase": "Subscriber Services",
         "hasSearch": "Yes",
-        "category": "Alerting, Capacity Planning",
+        "category": "Alerting",
         "knownFP": "unused",
         "includeSSE": "Yes",
         "dashboard": "showcase_simple_search?ml_toolkit.dataset=General Call Disposition Metrics",
@@ -2754,8 +2869,8 @@
     "showcase_subscriber_search0002": {
         "id": "Failed Call Metrics - Simple",
         "name": "Call Failure Statistics",
-        "description": "This search shows us all the general failures for our Customers Calls on our network.<p>",
-        "relevance": "<p>This search shows us all the general failures for our Customers Calls on our network.",
+        "description": "This search shows us all the general failures for our Customer's Calls on our network.<p>",
+        "relevance": "<p>This search shows us all the general failures for our Customer's Calls on our network.",
         "howToImplement": "<p>This search requires CDR logs with a disposition / error field, and then a lookup with a mapping of the disposition codes to a human friendly message. From there, we calculate the number of occurences of these by the disposition and display this. This can then easily be operationalized as an alert or action.",
         "operationalize": "This search is important because it provides us with insight to the failures our network is experiencing.<p> We can operationalize this in the form of an alert or action.", 
         "domain": "Application",
@@ -4041,6 +4156,63 @@
                 }
             }
         ]
+    },
+
+    "showcase_sa_search0007": {
+        "id": "WIFI AP Association Alertable",
+        "name": "WAPs With No Connections During Business Hours",
+        "description": "This example shows how to alert when there are no connections to a service found during defined business hours.<p>",
+        "relevance": "<p>This example shows how to alert when there are no connections to a service found during defined business hours.",
+        "operationalize": "<p>This search gives us the ability to monitor access points during defined business hours and the users that are connected to them. When we see that we have zero (0) users accessing a WAP/Service during the defined business hours, this could be indicative of a problem and proactive alerting on this is good for the business. In this example, we don't look for events that are outside of business hours because in this location because we don't have a SLA (nor are customers supposed to be in these spaces.)",
+        "howToImplement": "<p>This search requires time series data of access to the wireless access points we want to monitor and a defined start and end of business hours in the search. The access time hour and minute range is then compared to these hours. These connections are then aggregated and we look for values less then one during business hours. When this returns results, we can trigger an alert.",
+        "domain": "Application",
+        "help": "Lets look at top Splunk Sourcetypes",
+        "app": "Splunk_Essentials_For_Telco",
+        "usecase": "Service Availability",
+        "hasSearch": "Yes",
+        "category": "Alerting",
+        "knownFP": "unused",
+        "includeSSE": "Yes",
+        "dashboard": "showcase_simple_search?ml_toolkit.dataset=WIFI AP Association Alertable",
+        "dashboard_type": "XML Panels with Screenshot",
+        "released": "1.0.0",
+        "journey": "Stage_1",
+        "icon": "Core_Use_Case.png",
+        "displayapp": "Splunk_Essentials_For_Telco",
+        "SPLEase": "Advanced",
+        "datasource": "Device Logs",
+        "highlight": "Yes",
+        "alertvolume": "unused",
+        "sampleSPL": "| inputlookup telco_wifi_mapping | eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") | fields _time apID | eval EndofBusinessHour=strftime(_time,\"00:30\") | eval StartofBusinessHour=strftime(_time,\"05:30\") | eval CurrentTime=strftime(_time,\"%H:%M\") | where CurrentTime > EndofBusinessHour OR CurrentTime > StartofBusinessHour | bin span=15minutes _time | stats count by apID _time | stats values(count) AS \"Connections\" by apID _time | convert ctime(_time) | rename apID AS \"WAP Name\" _time AS \"Connection Time\" | where Connections < 1",
+        "essential_apps": "Application Analytics, IT Troubleshooting  Monitoring",
+        "examples": [
+            {
+                "name": "WIFI AP Association Alertable",
+                "label": "Demo Data"
+            }
+        ],
+        "images": [
+            {
+                "name": "sa_search0007",
+                "label": "",
+                "path": "/static/app/Splunk_Essentials_For_Telco/images/use_case_image/sa_search0007.png"
+            }
+        ],
+        "hideSPLMode": "exception",
+        
+        "autoOpen": "none",
+        "visualizations": [
+            {
+                "panel": "row1cell1",
+                "type": "viz",
+                "vizType": "Tablelement",
+                "title": "WIFI AP Association Alertable",
+                "search": "| inputlookup telco_wifi_mapping | eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") | fields _time apID | eval EndofBusinessHour=strftime(_time,\"00:30\") | eval StartofBusinessHour=strftime(_time,\"05:30\") | eval CurrentTime=strftime(_time,\"%H:%M\") | where CurrentTime > EndofBusinessHour OR CurrentTime > StartofBusinessHour | bin span=15minutes _time | stats count by apID _time | stats values(count) AS \"Connections\" by apID _time | convert ctime(_time) | rename apID AS \"WAP Name\" _time AS \"Connection Time\" | where Connections < 1",
+                "vizParameters": {
+                    "refresh.display": "progressbar"
+                }
+            }
+        ]
     }
 
 }, 
@@ -4069,6 +4241,7 @@
     "showcase_sa_search0004",
     "showcase_sa_search0005",
     "showcase_sa_search0006",
+    "showcase_sa_search0007",
     "showcase_subscriber_search0001",
     "showcase_subscriber_search0002",
     "showcase_subscriber_search0003",
@@ -4104,7 +4277,9 @@
     "showcase_cdn_search0013",
     "showcase_cdn_search0014",
     "showcase_cdn_search0015",
-    "showcase_cdn_search0016"
+    "showcase_cdn_search0016",
+    "showcase_cdn_search0017",
+    "showcase_cdn_search0018"
     ]
       }
      }

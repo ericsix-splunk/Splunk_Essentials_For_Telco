@@ -13,12 +13,12 @@ var Descriptions = new Object;
 //Descriptions["Cloud Monitoring"] = "Regardless of what Cloud provider you use today, you should take these use cases for AWS, Azure, and GCP and expand your visibility into your next generation stacks."
 
 //Telco App Core Use Cases
-Descriptions["Subscriber Services"] = "Expedient and trouble free activation of High Speed Internet, Mobile Data, and Prepaid Mobile all require insight across many systems. These examples demonstrate how to track Activation across BSS/OSS, or similar stacks, along with CDR records and analytics examples."
-Descriptions["Service Availability"] = "CSPs have various networks : customer private networks, out of band, voice, core. This use case shows how to monitor various components of these networks and how to understand the business impact from outages."
-Descriptions["Content Delivery"] = "Content Delivery Networks (CDN) are now quite common in the Telco Marketplace. This use case explores various components within CDN."
+Descriptions["Subscriber Services"] = "CSPs and Telcos host a large variety of services. These examples look in depth at services such as Voice and VoIP services and traditional BSS/OSS solutions."
+Descriptions["Service Availability"] = "CSPs and Telcos have a variety of networks : data networks, private networks, voice, transit , etc. These examples show the monitor of various components of these networks and how to understand the business impact from outages."
+Descriptions["Content Delivery"] = "Content Delivery Networks (CDNs) are now quite common as a service offering by CSPs and Telcos. These examples explore various components and analytics within CDNs."
 Descriptions["Distributed Ledger Technology"] = "DLT is gaining momentum in many markets. These examples show how to monitor transactions and the underlying systems in a Distributed Ledger Network."
-Descriptions["Prepaid Mobile"] = "Prepaid / Top-up services are quite common throughout the world. This usecase explores examples around service activations, compliance, and fraud."
-Descriptions["Physical Monitoring"] = "Examples around collecting Sensor/IOT data in Data Centers."
+Descriptions["Prepaid Mobile"] = "Prepaid, MVNO, and Top-up Voice/Data services are commonplace. These examples explore common metrics and analytics around service activations, compliance, and fraud."
+Descriptions["Physical Monitoring"] = "CSPs and Telcos typically own and manage a large variety of locations. These examples explore collecting sensor and IoT data in Data Centers and how these can be used for compliance, reporting, and monitoring."
 
 var Icons = new Object;
 //Icons["Server Monitoring"] = "/static/app/Splunk_Essentials_For_Telco/images/general_images/FSIAppModerization.png"

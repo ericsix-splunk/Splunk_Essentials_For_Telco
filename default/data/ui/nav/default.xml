@@ -11,8 +11,8 @@
     <view name="setup" />
 <collection label="Documentation">
   <!--   <view name="data_source" /> -->
-    <a target="_blank" href="https://splunkbase.splunk.com/app/4145/#/details">Documentation</a>
-    <a target="_blank" href="https://answers.splunk.com/answers/ask.html?appid=4145">Ask a Question</a>
+    <a target="_blank" href="https://splunkbase.splunk.com/app/TBD/#/details">TBD --- Documentation</a>
+    <a target="_blank" href="https://answers.splunk.com/answers/ask.html?appid=TBD">TBD --- Ask a Question</a>
     <view name="credits" />
   </collection> 
   <collection label="Advanced">

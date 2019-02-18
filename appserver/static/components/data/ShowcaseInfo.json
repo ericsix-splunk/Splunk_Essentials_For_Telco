@@ -472,7 +472,7 @@
         "app": "Splunk_Essentials_For_Telco",
         "usecase": "Prepaid Mobile",
         "hasSearch": "Yes",
-        "category": "Prepaid Mobile",
+        "category": "Alerting, Analytics, Fraud",
         "knownFP": "unused",
         "includeSSE": "Yes",
         "dashboard": "showcase_simple_search?ml_toolkit.dataset=02A Provisioning Errors by Customer ID",

@@ -74,11 +74,11 @@ define([
         },
         template: _.template(
             '<div class="dashboard-description">' +
-                '<div class="description-title"><h3><%-= _("Description").t() %></h3></div>' +
+                '<div class="description-title"><h3><%- _("Description").t() %></h3></div>' +
                 '<div class="example-info">' +
-                    '<p class="description"><%-= description %></p>' +
+                    '<p class="description"><%- description %></p>' +
                     '<% if(related_links && related_links.length) { %>' +
-                    '<h5><%-= _("Related examples:").t() %></h5>' +
+                    '<h5><%- _("Related examples:").t() %></h5>' +
                         '<ul class="related-links">' +
                             '<% _.each(related_links, function(link) { %>' +
                                 '<li><a href="<%- link.href %>"><%- link.label %></a></li>' +

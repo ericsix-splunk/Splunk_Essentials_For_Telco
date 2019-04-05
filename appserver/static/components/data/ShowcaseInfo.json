@@ -2987,8 +2987,8 @@
     "showcase_subscriber_search0004": {
         "id": "Failed Call Metrics - Geo Stats",
         "name": "Failed Call Metrics by Geographic Location",
-        "description": "This searches finds failed calls which are then visualized on a geomap.<p>",
-        "relevance": "This searches finds failed calls that are then visualized on a geomap.",
+        "description": "This search finds failed calls which are then visualized on a geomap.<p>",
+        "relevance": "This search finds failed calls that are then visualized on a geomap.",
         "operationalize": "This search and visualization gives us an easy to understand representation of where the failed calls are occuring.",
         "howToImplement": "<p>This search requires cdr logs with a disposition status. We then extract a destination country code from the dialed number, and enrich this with a country lookup to map to a country name. We then calcuate an aggregate count by country, and use geom with the geo_countries maps. ",
         "domain": "Application",

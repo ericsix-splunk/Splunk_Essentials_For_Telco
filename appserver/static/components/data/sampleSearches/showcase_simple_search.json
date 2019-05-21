@@ -315,7 +315,7 @@
             "Only use the field(s) we want..",
             "Create a numeric value for the order status.. Ok is 0, and anything else is 1.",
             "Use eventstats to create a running total of our status counts.",
-            "Create a timechart with a 10minute span of the sum of our per process counts and name the processess. Use fixedrange true because this is a lookup.",
+            "Create a timechart with a 10-minute span of the sum of our per process counts and name the processes. Use fixedrange true as this is a lookup.",
             "Search where our results are more then 0 during our span of 10 minutes."
         ],
         "value": "| inputlookup prepaid_o2a_logs \n| eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| fields _time p1* p2* p3* p4* \n| eval p1=case(p1Status==\"OK\",0,1=1,\"1\"), p2=case(p2Status==\"OK\",0,1=1,\"1\"), p3=case(p3Status==\"OK\",0,1=1,\"1\"),p4=case(p4Status==\"OK\",0,1=1,\"1\") \n| eventstats sum(p1) AS p1cnt sum(p2) AS p2cnt sum(p3) AS p3cnt sum(p4) AS p4cnt by _time \n| timechart fixedrange=false span=10m sum(p1cnt) AS \"Billing\" sum(p2cnt) as \"Fullfilment\" sum(p3cnt) AS \"ServiceActivation\" sum(p4cnt) AS \"CRM\" \n| search  (\"Billing\" > 0) OR (\"Fullfilment\" > 0) OR ( \"ServiceActivation\" > 0 ) OR ( \"CRM\" > 0)",
@@ -399,10 +399,10 @@
             "Look for our transactions under 25 minutes.",
             "Use stats to get values for our events based on description and _time",
             "Search for durations over 5 minutes.",
-            "Humanize the fields.",
-            "Narrow our fields down.",
+            "Make such fields potentially more readable.",
+            "Narrow down to potential fields of interest.",
             "Use timechart to create a table with a 1 hour span.",
-            "Humanize our time field.",
+            "Make our time field more easy to understand.",
             "Create a tabled format for a report view."
                     ],
         "value": "| inputlookup prepaid_o2a_logs \n| eval _time=strptime(timestamp, \"%Y-%m-%d %H:%M:%S\") \n| fields _time orderLocation orderType productSKU transactionStatus \n| lookup prepaid_locations orderLocation OUTPUT description \n| search description=\"Store1*\" \n| sort 0 _time \n| streamstats window=1 current=false last(_time) AS previousTime \n| eval transactionDuration = ( _time - previousTime ) / 60 \n| eval transactionDuration = round(transactionDuration,2) \n| where transactionDuration < 25 \n| stats values(transactionDuration) as transactionDur values(_time) AS startTime values(orderLocation) AS orderLocation values(orderType) AS orderType values(transactionStatus) AS transactionStatus by description _time \n| where transactionDur > 5 \n| rename description AS \"Location\" transactionDur AS \"Duration\" \n| fields Location Duration _time startTime \n| timechart fixedrange=false span=1h count list(Duration) AS Duration list(startTime) as Times list(Location) AS Location \n| convert ctime(Times) timeformat=\"%Y/%m/%d %H:%M:%S\" \n| table _time Location  Times Duration count",
@@ -477,9 +477,9 @@
             "Summate our total requests and cached content values",
             "Calculate a hit ratio of cached content and format it..",
             "Use timechart chart with 5 minute span to determine the average hit ratio.",
-            "Set our threshold for low cache hit alerts. Here we say 50 percent, but realistically this might lower. Also round out our ratio to.",
+            "Set our threshold for low cache hit alerts. The above ratio is also rounded.",
             "Find where our ratio is below the threshold",
-            "Format the table for alert friendliness."
+            "Format the table for potentially more readability."
         ],
         "value": "| inputlookup cdn_general_operations \n| eval _time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") \n| fields _time messageBytes cached cp \n| stats count values(messageBytes) AS totalBytes by _time cp cached \n| stats sum(count) AS totalRequests sum(totalBytes) as totalBytes by cached _time \n| stats sum(totalRequests) as totalRequested sum(eval(totalRequests*if(cached==\"true\",1,0))) as \"cached\" by _time \n| eval cacheRequestedHitRatio=round(cached/totalRequested * 100, 2) \n| timechart span=5min fixedrange=false avg(cacheRequestedHitRatio) AS avgCacheRequestedHitRatio \n| eval lowCacheHitThreshold = 50.0, avgCacheRequestedHitRatio=round(avgCacheRequestedHitRatio,2) \n| where avgCacheRequestedHitRatio < lowCacheHitThreshold \n| table _time avgCacheRequestedHitRatio",
         "label": "Cache Hit Ratio by Number of Requests Alertable"
@@ -761,10 +761,10 @@
             "First we pull in our demo dataset.",
             "Format our timestamps..",
             "This will make sure our timestamp is in true timestamp format and not text.",
-            "These are the only fields we are interested in for this search.",
+            "Narrow down to potential fields of interest.",
             "Sort our results based on time and include all results (large lookups.)",
             "Calculate our average last mile round trip time based on the customer using it and time.",
-            "Make our value a bit more human readable and also set a high latency threshold value.",
+            "Make our value potentially more readable and set a latency threshold value.",
             "Find where our results are above our high threshold",
             "Format the results in a table for alerting."
         ],
@@ -907,8 +907,8 @@
             "Search for Answered or Billable calls.",
             "Use rex against the dst field to extract a dstCountry Code.",
             "Lookup and enrich our country code. Add a country name, iso code, and billable rates.",
-            "Narrow our fields down.",
-            "Use the convert command to get a easier math friendly number for duration.",
+            "Narrow down to potential fields of interest.",
+            "Use the convert command to get a potentially more calculable number for duration.",
             "Calculate billables minutes based on our duration.",
             "Round our minute value to the near whole number.",
             "Calculate our total duration, minus one minute.",
@@ -932,11 +932,11 @@
         ],
         "description": [
             "First we pull in our demo dataset.",
-            "Enrich our disposition to get a human readable message.",
+            "Enrich our disposition to get a potentially more readable message.",
             "Use stats to create a count of Descriptions by the Disposition.",
-            "Humanize our fields.. ",
+            "Make our fields easier to understand.. ",
             "Format our table",
-            "Give a more contextual Description for the Congested value.",
+            "Add more information to the description of the congested value.",
             "Sort the results by highest count."
         ],
         "value": "| inputlookup cdr_logs \n| lookup cdr_disposition_mapping disposition \n| stats count values(description) AS Description by disposition \n| rename disposition AS Disposition count AS Count \n| table Description Disposition Count \n| eval Description=if(match(Disposition,\"CONGESTED\"),\"Route Error\",Description) \n| sort - Count",
@@ -955,12 +955,12 @@
         ],
         "description": [
             "First we pull in our demo dataset.",
-            "Enrich our disposition to get a human readable message.",
+            "Enrich our disposition to potentially make it more readable.",
             "Search for failed call logs.",
             "Use stats to create a count of Descriptions by the Disposition.",
-            "Humanize our fields.. ",
+            "Make our fields more easy to understand..",
             "Format our table",
-            "Give a more contextual Description for the Congested value.",
+            "Provide more context for the description of the congested value.",
             "Sort the results by highest count."
         ],
         "value": "| inputlookup cdr_logs \n| lookup cdr_disposition_mapping disposition \n| search disposition=\"FAILED\" OR disposition=\"CONGESTED\" \n| stats count values(description) AS Description by disposition \n| rename disposition AS Disposition count AS Count \n| table Description Disposition Count \n| eval Description=if(match(Disposition,\"CONGESTED\"),\"Route Error\",Description) \n| sort - Count",
@@ -982,12 +982,12 @@
             "Set our timestamp field from our lookup.",
             "Enrich our data with a mapping of error codes to a message.",
             "Search for our definition of failed calls..",
-            "Add a more descriptive Description for our Congested Disposition message.",
+            "Add more information to the Congested Disposition message.",
             "Extract a field for our source country from the caller / source.",
             "Extract a field for our destintation country from the callee / destination.",
             "Add country code and country code and country name to our search results.",
             "",
-            "Make the fields a bit more human friendly for a report."
+            "Make the fields potentially more readable."
         ],
         "value": "| inputlookup cdr_logs \n| eval _time = start \n| lookup cdr_disposition_mapping disposition \n| search disposition=FAILED OR disposition=CONGESTED \n| eval Description=if(match(disposition,\"CONGESTED\"),\"Route Error\",description) \n| rex field=src \"(?<srcCountry>\\d+)(?=\\d{10})\" \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| table _time src dst dstCountryCode Description disposition \n| rename _time AS Time src AS \"Source #\" dst AS \"Destination #\" disposition AS Disposition dstCountryCode AS \"Destination Country\"",
         "label": "Failed Call Metrics - Advanced"
@@ -1006,7 +1006,7 @@
         "description": [
             "First we pull in our demo dataset.",
             "Set our timestamp field..",
-            "Enrich our call disposition status codes with more understandable reason..",
+            "Enrich our call disposition status codes with a potentially clearer reason",
             "Search for failed calls ",
             "Extract a country code from the dialed number. We assume the country code preceeds a 10 digit local number.",
             "Enrich the logs by adding a Country Name based on the dstCountry field we extracted.",
@@ -1132,7 +1132,7 @@
             "Perform analytics on the reduced event set. Summate our total count by source, list our dialed destinations and counts also by source.",
             "Reverse sort on our count.",
             "Format our report",
-            "Humanize the report to make it more understandable."
+            "Make the report more understandable."
         ],
         "value": "| inputlookup cdr_logs \n| eval _time = start \n| rex field=dst \"(?<dstCountry>\\d+)(?=\\d{10})\" \n| lookup cdr_country_codes phoneCode AS dstCountry OUTPUTNEW countryName as dstCountryName ISO2 AS dstCountryCode \n| stats count count(dstCountryName) as dcount values(dstCountryName) as CountryName by src dstCountryName \n| stats sum(count) as count list(dcount) as dcount values(CountryName) as dstCountryName by src \n| sort - count \n| table src dstCountryName dcount count \n| rename src AS \"Subscriber\" count AS \"Total Call Count\" dcount AS \"Destination Calls\" dstCountryName AS \"Dialed Countries\"",
         "label": "General Call Metrics - Top Outbound Callers"
@@ -1262,10 +1262,10 @@
             "Enrich our data...",
             "Enrich our data... ",
             "Here we will search for a specific Employee Identifier.",
-            "Narrow our interesting fields down a bit..",
+            "Narrow down to potential fields of interest.",
             "",
             "",
-            "Make this more Human Readable.."
+            "Make this potentially more readable."
         ],
         "value": "| inputlookup physical_card_logs \n| lookup physical_card_error_codes errorCode OUTPUTNEW status \n| lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description \n| lookup physical_card_user_mapping cardId AS badgeId OUTPUTNEW firstName lastName emailAddress employeeId note officeId \n| search employeeId=\"25020002\" \n| fields - badgereaderId,envAlarm,errorCode,powerStatus \n| eval fullName = firstName+\" \"+lastName \n| fields _time badgeId employeeId fullName officeId description status note \n| rename badgeId AS \"Badge ID #\" employeeId AS \"Employee Number\" fullName AS \"Employee Name\" officeId AS \"Home Office\" description AS \"Card Reader Location\" status AS \"Read Status\" note AS \"Additional Notes..\"",
                 "label": "Security Auditing - Badge Monitoring"
@@ -1321,8 +1321,8 @@
             "Set our span to five minutes.",
             "Get our aggregates for the badges, location, and name by time.",
             "Search where our count > 1",
-            "Humanize fields.",
-            "Can you read epoch? I can't.. humanize our timestamp.",
+            "Make our fields more easy to understand.",
+            "Can you read epoch? I can't.. Make our timestamp more easy to understand.",
             "Format for reporting."
         ],
         "value": "| inputlookup physical_card_logs \n| lookup physical_card_error_codes errorCode OUTPUTNEW status \n| lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description active \n| lookup physical_card_user_mapping cardId AS badgeId \n| eval fullName=firstName+\" \"+lastName \n| fields _time badgeId description fullName status \n| search status=\"ACCESS-DENIED\" OR status=\"READ-SUCCESS\" \n| streamstats count reset_on_change=true window=2 by description \n| search (count > 1) AND status=\"ACCESS-DENIED\" \n| bin span=5m _time \n| stats count list(badgeId) AS Badge list(description) AS Location list(fullName) as Name by _time \n| where count > 1 \n| rename _time AS Time \n| convert ctime(Time) \n| table Time Location Badge Name",
@@ -1343,7 +1343,7 @@
             "First we pull in our demo dataset.",
             "Enrich our data...",
             "Enrich our data... ",
-            "Reduce our data set to only our interesting fields for this example.",
+            "Reduce dataset to potential fields of interest.",
             "Filter for only FIRE or POWER events."
                     ],
         "value": "| inputlookup physical_card_logs \n| lookup physical_card_error_codes errorCode OUTPUTNEW status \n| lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description\n| fields _time badgereaderId description envAlarm errorCode powerStatus status \n| search envAlarm=\"FIRE\" OR envAlarm=\"POWER\"",        
@@ -1370,7 +1370,7 @@
             "Calculate a duration between related events",
             "",
             "Fill null numeric values with a 0 to make sorting easier..",
-            "Humanize the Events..",
+            "Make the Events more easy to understand..",
             "Take our relevant fields and make a report friendly view.."
                     ],
         "value": "| inputlookup physical_card_logs \n| lookup physical_card_mapping readerID AS badgereaderId OUTPUTNEW description \n| lookup physical_card_error_codes errorCode OUTPUT status \n| search envAlarm=\"FIRE\" OR envAlarm=\"POWER\" \n| sort _time \n| streamstats window=0 current=false latest(_time) AS previousEventTime latest(status) AS previousStatus BY description \n| eval duration = _time - previousEventTime \n| rename status AS currentStatus \n| fillnull value=0 duration \n| eval envAlarm=case(match(envAlarm,\"FIRE\"),\"Fire Alarm Detected in Zone\",match(envAlarm,\"POWER\"),\"Power Event Detected in Zone\") \n| fields _time description currentStatus duration envAlarm \n| rename description AS \"Reader Location\" currentStatus AS \"Lock Status\" envAlarm AS \"Alarm\" \n| convert ctime(previousEventTime) \n| where duration > 0 \n| rename duration AS \"Duration of Alarm (seconds)\" _time AS \"Time Cleared\" \n| convert ctime(\"Time Cleared\") \n| table Alarm \"Reader Location\" \"Lock Status\" \"Duration of Alarm (seconds)\" \"Time Cleared\"",       
@@ -1420,7 +1420,7 @@
             "Get a count by WAP and time.",
             "Get a list of counts per WAP and time.",
             "Convert our epoch time to human readable.",
-            "Humanize our fields.",
+            "Make our fields more easy to understand.",
             "Return results when this is less then 1, meaning no-one is connecting to a WAP during business hours."
                     ],
         "value": "| inputlookup telco_wifi_mapping \n| eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") \n| fields _time apID \n| eval EndofBusinessHour=strftime(_time,\"00:30\") \n| eval StartofBusinessHour=strftime(_time,\"05:30\") \n| eval CurrentTime=strftime(_time,\"%H:%M\") \n| where CurrentTime > EndofBusinessHour OR CurrentTime > StartofBusinessHour \n| bin span=15minutes _time \n| stats count by apID _time \n| stats values(count) AS \"Connections\" by apID _time \n| convert ctime(_time) \n| rename apID AS \"WAP Name\" _time AS \"Connection Time\" \n| where Connections < 1",
@@ -1444,9 +1444,9 @@
             "Convert our timestamps to EPOCH times, which makes numeric operations easier.",
             "Calculate our duration.",
             "Calculate our Average / Maximum / Minimum connection durations.",
-            "Humanize our fields a bit..",
-            "Humanize our fields a bit..",
-            "Humanize our fields a bit..",
+            "Make our fields a bit more easy to understand..",
+            "Make our fields a bit more easy to understand..",
+            "Make our fields a bit more easy to understand..",
             "Make this more report friendly for the humans."
                     ],
         "value": "| inputlookup telco_wifi_mapping \n| eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") \n| sort _time \n| convert timeformat=\"%Y-%m-%d %T\" mktime(accessTime) AS accessTime mktime(accessDisconnectTime) AS accessDisconnectTime \n| eval accessDuration = accessDisconnectTime-accessTime \n| stats avg(accessDuration) as avgAccessDur max(accessDuration) as maxAccessdur min(accessDuration) as minAccessdur by apID \n| eval avgAccessDur=round(avgAccessDur/60,2) \n| eval maxAccessdur=round(maxAccessdur/60,2) \n| eval minAccessdur=round(minAccessdur/60,2) \n| rename apID AS \"WIFI AP Name\" avgAccessDur AS \"Average Duration (Minutes)\" maxAccessdur AS \"Maximum Duration (Minutes)\" minAccessdur AS \"Minimum Duration (Minutes)\"",

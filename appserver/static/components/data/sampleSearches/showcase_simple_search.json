@@ -13,7 +13,7 @@
             "First we pull in our demo dataset.",
             "Format our timestamp properly.",
             "Convert our timestamp to a true timestamp format.",
-            "Assign our temperature field as temperature in F (Sorry rest of the world ;)",
+            "Assign our temperature field as temperature in Fahrenheit.",
             "Chart our maximum temperatures over time.."
              ],
         "value": "| inputlookup physical_environmental \n| eval _time=strptime(dateTime, \"%Y/%m/%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| eval tempF=sensorValue  \n| timechart fixedrange=false max(tempF) as maxTempF",
@@ -32,11 +32,11 @@
         ],
         "description": [
             "First we pull in our demo dataset.",
-            "Format our timestamp properly.",
+            "Format our timestamp in an ideal manner.",
             "Convert our timestamp to a true timestamp format.",
             "Use regex to extract Room Row Rack and Sensor information from the SensorLocation field.",
-            "Reasseble a Location value with the fields we just extracted and also create a tempF field.",
-            "Only keep the fields that are interesting.",
+            "Reassemble a location value with the extracted fields and create a tempF field.",
+            "Narrow down to potential fields of interest.",
             "Search for a specific Sensor OR Rack location.",
             "Create a field called sensor that is formatted with the row number rack and sensor location.",
             "Run this through timechart to get our average temperature value. Use fixedrange false since this is populated from a lookup."
@@ -129,8 +129,8 @@
             "Fix our timestamp from our lookup.",
             "Convert our timestamp to a recognized timestamp format..",
             "Search for our failed processes.",
-            "Only use the field(s) we want..",
-            "Enrich our error messages with more human friendly details.",
+            "Narrow down to potential fields of interest.",
+            "Enrich our error messages with potentially more readable details.",
             "Search for our SIM Activation Error Message..",
             "Add location data to our search results.",
             "Calculate our counts of Orders and Location based on the CustomerID",
@@ -337,8 +337,8 @@
             "Format our timestamp properly.",
             "Convert our timestamp to a true timestamp format.",
             "Searching in our Service Activation Process for failures.",
-            "Only use the field(s) we want..",
-            "Enrich our error messages with more Human Readable data.",
+            "Narrow down to potential fields of interest.",
+            "Enrich error messages with data of potential interest.",
             "Get values for our individual error messages and details by time.",
             "Search for where we have a count > 0",
             "Run this through stats again to get a count by Error Message.",
@@ -642,7 +642,7 @@
             "Format our timestamps..",
             "This will make sure our timestamp is in true timestamp format and not text.",
             "",
-            "These are the only fields we are interested in for this search.",
+            "Narrow down to potential fields of interest.",
             "Calculate Mbps from the given rate.",
             "Use timechart here with a one minute bucket span and fixedrange false because this is coming from a lookup file.",
             "Define a static low threshold value.",
@@ -787,7 +787,7 @@
             "Format our timestamps..",
             "This will make sure our timestamp is in true timestamp format and not text.",
             "",
-            "These are the only fields we are interested in for this search.",
+            "Narrow down to potential fields of interest.",
             "Use the iplocation command to enrich our dataset with geodata.",
             "Fill unknown City values with Unknown value.",
             "Fill unknown Region values with Unknown value.",
@@ -796,7 +796,7 @@
             "",
             "",
             "Sort by the highest response time",
-            "Make the results more human friendly."
+            "Make our results potentially more readable."
         ],
         "value": "| inputlookup cdn_general_operations \n| eval time=strptime(_time,\"%Y-%m-%d %H:%M:%S\") \n| convert timeformat=\"%Y-%m-%d %H:%M:%S\" mktime(_time) AS _time \n| sort 0 _time \n| fields _time responseTime requestClientIp \n| iplocation requestClientIp \n| eval City=case(City==\"\",\"Unknown\",1=1,City) \n| eval Region=case(Region==\"\",\"Unknown\",1=1,Region) \n| eval HostingEdge = Region.\" - \".Country \n| stats avg(responseTime) AS avgResponseTime by HostingEdge \n| eval \"Average Response Time\"=round(avgResponseTime,3) \n| rename HostingEdge AS \"Edge Hosting Region\"\n| sort - \"Average Response Time\" \n| fields \"Edge Hosting Region\" \"Average Response Time\"",
         "label": "CDN High Latency Edge Networks"
@@ -1419,8 +1419,8 @@
             "Set our bucket span for 15minutes, to align with both the event times and our alert.",
             "Get a count by WAP and time.",
             "Get a list of counts per WAP and time.",
-            "Convert our epoch time to human readable.",
-            "Make our fields more easy to understand.",
+            "Convert our epoch time to a potentially more readable format.",
+            "Make our fields potentially more readable.",
             "Return results when this is less then 1, meaning no-one is connecting to a WAP during business hours."
                     ],
         "value": "| inputlookup telco_wifi_mapping \n| eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") \n| fields _time apID \n| eval EndofBusinessHour=strftime(_time,\"00:30\") \n| eval StartofBusinessHour=strftime(_time,\"05:30\") \n| eval CurrentTime=strftime(_time,\"%H:%M\") \n| where CurrentTime > EndofBusinessHour OR CurrentTime > StartofBusinessHour \n| bin span=15minutes _time \n| stats count by apID _time \n| stats values(count) AS \"Connections\" by apID _time \n| convert ctime(_time) \n| rename apID AS \"WAP Name\" _time AS \"Connection Time\" \n| where Connections < 1",
@@ -1487,7 +1487,7 @@
             "Sort our time..",
             "Here we start run stats against our network connections by Access Point and Network",
             "Running stats here again gives us a per AP and per Network connection list.",
-            "Make this more human readable."
+            "Make our fields potentially more readable."
                     ],
         "value": "| inputlookup telco_wifi_mapping \n| eval _time=strptime(accessTime, \"%Y-%m-%d %H:%M:%S\") \n| sort - _time \n| stats count values(apInfoNetwork) AS apInfoNetworks by apID apInfoNetwork \n| stats list(apInfoNetwork) AS apInfoNetwork list(apID) as apID list(count) as Count \n| rename apInfoNetwork AS \"Connected Network\" apID AS \"Access Point Connected\" Count AS \"Connection Count\"", 
         "label": "WIFI AP Networks Users Connect To"

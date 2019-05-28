@@ -1,7 +1,7 @@
 # Splunk Essentials for Telco v1.0
 # Release Notes
 
-Welcome to the Splunk Essentials for Telco App! This app is a showcase of Telco and CSP centric use cases!
+Welcome to the Splunk Essentials for Telco App! This app is a showcase of Telco and CSP-centric use cases!
 
 ### System Requirements
 Supported on Linux, Mac OSX, but should run on other platforms
@@ -19,7 +19,7 @@ If you have questions, comments, or thoughts in general please reach out to us!
 
 Email us : telco@splunk.com
 
-Or find on on Slack!
+Or find us on Slack!
 
 #telco-community on Splunk Slack
 

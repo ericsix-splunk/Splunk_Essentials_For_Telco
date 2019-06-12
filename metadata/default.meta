@@ -1,308 +1,178 @@
-[]
-access = read : [ * ], write : [ admin, power ]
+[nav/default]
+version = 7.2.1
+modtime = 1546360374.547944000
 
-[viewstates]
-access = read : [ * ], write : [ * ]
-export = system
+[views/home]
+version = 7.2.1
+modtime = 1548864720.489759000
 
-[commands]
-export = system
-#export = system
+[views/contents]
+version = 7.2.1
+modtime = 1546361599.890453000
 
-[searchbnf]
-export = system
+[views/stages]
+version = 7.2.1
+modtime = 1546361327.662900000
 
-[views/use_case_metrics]
-owner = admin
-version = 7.0.0
-modtime = 1513706850.650944000
-
-[ui-tour/showcase_simple_search-tour%3Aenterprise]
-owner = admin
-version = 7.0.1
-modtime = 1516200723.381278000
-
-[views/journey]
-version = 7.0.2
-modtime = 1519061060.343288000
-
-[macros/User_to_Index_Provisioning_From_Data_Governance_App]
-export = none
-owner = admin
-version = 7.0.1
-modtime = 1518020879.050514000
-
-[views/security_journey_clone]
+[lookups/cdn_cloudevent_status.csv]
 access = read : [ * ], write : [ admin, power ]
 export = none
-owner = admin
-version = 7.0.2
-modtime = 1518590899.220782000
+owner = nobody
+version = 7.2.1
+modtime = 1546834333.927050000
 
-[ui-tour/contents-tour%3Aenterprise]
-owner = admin
-version = 7.0.1
-modtime = 1518573990.552671000
-
-[app/install/install_source_checksum]
-version = 7.1.0
-modtime = 1525875921.257034000
-
-[lookups/ATM_list.csv]
-access = read : [ * ], write : [ admin ]
+[lookups/cdn_user_by_country.csv]
+access = read : [ * ], write : [ admin, power ]
 export = none
 owner = nobody
-version = 7.1.0
-modtime = 1532658570.035054000
+version = 7.2.1
+modtime = 1546834344.445696000
 
-[lookups/maps.csv]
-access = read : [ * ], write : [ admin ]
+[transforms/cdn_connections]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1532658577.110839000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1546835155.374938000
 
-[lookups/risk.csv]
-access = read : [ * ], write : [ admin ]
+[transforms/physical_card_error_codes]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1532658584.665982000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1546835166.182444000
 
-[transforms/Risk]
-access = read : [ * ], write : [ admin ]
+[transforms/physical_card_logs]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1532658677.241434000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1546835177.451737000
 
-[lookups/RequestResponse.csv]
-access = read : [ * ], write : [ admin ]
+[transforms/physical_card_mapping]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533056388.417422000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1546835194.560917000
 
-[lookups/wire_transfer.csv]
-access = read : [ * ], write : [ admin ]
+[transforms/physical_card_user_mapping]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533065509.604840000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1546835208.783537000
 
-[lookups/susplcious_ip.csv]
-access = read : [ * ], write : [ admin ]
+[transforms/cdr_country_codes]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533095403.562213000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1546925981.197451000
 
-[transforms/isSuspicious]
-access = read : [ * ], write : [ admin ]
+[transforms/cdr_logs]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533095475.953349000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1546927157.014720000
 
-[lookups/exchange.csv]
-access = read : [ * ], write : [ admin ]
+[transforms/cdr_account_mappings]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533158957.015895000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1546937127.913173000
 
-[lookups/orders.csv]
-access = read : [ * ], write : [ admin ]
+[transforms/cdr_disposition_mapping]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533158965.967360000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1547049090.589603000
 
-[lookups/timedrift.csv]
-access = read : [ * ], write : [ admin ]
+[transforms/cdr_international_call_rates]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533158978.759848000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1547123588.454168000
 
-[transforms/FSExchange]
-access = read : [ * ], write : [ admin ]
+[transforms/telco_wifi_mapping]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533161378.954081000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1547313764.910578000
 
-[lookups/cust_data.csv]
-access = read : [ * ], write : [ admin ]
+[transforms/cdn_general_operations]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533177258.191550000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1547780978.229024000
 
-[lookups/customer_txn.csv]
-access = read : [ * ], write : [ admin ]
+[transforms/prepaid_o2a_products]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533177266.931622000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1548057607.443472000
 
-[transforms/CCData]
-access = read : [ * ], write : [ admin ]
+[transforms/prepaid_o2a_logs]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533177323.999033000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1548337820.596898000
 
-[lookups/bank_accounts.csv]
-access = read : [ * ], write : [ admin ]
+[transforms/prepaid_mobile_errors]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533569170.507745000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1548177323.100541000
 
-[lookups/other_accounts.csv]
-access = read : [ * ], write : [ admin ]
+[transforms/physical_environmental]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533569186.002447000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1548337805.473516000
 
-[transforms/All_Accounts]
-access = read : [ * ], write : [ admin ]
-export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533569278.746154000
+[views/temperature_sensor_average_over_time]
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1548415593.588430000
 
-[lookups/morefix.csv]
-access = read : [ * ], write : [ admin ]
-export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533583585.098737000
+[views/credits]
+version = 7.2.1
+modtime = 1550048661.488117000
 
-[lookups/fix.csv]
-access = read : [ * ], write : [ admin ]
+[transforms/prepaid_previous_revenue]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533583671.581385000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1549015787.225609000
 
-[lookups/bc_block.csv]
-access = read : [ * ], write : [ admin ]
+[transforms/prepaid_locations]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533613382.498014000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1549122874.819389000
 
-[lookups/bc_stats.csv]
-access = read : [ * ], write : [ admin ]
+[transforms/cdn_contentproviders]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533613391.298608000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1549251711.103072000
 
-[lookups/bc_trans.csv]
-access = read : [ * ], write : [ admin ]
+[transforms/cdn_content_costs]
+access = read : [ * ], write : [ admin, power ]
 export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533613403.515844000
-
-[lookups/trade_entry.csv]
-access = read : [ * ], write : [ admin ]
-export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533665022.976320000
-
-[lookups/new_today.csv]
-access = read : [ * ], write : [ admin ]
-export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533699902.493607000
-
-[lookups/new_total.csv]
-access = read : [ * ], write : [ admin ]
-export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533700355.035108000
-
-[transforms/ATM_place]
-access = read : [ * ], write : [ admin ]
-export = none
-owner = nobody
-version = 7.1.0
-modtime = 1533824734.445315000
-
-[lookups/transdate.csv]
-access = read : [ * ], write : [ admin ]
-export = none
-owner = nobody
-version = 7.1.0
-modtime = 1534170328.198648000
-
-[lookups/credit_limit_requests.csv]
-access = read : [ * ], write : [ admin ]
-export = none
-owner = nobody
-version = 7.1.0
-modtime = 1534263163.550504000
-
-[lookups/customer_data.csv]
-access = read : [ * ], write : [ admin ]
-export = none
-owner = nobody
-version = 7.1.0
-modtime = 1534263243.391295000
-
-[transforms/CustomerData]
-access = read : [ * ], write : [ admin ]
-export = none
-owner = nobody
-version = 7.1.0
-modtime = 1534263300.356929000
-
-[lookups/authorizations.csv]
-access = read : [ * ], write : [ admin ]
-export = none
-owner = nobody
-version = 7.1.0
-modtime = 1534284159.108599000
-
-[lookups/authorized2days.csv]
-access = read : [ * ], write : [ admin ]
-export = none
-owner = nobody
-version = 7.1.0
-modtime = 1534284222.514391000
-
-[lookups/volume_buy.csv]
-access = read : [ * ], write : [ admin ]
-export = none
-owner = nobody
-version = 7.1.0
-modtime = 1534376306.191929000
-
-[lookups/volume_sell.csv]
-access = read : [ * ], write : [ admin ]
-export = none
-owner = nobody
-version = 7.1.0
-modtime = 1534376315.572190000
-
-[transforms/VolumeBuy]
-access = read : [ * ], write : [ admin ]
-export = none
-owner = nobody
-version = 7.1.0
-modtime = 1534376373.659037000
-
-[transforms/VolumeSell]
-access = read : [ * ], write : [ admin ]
-export = none
-owner = nobody
-version = 7.1.0
-modtime = 1534376381.807571000
+owner = w0rdp4ss!
+version = 7.2.1
+modtime = 1549254677.655917000
